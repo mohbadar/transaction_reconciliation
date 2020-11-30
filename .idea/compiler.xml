@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="lib-lang" />
+        <module name="trxreconcile" />
+        <module name="lib-core" />
+        <module name="lib-json" />
+        <module name="anar-lib-logger" />
+        <module name="lib-api" />
+        <module name="lib-logger" />
+        <module name="reconcile-core" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="anar-lib-logger" target="1.8" />
+      <module name="lib-api" target="1.8" />
+      <module name="lib-core" target="1.8" />
+      <module name="lib-json" target="1.8" />
+      <module name="lib-lang" target="1.8" />
+      <module name="lib-logger" target="1.8" />
+      <module name="reconcile-core" target="1.8" />
+      <module name="trxreconcile" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="anar-lib-logger" options="-parameters" />
+      <module name="lib-api" options="-parameters" />
+      <module name="lib-core" options="-parameters" />
+      <module name="lib-json" options="-parameters" />
+      <module name="lib-lang" options="-parameters" />
+      <module name="lib-logger" options="-parameters" />
+      <module name="reconcile-core" options="-parameters" />
+      <module name="trxreconcile" options="-parameters" />
+    </option>
+  </component>
+</project>

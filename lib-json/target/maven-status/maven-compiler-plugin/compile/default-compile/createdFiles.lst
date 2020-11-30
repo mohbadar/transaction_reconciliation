@@ -1,0 +1,10 @@
+af\gov\anar\lib\json\exception\JsonMappingException.class
+af\gov\anar\lib\json\FromJsonHelper.class
+af\gov\anar\lib\json\JsonUtility$1.class
+af\gov\anar\lib\json\util\JsonUtilConstants.class
+af\gov\anar\lib\json\exception\JsonGenerationException.class
+af\gov\anar\lib\json\JsonUtility.class
+af\gov\anar\lib\json\exception\JsonProcessingException.class
+af\gov\anar\lib\json\exception\JsonParseException.class
+af\gov\anar\lib\json\JsonParserHelper.class
+af\gov\anar\lib\json\JsonUtility$2.class

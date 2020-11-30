@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/lib-logger/anar-lib-logger.iml" filepath="$PROJECT_DIR$/lib-logger/anar-lib-logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-api/lib-api.iml" filepath="$PROJECT_DIR$/lib-api/lib-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-lang/lib-core.iml" filepath="$PROJECT_DIR$/lib-lang/lib-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-json/lib-json.iml" filepath="$PROJECT_DIR$/lib-json/lib-json.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-lang/lib-lang.iml" filepath="$PROJECT_DIR$/lib-lang/lib-lang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-logger/lib-logger.iml" filepath="$PROJECT_DIR$/lib-logger/lib-logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reconcile-core/reconcile-core.iml" filepath="$PROJECT_DIR$/reconcile-core/reconcile-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/trxreconcile.iml" filepath="$PROJECT_DIR$/.idea/trxreconcile.iml" />
+    </modules>
+  </component>
+</project>
