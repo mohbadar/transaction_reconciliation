@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableApplicationName
-@ComponentScan(basePackages = {"af.*"})
+@ComponentScan(basePackages = {"com.*"})
 @EnableSwagger2
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableAsync

@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class SimilarityMeasurementService {
+public class SimilarityMeasurementUtility {
 	private ArrayList<Double> cosineSimArray = new ArrayList<Double>();
 
 	private Double getIndividualCosineSimilarityScore(String s1, String s2) {

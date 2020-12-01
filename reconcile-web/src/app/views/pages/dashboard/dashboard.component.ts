@@ -1,10 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatExpansionPanel } from "@angular/material";
-import { FileDownloadService } from 'app/core/service/file-download.service';
+import { TranslateService } from '@ngx-translate/core';
 import { LayoutUtilsService, MessageType } from 'app/core/_base/crud';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Observable } from "rxjs";
 
 
 @Component({
@@ -31,19 +30,23 @@ export class DashboardComponent implements OnInit {
     searchResult: any;
   
     constructor(
-      private formBuilder: FormBuilder,
-      public dialog: MatDialog,
-      private cdr: ChangeDetectorRef,
-      private fileDownloadService: FileDownloadService,
-      private layoutUtilsService: LayoutUtilsService,
-      private spinner: NgxSpinnerService
-    ) { }
+      public formBuilder: FormBuilder,
+      public layoutUtilsService: LayoutUtilsService,
+      spinner: NgxSpinnerService,
+      private translate: TranslateService,
+    ) { 
+     
+      console.log("FormBuilder", this.formBuilder);
+      console.log("FormGroup", this.formGroup);
+      
+      
+    }
   
     ngOnInit(): void {
 
       this.formGroup = this.formBuilder.group({
-        clientfile: [ [Validators.required]],
-        tutukafile: [ [Validators.required]],
+        clientfile: ['', [Validators.required]],
+        tutukafile: ['', [Validators.required]],
       });
     }
 

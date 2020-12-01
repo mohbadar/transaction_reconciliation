@@ -16,48 +16,48 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class FuzzyLogicService {
+public class SimilarityMeasurementService {
 
-	@Value("${fuzzy.match_tolerance}")
+	@Value("${similarity.match_tolerance}")
 	public double match_tolerance;
 
-	@Value("${fuzzy.probable_match_tolerance}")
+	@Value("${similarity.probable_match_tolerance}")
 	public double probable_match_tolerance;
 
-	@Value("${fuzzy.probable_mismatch_tolerance}")
+	@Value("${similarity.probable_mismatch_tolerance}")
 	public double probable_mismatch_tolerance;
 
-	@Value("${fuzzy.valid_incr}")
+	@Value("${similarity.valid_incr}")
 	public double valid_incr;
 
-	@Value("${fuzzy.fuzzy_incr}")
+	@Value("${similarity.similarity_incr}")
 	public double fuzzy_incr;
 
-	@Value("${fuzzy.tx_nrtv_valid_incr}")
+	@Value("${similarity.tx_nrtv_valid_incr}")
 	public double tx_nrtv_valid_incr;
 
-	@Value("${fuzzy.tx_nrtv_probable_match_incr}")
+	@Value("${similarity.tx_nrtv_probable_match_incr}")
 	public double tx_nrtv_probable_match_incr;
 
-	@Value("${fuzzy.tx_nrtv_probable_mismatch_incr}")
+	@Value("${similarity.tx_nrtv_probable_mismatch_incr}")
 	public double tx_nrtv_probable_mismatch_incr;
 
-	@Value("${fuzzy.total_score}")
+	@Value("${similarity.total_score}")
 	public double total_score;
 
-	@Value("${fuzzy.permissible_match_lower}")
+	@Value("${similarity.permissible_match_lower}")
 	public double permissible_match_lower;
 
-	@Value("${fuzzy.probable_match_lower}")
+	@Value("${similarity.probable_match_lower}")
 	public double probable_match_lower;
 
-	@Value("${fuzzy.probable_mismatch_lower}")
+	@Value("${similarity.probable_mismatch_lower}")
 	public double probable_mismatch_lower;
 
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	SimilarityMeasurementService simUtil = new SimilarityMeasurementService();
+	SimilarityMeasurementUtility simUtil = new SimilarityMeasurementUtility();
 	
 	public List<TransactionReportWithScore> fuzzyLogicMatch(List<Transaction> tutukaTransactionList,
 			List<Transaction> clientTransactionList, FileUploadDTO fileUploadDTO) {

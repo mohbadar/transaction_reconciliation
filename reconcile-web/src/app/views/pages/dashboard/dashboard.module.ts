@@ -11,7 +11,7 @@ import { NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootst
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
@@ -19,6 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         PartialsModule,
         CoreModule,
         TranslateModule.forChild(),
+        FormsModule,
+        ReactiveFormsModule,
         RouterModule.forChild([
             {
                 path: '',
@@ -31,7 +33,6 @@ import { ReactiveFormsModule } from '@angular/forms';
         NgbTooltipModule,
         NgxSpinnerModule,
         NgSelectModule,
-        ReactiveFormsModule,
     ],
     providers: [],
     declarations: [

@@ -1,8 +1,10 @@
 package com.tutuka.reconcile.core.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties("storage")
+//@ConfigurationProperties("storage")
+@Component
 public class StorageProperties {
 
     /**
