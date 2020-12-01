@@ -72,6 +72,22 @@ public class BaseUncheckedException extends RuntimeException {
 		}
 	}
 
+
+	/**
+	 * Constructs a new unchecked exception with the specified detail message and
+	 * error code and error cause.
+	 *
+	 *
+	 * @param errorMessage the detail message.
+	 * @param rootCause    the specified cause
+	 */
+	public BaseUncheckedException( String errorMessage, Throwable rootCause) {
+		if (rootCause instanceof BaseUncheckedException) {
+			BaseUncheckedException bue = (BaseUncheckedException) rootCause;
+			infoItems.addAll(bue.infoItems);
+		}
+	}
+
 	/*
 	 * Returns a String object that can be used to get the exception message.
 	 * 
