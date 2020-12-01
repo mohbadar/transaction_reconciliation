@@ -1,0 +1,22 @@
+:host {
+	::ng-deep {
+		ngb-tabset > .nav-tabs {
+			display: none;
+		}
+	}
+}
+
+.m__wrapper {
+	width: 100%;
+    cursor: pointer;
+}
+
+
+.feature_icon {
+	width: 100%;
+	padding: 10px;
+}
+
+.feature_icon img {
+	width: 100px;
+}

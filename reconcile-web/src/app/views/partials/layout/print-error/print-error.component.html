@@ -1,0 +1,17 @@
+<div class="kt-font-danger" *ngIf="control && control.errors">
+    <!-- && (control.dirty || control.touched)"> -->
+    <div *ngIf="control.errors.required"><small>This field is required</small></div>
+    <div *ngIf="control.errors.unique"><small>{{control.errors.unique}}</small></div>
+    <div *ngIf="control.errors.lessThan">
+        <small>this field should greater than {{control.errors.lessThan.value}}</small></div>
+
+    <div *ngIf="control.errors.greaterThan">
+        <small>this field should less than {{control.errors.greaterThan.value}}</small></div>
+    <div *ngIf="control.errors.min"><small>this field should equal or greater than {{control.errors.min.min}}</small>
+    </div>
+    <div *ngIf="control.errors.greaterThan"><small>{{control.errors.value}}</small></div>
+    <div *ngIf="control.errors.email"><small>this field should match the pattern of email address</small></div>
+    <div *ngIf="control.errors.mobile"><small>{{control.errors.mobile}}</small></div>
+    <div *ngIf="control.errors.confirmPassword"><small>{{control.errors.confirmPassword}}</small></div>
+    <div *ngIf="control.errors.pattern"><small>this field should match the pattern of phone number</small></div>
+</div>

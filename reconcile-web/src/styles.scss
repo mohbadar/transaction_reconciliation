@@ -1,0 +1,53 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~material-design-icons/iconfont/material-icons.css";
+@import "~highlight.js/styles/googlecode.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "sass/pages/wizard/wizard-4";
+
+// hide bootstrap dropdown arrow globally
+.dropdown-toggle::after {
+    display: none !important;
+}
+
+.mat-table__wrapper--dashboard .mat-table {
+    min-width: 600px !important;
+    width: 100% !important;
+}
+
+.position-static {
+    position: static;
+}
+
+
+// @media (max-width: 1399px) {
+
+// 	._p_collections .kt-wizard-v4__nav-item {
+// 		flex: 0 0 calc(33% - 0.25rem) !important;
+// 	}
+// }
+
+.kt-wizard-v4 [data-ktwizard-type="step-content"][data-ktwizard-state="current"] {
+    width: 60% !important;
+}
+
+.kt-wizard-v4 .kt-wizard-v4__wrapper .kt-form {
+    width: auto !important;
+}
+
+._form_wrapper {
+    padding: 3rem 0rem;
+}
+
+._abs_btn {
+    position: absolute;
+    top: 28%;
+}
+
+button:disabled {
+    cursor: not-allowed !important;
+}
+.form-group.required .col-form-label:after {
+    content: "  *";
+    color: red;
+}

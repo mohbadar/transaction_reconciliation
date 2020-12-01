@@ -4,7 +4,7 @@ import com.google.common.base.Splitter;
 import com.tutuka.reconcile.core.data.Transaction;
 import com.tutuka.reconcile.core.infrastructure.exception.EmptyFileException;
 import com.tutuka.reconcile.core.infrastructure.exception.TransactionDateException;
-import com.tutuka.reconcile.core.utils.TransactionUtiltiy;
+import com.tutuka.reconcile.core.infrastructure.util.TransactionUtiltiy;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
