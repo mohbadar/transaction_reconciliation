@@ -5,6 +5,7 @@ import com.tutuka.reconciliation.trxcompare.data.Transaction;
 import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
 import com.tutuka.reconciliation.infrastructure.exception.TransactionDateException;
 import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,12 +111,9 @@ public class CsvReaderService {
 		if (p.length > TxDateIndex && TxDateIndex >= 0) {
 			if (StringUtils.trimToNull(p[TxDateIndex]) != null) {
 				try {
-					transactionDate = LocalDateTime.parse(p[TxDateIndex], formatter);
+					transactionDate = DateUtil.parseToLocalDateTime(p[TxDateIndex]);
 				} catch (Exception e) {
-//					logger.error("DateTimeParseException occured while trying to parse " +p[TxDateIndex]+ " in the Transaction Date Field. File may be corrupt");
-//					throw new TransactionDateException("DateTimeParseException occured while trying to parse "
-//							+ p[TxDateIndex] + " in the Transaction Date Field. File may be corrupt", p[TxDateIndex]);
-
+					transactionDate = DateUtil.convertToLocalDateTimeViaInstant(DateUtil.parseDate(p[TxDateIndex]));
 				}
 				if (util.isValidDate(transactionDate)) {
 					transaction.setTransactionDate(transactionDate);
