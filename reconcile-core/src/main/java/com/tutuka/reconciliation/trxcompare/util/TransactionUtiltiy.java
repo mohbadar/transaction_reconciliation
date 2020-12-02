@@ -1,8 +1,9 @@
-package com.tutuka.reconciliation.infrastructure.util;
+package com.tutuka.reconciliation.trxcompare.util;
 
 import com.tutuka.reconciliation.trxcompare.enumeration.Result;
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
-import com.tutuka.reconciliation.trxcompare.service.TransactionReportWithScore;
+import com.tutuka.reconciliation.trxcompare.domain.TransactionWithScoreDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,13 +12,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Slf4j
 public class TransactionUtiltiy {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-	HashMap<String, String> map = new HashMap<>();
-	Properties properties = new Properties();
-
+	
 	public boolean isValidDate(LocalDateTime date) {
 		LocalDateTime now = LocalDateTime.now();
 		if (now.compareTo(date) >= 0) {
@@ -34,7 +32,7 @@ public class TransactionUtiltiy {
 	 * @return
 	 **/
 	public List<Transaction> removeDuplicates(List<Transaction> transactionList) {
-		logger.info("Removing Duplicate Transactions");
+		log.info("Removing Duplicate Transactions");
 		Set<String> transactionIdSet = new HashSet<String>();
 		List<Transaction> duplicateTransactions = new ArrayList<>();
 		for (Iterator<Transaction> tutukaIterator = transactionList.iterator(); tutukaIterator.hasNext();) {
@@ -42,7 +40,6 @@ public class TransactionUtiltiy {
 			String transactionId = transactionIter.getTransactionID() + "|"
 					+ transactionIter.getTransactionDescription();
 			if (transactionIdSet.contains(transactionId)) {
-				logger.warn("Duplicate Transaction found with Transaction ID : " +transactionId);
 				duplicateTransactions.add(transactionIter);
 				tutukaIterator.remove();
 			}
@@ -57,13 +54,13 @@ public class TransactionUtiltiy {
 	 * 
 	 **/
 	public List<Transaction> removeBadTransactions(List<Transaction> transactionsList) {
-		logger.info("Removing NULL/BAD transactions");
+		log.info("Removing NULL/BAD transactions");
 		List<Transaction> badTransactionList = new ArrayList<>();
 		for (Iterator<Transaction> tutukaIterator = transactionsList.iterator(); tutukaIterator.hasNext();) {
 			Transaction transactionIter = tutukaIterator.next();
 			if (transactionIter.getTransactionID() == null || transactionIter.getTransactionDescription() == null
 					|| transactionIter.getTransactionID().equals(BigInteger.ZERO)) {
-				logger.warn("BAD Transaction found");
+				log.warn("BAD Transaction found");
 				badTransactionList.add(transactionIter);
 				tutukaIterator.remove();
 			}
@@ -71,12 +68,12 @@ public class TransactionUtiltiy {
 		return badTransactionList;
 	}
 
-	private void removeDuplicatesFileOne(List<Transaction> transactionList, List<TransactionReportWithScore> report,
+	private void removeDuplicatesFileOne(List<Transaction> transactionList, List<TransactionWithScoreDTO> report,
 			String fileName) {
 		List<Transaction> FileOneDuplicates = new ArrayList<>();
 		FileOneDuplicates = removeDuplicates(transactionList);
 		for (Transaction fileOneDuplicate : FileOneDuplicates) {
-			TransactionReportWithScore reportRecord = new TransactionReportWithScore();
+			TransactionWithScoreDTO reportRecord = new TransactionWithScoreDTO();
 			reportRecord.setFile1Name(fileName);
 			reportRecord.setProfileName1(fileOneDuplicate.getProfileName());
 			reportRecord.setTransactionAmount1(fileOneDuplicate.getTransactionAmount());
@@ -93,12 +90,12 @@ public class TransactionUtiltiy {
 		}
 	}
 
-	private void removeDuplicatesFileTwo(List<Transaction> transactionList, List<TransactionReportWithScore> report,
+	private void removeDuplicatesFileTwo(List<Transaction> transactionList, List<TransactionWithScoreDTO> report,
 			String fileName) {
 		List<Transaction> FileTwoDuplicates = new ArrayList<>();
 		FileTwoDuplicates = removeDuplicates(transactionList);
 		for (Transaction fileTwoDuplicate : FileTwoDuplicates) {
-			TransactionReportWithScore reportRecord = new TransactionReportWithScore();
+			TransactionWithScoreDTO reportRecord = new TransactionWithScoreDTO();
 			reportRecord.setFile2Name(fileName);
 			reportRecord.setProfileName2(fileTwoDuplicate.getProfileName());
 			reportRecord.setTransactionAmount2(fileTwoDuplicate.getTransactionAmount());
@@ -115,12 +112,12 @@ public class TransactionUtiltiy {
 		}
 	}
 
-	private void removeBadTransactionsFileOne(List<Transaction> transactionList, List<TransactionReportWithScore> report,
+	private void removeBadTransactionsFileOne(List<Transaction> transactionList, List<TransactionWithScoreDTO> report,
 			String fileName) {
 		List<Transaction> FileOneDuplicates = new ArrayList<>();
 		FileOneDuplicates = removeBadTransactions(transactionList);
 		for (Transaction fileOneDuplicate : FileOneDuplicates) {
-			TransactionReportWithScore reportRecord = new TransactionReportWithScore();
+			TransactionWithScoreDTO reportRecord = new TransactionWithScoreDTO();
 			reportRecord.setFile1Name(fileName);
 			reportRecord.setProfileName1(fileOneDuplicate.getProfileName());
 			reportRecord.setTransactionAmount1(fileOneDuplicate.getTransactionAmount());
@@ -137,12 +134,12 @@ public class TransactionUtiltiy {
 		}
 	}
 
-	private void removeBadTransactionsFileTwo(List<Transaction> transactionList, List<TransactionReportWithScore> report,
+	private void removeBadTransactionsFileTwo(List<Transaction> transactionList, List<TransactionWithScoreDTO> report,
 			String fileName) {
 		List<Transaction> FileTwoDuplicates = new ArrayList<>();
 		FileTwoDuplicates = removeBadTransactions(transactionList);
 		for (Transaction fileTwoDuplicate : FileTwoDuplicates) {
-			TransactionReportWithScore reportRecord = new TransactionReportWithScore();
+			TransactionWithScoreDTO reportRecord = new TransactionWithScoreDTO();
 			reportRecord.setFile2Name(fileName);
 			reportRecord.setProfileName2(fileTwoDuplicate.getProfileName());
 			reportRecord.setTransactionAmount2(fileTwoDuplicate.getTransactionAmount());
@@ -161,13 +158,13 @@ public class TransactionUtiltiy {
 	
 	
 	public void removeBadAndDuplicatesFileOne(List<Transaction> transactionList,
-			List<TransactionReportWithScore> report, String fileName) {
+											  List<TransactionWithScoreDTO> report, String fileName) {
 		removeBadTransactionsFileOne(transactionList, report, fileName);
 		removeDuplicatesFileOne(transactionList, report, fileName);
 	}
 
 	public void removeBadAndDuplicatesFileTwo(List<Transaction> transactionList,
-			List<TransactionReportWithScore> report, String fileName) {
+											  List<TransactionWithScoreDTO> report, String fileName) {
 		removeBadTransactionsFileTwo(transactionList, report, fileName);
 		removeDuplicatesFileTwo(transactionList, report, fileName);
 	}

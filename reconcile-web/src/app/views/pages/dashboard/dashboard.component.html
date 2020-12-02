@@ -52,6 +52,14 @@
         </div>
         <hr>
 
+    <div *ngIf="resultLoaded == true">
+         <kt-list-transaction-result [(data)]="result"></kt-list-transaction-result>
+    </div>
+
     </kt-portlet-body>
 </kt-portlet>
 <ngx-spinner></ngx-spinner>
+
+
+
+

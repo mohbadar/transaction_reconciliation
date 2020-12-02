@@ -1,7 +1,7 @@
 import com.tutuka.reconciliation.Application;
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
 import com.tutuka.reconciliation.infrastructure.exception.StorageFileNotFoundException;
-import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.util.TransactionUtiltiy;
 import com.tutuka.reconciliation.trxcompare.service.CsvReaderService;
 import com.tutuka.reconciliation.trxcompare.service.FileSystemStorageService;
 import org.junit.Test;

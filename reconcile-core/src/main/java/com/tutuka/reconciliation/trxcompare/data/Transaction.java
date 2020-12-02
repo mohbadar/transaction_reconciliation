@@ -1,5 +1,6 @@
 package com.tutuka.reconciliation.trxcompare.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,6 +23,10 @@ public class Transaction {
 	//Useful in reducing the Cartesian cross matching complexity [Still O(n^2) though]
 	private boolean isMatched;
 
+	@JsonIgnore
+	private String comparisonString;
+	private Double similarityScore;
+
 	/**
 	 * Caculate HashCode for Objects of class Transaction Record
 	 * @return
@@ -39,6 +44,11 @@ public class Transaction {
 		result = prime * result + transactionType;
 		result = prime * result + ((walletReference == null) ? 0 : walletReference.hashCode());
 		return result;
+	}
+
+	public String getComparisonString()
+	{
+		return String.format("%s%s",transactionDescription,transactionNarrative);
 	}
 
 	/**

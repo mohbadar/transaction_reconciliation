@@ -20,10 +20,7 @@ public class SimilarityMeasurementUtility {
 		return cosineSimilarity(first, second);
 	}
 	
-		/**
-		 * Check https://en.wikipedia.org/wiki/Cosine_similarity
-		 * Usually used for similarity between documents
-		**/
+
 	private Double cosineSimilarity(final Map<CharSequence, Integer> vectorOne,
 			final Map<CharSequence, Integer> vectorTwo) {
 		if (vectorOne == null || vectorTwo == null) {

@@ -1,15 +1,17 @@
-package com.tutuka.reconciliation.trxcompare.service;
+package com.tutuka.reconciliation.trxcompare.domain;
 
 import com.tutuka.reconciliation.trxcompare.enumeration.Result;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigInteger;
 
 @Getter
 @Setter
-public class TransactionReportWithScore {
-	private String File1Name;
+@ToString
+public class TransactionWithScoreDTO {
+	private String file1Name;
 	private String profileName1;
 	private String transactionDate1;
 	private Long transactionAmount1;
@@ -19,7 +21,7 @@ public class TransactionReportWithScore {
 	private int transactionType1;
 	private String walletReference1;
 	
-	private String File2Name;
+	private String file2Name;
 	private String profileName2;
 	private String transactionDate2;
 	private Long transactionAmount2;
@@ -35,9 +37,9 @@ public class TransactionReportWithScore {
 	*/ 
 	private double matchScore;
 	
-	private StringBuilder Reasons  = new StringBuilder("");
+	private StringBuilder reasons  = new StringBuilder("");
 		
-	private Enum<Result> Status;
+	private Enum<Result> status;
 	
 
 }

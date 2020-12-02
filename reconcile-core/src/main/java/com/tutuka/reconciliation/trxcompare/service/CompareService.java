@@ -1,215 +1,156 @@
 package com.tutuka.reconciliation.trxcompare.service;
 
-import com.tutuka.reconciliation.infrastructure.util.FileUtility;
-import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.infrastructure.exception.TransactionWithScoreEmptyListException;
+import com.tutuka.reconciliation.trxcompare.enumeration.Result;
+import com.tutuka.reconciliation.trxcompare.util.FileUtility;
+import com.tutuka.reconciliation.trxcompare.util.SimilarityMeasurementUtility;
+import com.tutuka.reconciliation.trxcompare.util.TransactionUtiltiy;
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.trxcompare.domain.TransactionWithScoreDTO;
 import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CompareService {
 
     @Autowired
     private FileSystemStorageService storageService;
+
     @Autowired
     private SimilarityMeasurementService similarityMeasurementService;
 
-    public Map<String, Object> compareTransactions(MultipartFile tutukaCsv, MultipartFile clientCsv)
-    {
-        Map<String, Object> response = new HashMap<>();
+    @Autowired
+    private PreprocessingService preprocessingService;
 
-        Set<Transaction> tutukaUnmatchTransactions = new HashSet<>();
-        Set<Transaction> clientUnmatchTransactions = new HashSet<>();
+    FileUtility fileUtil = new FileUtility();
+    CsvReaderService csvBean = new CsvReaderService();
 
-        FileUploadDTO fileLoader = new FileUploadDTO();
-        fileLoader.setFileOne(tutukaCsv);
-        fileLoader.setFileTwo(clientCsv);
+    private FileUploadDTO fileUploadDTO;
 
 
+    public Map<String, Object> compareTransactions(FileUploadDTO fileLoader) throws IOException {
+        List<TransactionWithScoreDTO> transactionsWithScores = new ArrayList<>();
+
+        //store files
         storageService.store(fileLoader.getFileOne());
         storageService.store(fileLoader.getFileTwo());
 
-        //Validates for Empty file, INVALID Headers and INVALID File extension
-        FileUtility fileUtil = new FileUtility();
+        //Validates for Empty file, Invalid Headers and INVALID File extension
         fileUtil.validate(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
         fileUtil.validate(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
 
-        //Read the files into Transaction List
-        CsvReaderService csvBean = new CsvReaderService();
-        List<Transaction> tutukaList = csvBean.csvRead(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
-        System.out.println("TutukaTransactionsList>"+ tutukaList.toString());
+        /**
+         * Read the files into Transaction List
+         * Apply pre-processing logics
+         */
+        List<Transaction> tutukaList = preprocessingService.applyPreprocessingLogic(csvBean.csvRead(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString()));
+        List<Transaction> clientList = preprocessingService.applyPreprocessingLogic(csvBean.csvRead(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString()));
 
-        List<Transaction> clientList = csvBean.csvRead(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
-
-        System.out.println("ClientTransactionsList>"+ clientList.toString());
-
-//        for (Transaction tutukaTransaction: tutukaList){
-//            for (Transaction clientTransaction: clientList)
-//            {
-//                if (!tutukaTransaction.match(clientTransaction)){
-//                    tutukaUnmatchTransactions.add(tutukaTransaction);
-//                }
-//            }
-//        }
-//
-//        for (Transaction clientTransaction: clientList){
-//            for (Transaction tutukaTransaction: tutukaList)
-//            {
-//                if (!tutukaTransaction.match(clientTransaction)){
-//                    clientUnmatchTransactions.add(tutukaTransaction);
-//                }
-//            }
-//        }
-
-        List<TransactionReportWithScore> report = new ArrayList<>();
+        //Remove duplicate and bad transactions from transaction list
         TransactionUtiltiy util = new TransactionUtiltiy();
+        util.removeBadAndDuplicatesFileOne(tutukaList, transactionsWithScores, fileLoader.getFileOne().getOriginalFilename());
+        util.removeBadAndDuplicatesFileTwo(clientList, transactionsWithScores, fileLoader.getFileTwo().getOriginalFilename());
 
-        //Remove the bad and duplicate transactions from the transaction List
-        util.removeBadAndDuplicatesFileOne(tutukaList, report, fileLoader.getFileOne().getOriginalFilename());
-        util.removeBadAndDuplicatesFileTwo(clientList, report, fileLoader.getFileTwo().getOriginalFilename());
+        transactionsWithScores.addAll(similarityMeasurementService.calculateSimilarityScoreWithFuzzyLoginMatch(tutukaList, clientList, fileLoader));
 
-        report.addAll(similarityMeasurementService.fuzzyLogicMatch(tutukaList, clientList, fileLoader));
-
-
-//        response.put("report", report);
+        Map<String, Object> response = splitResultForFiltering(transactionsWithScores);
         response.put("status", HttpStatus.OK);
-        response.put("tutukaUnmatched", report);
-//        response.put("clientUnmatched", clientUnmatchTransactions);
+
+        this.fileUploadDTO = fileLoader;
+
         return response;
     }
 
 
     /**
-     * Check if two objects are matched
-     * @param t2
-     * @param t1
+     * Get A Transaction and find the similar transaction
+     * @param dto
      * @return
      */
-    public boolean match(Transaction t1, Transaction t2) {
+    public Map<String, Object> getSimilarTransaction(TransactionWithScoreDTO dto) throws IOException {
+        Map<String, Object> response = new HashMap<>();
 
-        if (t1 == t2)
-            return true;
-        if (t1 == null || t2 == null)
-            return false;
-
-        /**
-         * If transactionId and TransactionDescription not null and their them same, then it returns true
-         *
-         */
-        if (t1.getTransactionID() != null && t1.getTransactionDescription() != null) {
-            if (t2.getTransactionID() != null && t2.getTransactionDescription() != null) {
-                if (t1.getTransactionID() == t2.getTransactionID()
-                        && t1.getTransactionDescription().equalsIgnoreCase(t2.getTransactionDescription())) {
-                    return true;
-                }
-            }
+        //Select another for comparison. For Tutuka Transactions-> ClientFile, and for client Transactions -> Tutuka file
+        String fileName = fileUploadDTO.getFileOne().getOriginalFilename();
+        if(dto.getFile1Name() != null)
+        {
+            fileName = fileUploadDTO.getFileTwo().getOriginalFilename();
         }
 
+        System.out.println("FileName: "+ fileName);
 
-        /**
-         * If transactionAmount and WalletReference not null and their them same, then it returns true
-         *
-         */
-        if (t1.getTransactionAmount() != null && t1.getWalletReference() != null) {
-            if (t2.getTransactionAmount() != null && t2.getWalletReference() != null) {
-                if (t1.getTransactionAmount() == t2.getTransactionAmount()
-                        && t1.getWalletReference().equalsIgnoreCase(t2.getWalletReference())) {
-                    return true;
-                }
-            }
-        }
+        List<Transaction> transactions = preprocessingService.applyPreprocessingLogic(csvBean.csvRead(storageService.load(fileName).toString()));
 
+        if (transactions.size() < 1)
+            throw new TransactionWithScoreEmptyListException("List of Transactions with score is null");
 
-        /**
-         * if profileName in one file is null and in another file is not, than return false
-         * also if they are not them same in both files, then return false
-         */
-        if (t1.getProfileName() == null) {
-            if (t2.getProfileName() != null)
-                return false;
-        } else if (!t1.getProfileName().equals(t2.getProfileName()) && !t1.getProfileName().equalsIgnoreCase(t2.getProfileName()))
-            return false;
+        Transaction transaction = TransactionMapper.map(dto);
 
+        //get list of transactions from another file
+        List<Transaction> similarTransactions = similarityMeasurementService.calculateSimilarTransaction(transaction, transactions);
 
-        /**
-         * if transactionAmount in one file is null and in another file is not null, than return false
-         *  also if they are not them same in both files, then return false
-         */
-        if (t1.getTransactionAmount() == null) {
-            if (t2.getTransactionAmount() != null)
-                return false;
-        } else if (!t1.getTransactionAmount().equals(t2.getTransactionAmount()))
-            return false;
+        response.put("status", HttpStatus.OK);
+        response.put("similarTransactions", similarTransactions);
 
-        /**
-         * if transactionDate in one file is null and in another file is not null, than return false
-         *  also if they are not them same in both files, then return false
-         */
-        if (t1.getTransactionDate() == null) {
-            if (t2.getTransactionDate() != null)
-                return false;
-        } else if (!t1.getTransactionDate().equals(t2.getTransactionDate()))
-            return false;
-
-
-        /**
-         * if transactionDescription in one file is null and in another file is not null, than return false
-         *  also if they are not them same in both files, then return false
-         */
-        if (t1.getTransactionDescription() == null) {
-            if (t2.getTransactionDescription() != null)
-                return false;
-        } else if (!t1.getTransactionDescription().equals(t2.getTransactionDescription())
-                && !t1.getTransactionDescription().equalsIgnoreCase(t2.getTransactionDescription()))
-            return false;
-
-        /**
-         * if transactionId in one file is null and in another file is not null, than return false
-         *  also if they are not them same in both files, then return false
-         */
-        if (t1.getTransactionID() == null) {
-            if (t2.getTransactionID() != null)
-                return false;
-        } else if (t1.getTransactionID() != t2.getTransactionID())
-            return false;
-
-        /**
-         * if transactionNarrative in one file is null and in another file is not null, than return false
-         *  also if they are not them same in both files, then return false
-         */
-        if (t1.getTransactionNarrative() == null) {
-            if (t2.getTransactionNarrative() != null)
-                return false;
-        } else if (!t1.getTransactionNarrative().equals(t2.getTransactionNarrative())
-                && !t1.getTransactionNarrative().equalsIgnoreCase(t2.getTransactionNarrative()))
-            return false;
-
-        /**
-         * if transactionType in both files are not the same, then return false
-         */
-        if (t1.getTransactionType() != t2.getTransactionType())
-            return false;
-
-        /**
-         * if walletReference in one file is null and in another file is not null, than return false
-         *  also if they are not them same in both files, then return false
-         */
-        if (t1.getWalletReference() == null) {
-            if (t2.getWalletReference() != null)
-                return false;
-        } else if (!t1.getWalletReference().equals(t2.getWalletReference())
-                && !t1.getWalletReference().equalsIgnoreCase(t2.getWalletReference()))
-            return false;
-
-
-        return true;
-
+        return response;
     }
+
+    public List<Transaction> mapTransactionWithScoresToTransaction(List<TransactionWithScoreDTO> dtos)
+    {
+        List<Transaction> transactions = new ArrayList<>();
+        dtos.forEach(transactionWithScoreDTO -> {
+            transactions.add(TransactionMapper.map(transactionWithScoreDTO));
+        });
+        return transactions;
+    }
+
+
+    /**
+     * Split List for sub-lists for rendering on UI
+     * @param transactionWithScoreDTOS
+     * @return
+     */
+    private Map<String, Object> splitResultForFiltering(List<TransactionWithScoreDTO> transactionWithScoreDTOS)
+    {
+        Map<String, Object> data = new HashMap<>();
+        List<TransactionWithScoreDTO> badTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.BAD_TRANSACTION);
+
+        List<TransactionWithScoreDTO> duplicateTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.DUPLICATE);
+        List<TransactionWithScoreDTO> unmatchedTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.UNMATCHED);
+        List<TransactionWithScoreDTO> perfectMatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PERFECT_MATCH);
+        List<TransactionWithScoreDTO> permissibleMatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PERMISSIBLE_MATCH);
+        List<TransactionWithScoreDTO> probableMismatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PROBABLE_MISMATCH);
+        List<TransactionWithScoreDTO> perfectMismatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PERFECT_MISMATCH);
+
+        data.put("duplicate", duplicateTransactions);
+        data.put("bad", badTransactions);
+        data.put("unmatched", unmatchedTransactions);
+        data.put("perfectMatch", perfectMatchTransactions);
+        data.put("permissibleMatch", permissibleMatchTransactions);
+        data.put("probableMismatch", probableMismatchTransactions);
+        data.put("perfectMismatch", perfectMatchTransactions);
+        return data;
+    }
+
+    private List<TransactionWithScoreDTO> filterTransactionsWithScore(List<TransactionWithScoreDTO> dtos, Result result)
+    {
+        List<TransactionWithScoreDTO> filteredTransactions = new ArrayList<>();
+
+        dtos.forEach(transactionWithScoreDTO -> {
+//            System.out.println("Status> " +transactionWithScoreDTO.getStatus().name());
+            if (transactionWithScoreDTO.getStatus().name().equalsIgnoreCase(result.getValue()))
+            {
+                filteredTransactions.add(transactionWithScoreDTO);
+            }
+        });
+        return filteredTransactions;
+    }
+
 
 }

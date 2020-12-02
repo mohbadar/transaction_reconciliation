@@ -1,4 +1,4 @@
-package com.tutuka.reconciliation.infrastructure.util;
+package com.tutuka.reconciliation.trxcompare.util;
 
 import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
 import com.tutuka.reconciliation.infrastructure.exception.FileExtensionException;

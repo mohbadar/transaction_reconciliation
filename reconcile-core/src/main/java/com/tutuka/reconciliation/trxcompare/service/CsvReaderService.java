@@ -3,18 +3,14 @@ package com.tutuka.reconciliation.trxcompare.service;
 import com.google.common.base.Splitter;
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
 import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
-import com.tutuka.reconciliation.infrastructure.exception.TransactionDateException;
-import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.util.TransactionUtiltiy;
 import com.tutuka.reconciliation.trxcompare.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.math.BigInteger;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,19 +18,19 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class CsvReaderService {
-	private int pNameIndex;
-	private int TxDateIndex;
-	private int TxAmtIndex;
-	private int TxNrtvIndex;
-	private int TxDscrIndex;
-	private int TxIDIndex;
-	private int TxTypeIndex;
-	private int WRefIndex;
+	
+	private int profileNameIndex;
+	private int transactionDateIndex;
+	private int transactionAmountIndex;
+	private int transactionNarrativeIndex;
+	private int transactionDescriptionIndex;
+	private int transactionIDIndex;
+	private int transactionTypeIndex;
+	private int walletReferenceIndex;
 
 	TransactionUtiltiy util = new TransactionUtiltiy();
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:mm:ss");
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	LocalDateTime transactionDate = null;
 	Pattern pattern = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 	Splitter splitter = Splitter.on(pattern);
@@ -47,7 +43,7 @@ public class CsvReaderService {
 	 * @return List of transactions after appropriate validations and trimming<br>
 	 */
 	public List<Transaction> csvRead(String fileName) {
-		logger.debug("Inside csvRead method");
+		log.debug("Inside csvRead method");
 		List<Transaction> TransactionsList = new ArrayList<Transaction>();
 		long startTime = System.currentTimeMillis();
 		try {
@@ -62,36 +58,30 @@ public class CsvReaderService {
 			 * This is done to obtain the indexes of the headers. Further in the parsing
 			 * process, this is used so that order of the columns doesn't matter
 			 */
-			pNameIndex = Arrays.asList(headers).indexOf("ProfileName");
-			TxDateIndex = Arrays.asList(headers).indexOf("TransactionDate");
-			TxAmtIndex = Arrays.asList(headers).indexOf("TransactionAmount");
-			TxNrtvIndex = Arrays.asList(headers).indexOf("TransactionNarrative");
-			TxDscrIndex = Arrays.asList(headers).indexOf("TransactionDescription");
-			TxIDIndex = Arrays.asList(headers).indexOf("TransactionID");
-			TxTypeIndex = Arrays.asList(headers).indexOf("TransactionType");
-			WRefIndex = Arrays.asList(headers).indexOf("WalletReference");
+			profileNameIndex = Arrays.asList(headers).indexOf("ProfileName");
+			transactionDateIndex = Arrays.asList(headers).indexOf("TransactionDate");
+			transactionAmountIndex = Arrays.asList(headers).indexOf("TransactionAmount");
+			transactionNarrativeIndex = Arrays.asList(headers).indexOf("TransactionNarrative");
+			transactionDescriptionIndex = Arrays.asList(headers).indexOf("TransactionDescription");
+			transactionIDIndex = Arrays.asList(headers).indexOf("TransactionID");
+			transactionTypeIndex = Arrays.asList(headers).indexOf("TransactionType");
+			walletReferenceIndex = Arrays.asList(headers).indexOf("WalletReference");
 
 			TransactionsList = br.lines().parallel().map(mapToItem).collect(Collectors.toList());
 			br.close();
 		} catch (FileNotFoundException e) {
-			logger.error("FileNotFoundException, The file " + fileName + " cannot be found ");
+			log.error("FileNotFoundException, The file " + fileName + " cannot be found ");
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("IOException from csvRead method when trying to read " + fileName + " into memory");
+			log.error("IOException from csvRead method when trying to read " + fileName + " into memory");
 			e.printStackTrace();
 		}
 
-		logger.info("Total records in the file : " + TransactionsList.size());
-		
 		if(TransactionsList.size()==0) {
-			logger.error("The file "+fileName+" has ZERO transactions");
+			log.error("The file "+fileName+" has ZERO transactions");
 			throw new EmptyFileException("The file "+fileName+" has ZERO transactions");
 		}
-		
-		logger.info("TotalTime to read " + fileName + " is : " + (-startTime + (System.currentTimeMillis())) + "ms");
-
 		return TransactionsList;
-
 	}
 
 	private Function<String, Transaction> mapToItem = (line) -> {
@@ -102,18 +92,18 @@ public class CsvReaderService {
 		 */
 		String[] p = splitter.splitToList(line).toArray(new String[0]);
 
-		if (p.length > pNameIndex && pNameIndex >= 0) {
-			if (StringUtils.trimToNull(p[pNameIndex]) != null) {
-				transaction.setProfileName(p[pNameIndex].replaceAll("[^a-zA-Z ]+", ""));
+		if (p.length > profileNameIndex && profileNameIndex >= 0) {
+			if (StringUtils.trimToNull(p[profileNameIndex]) != null) {
+				transaction.setProfileName(p[profileNameIndex].replaceAll("[^a-zA-Z ]+", ""));
 			}
 		}
 
-		if (p.length > TxDateIndex && TxDateIndex >= 0) {
-			if (StringUtils.trimToNull(p[TxDateIndex]) != null) {
+		if (p.length > transactionDateIndex && transactionDateIndex >= 0) {
+			if (StringUtils.trimToNull(p[transactionDateIndex]) != null) {
 				try {
-					transactionDate = DateUtil.parseToLocalDateTime(p[TxDateIndex]);
+					transactionDate = DateUtil.parseToLocalDateTime(p[transactionDateIndex]);
 				} catch (Exception e) {
-					transactionDate = DateUtil.convertToLocalDateTimeViaInstant(DateUtil.parseDate(p[TxDateIndex]));
+					transactionDate = DateUtil.convertToLocalDateTimeViaInstant(DateUtil.parseDate(p[transactionDateIndex]));
 				}
 				if (util.isValidDate(transactionDate)) {
 					transaction.setTransactionDate(transactionDate);
@@ -121,40 +111,40 @@ public class CsvReaderService {
 			}
 		}
 
-		if (p.length > TxAmtIndex && TxAmtIndex >= 0) {
-			if (StringUtils.trimToNull(p[TxAmtIndex]) != null) {
-				transaction.setTransactionAmount(Long.valueOf(p[TxAmtIndex].replaceAll("[^\\p{Digit}-]+", "")));
+		if (p.length > transactionAmountIndex && transactionAmountIndex >= 0) {
+			if (StringUtils.trimToNull(p[transactionAmountIndex]) != null) {
+				transaction.setTransactionAmount(Long.valueOf(p[transactionAmountIndex].replaceAll("[^\\p{Digit}-]+", "")));
 			}
 		}
 
-		if (p.length > TxNrtvIndex && TxNrtvIndex >= 0) {
-			if (StringUtils.trimToNull(p[TxNrtvIndex]) != null) {
+		if (p.length > transactionNarrativeIndex && transactionNarrativeIndex >= 0) {
+			if (StringUtils.trimToNull(p[transactionNarrativeIndex]) != null) {
 				transaction.setTransactionNarrative(
-						Normalizer.normalize(p[TxNrtvIndex], Normalizer.Form.NFD).replaceAll("[^a-zA-Z0-9 ]+", ""));
+						Normalizer.normalize(p[transactionNarrativeIndex], Normalizer.Form.NFD).replaceAll("[^a-zA-Z0-9 ]+", ""));
 			}
 		}
 
-		if (p.length > TxDscrIndex && TxDscrIndex >= 0) {
+		if (p.length > transactionDescriptionIndex && transactionDescriptionIndex >= 0) {
 			if (StringUtils.trimToNull(p[4]) != null) {
-				transaction.setTransactionDescription(p[TxDscrIndex].replaceAll("[^a-zA-Z]+", ""));
+				transaction.setTransactionDescription(p[transactionDescriptionIndex].replaceAll("[^a-zA-Z]+", ""));
 			}
 		}
 
-		if (p.length > TxIDIndex && TxIDIndex >= 0) {
-			if (StringUtils.trimToNull(p[TxIDIndex]) != null) {
-				transaction.setTransactionID(new BigInteger(p[TxIDIndex].replaceAll("[^\\p{Digit}]+", "")));
+		if (p.length > transactionIDIndex && transactionIDIndex >= 0) {
+			if (StringUtils.trimToNull(p[transactionIDIndex]) != null) {
+				transaction.setTransactionID(new BigInteger(p[transactionIDIndex].replaceAll("[^\\p{Digit}]+", "")));
 			}
 		}
 
-		if (p.length > TxTypeIndex & TxTypeIndex >= 0) {
-			if (StringUtils.trimToNull(p[TxTypeIndex]) != null) {
-				transaction.setTransactionType(Integer.parseInt(p[TxTypeIndex].replaceAll("[^\\p{Digit}]+", "")));
+		if (p.length > transactionTypeIndex & transactionTypeIndex >= 0) {
+			if (StringUtils.trimToNull(p[transactionTypeIndex]) != null) {
+				transaction.setTransactionType(Integer.parseInt(p[transactionTypeIndex].replaceAll("[^\\p{Digit}]+", "")));
 			}
 		}
 
-		if (p.length > WRefIndex && WRefIndex >= 0) {
-			if (StringUtils.trimToNull(p[WRefIndex]) != null) {
-				transaction.setWalletReference(p[WRefIndex].replaceAll("[^a-zA-Z0-9 _]+", ""));
+		if (p.length > walletReferenceIndex && walletReferenceIndex >= 0) {
+			if (StringUtils.trimToNull(p[walletReferenceIndex]) != null) {
+				transaction.setWalletReference(p[walletReferenceIndex].replaceAll("[^a-zA-Z0-9 _]+", ""));
 			}
 		}
 

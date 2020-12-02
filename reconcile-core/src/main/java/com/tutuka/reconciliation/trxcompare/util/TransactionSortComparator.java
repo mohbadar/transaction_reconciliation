@@ -1,11 +1,11 @@
-package com.tutuka.reconciliation.trxcompare.service;
+package com.tutuka.reconciliation.trxcompare.util;
 
 import com.google.common.collect.ComparisonChain;
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
 
 import java.util.Comparator;
 
-public class TransactionComparator implements Comparator<Transaction>{
+public class TransactionSortComparator implements Comparator<Transaction>{
 
 	@Override
 	public int compare(Transaction t1, Transaction t2) {

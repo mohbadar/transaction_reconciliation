@@ -17,5 +17,8 @@ export class ReconciliationService {
         return this.httpClient.post(`${_BASE_URL}/compare-files`, data);
     }
 
+    public getSimilarTransactions(data): Observable<any> {
+        return this.httpClient.post(`${_BASE_URL}/similar-transactions`, data);
+    }
 
 }

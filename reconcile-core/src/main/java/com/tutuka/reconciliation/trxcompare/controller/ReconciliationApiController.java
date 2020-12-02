@@ -1,11 +1,16 @@
 package com.tutuka.reconciliation.trxcompare.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
 import com.tutuka.reconciliation.infrastructure.exception.FileExtensionException;
 import com.tutuka.reconciliation.infrastructure.exception.InvalidHeaderException;
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
-import com.tutuka.reconciliation.infrastructure.util.FileUtility;
-import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.util.FileUtility;
+import com.tutuka.reconciliation.trxcompare.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.domain.TransactionWithScoreDTO;
 import com.tutuka.reconciliation.trxcompare.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,157 +39,72 @@ import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 @RestController
 @RequestMapping("api")
 public class ReconciliationApiController {
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private FileSystemStorageService storageService;
     @Autowired
     private CompareService compareService;
-    
-    @Autowired
-    private SimilarityMeasurementService fLogic;
 
 
-    @PostMapping(value = "/process-files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+    @PostMapping(value = "/compare-files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
-    public ResponseEntity<Map<String,Object>> processFile(
+    public ResponseEntity<Map<String,Object>> compareFiles(
             @RequestParam(name = "info") String info,
             @RequestParam(name = "clientCsv", required = true) MultipartFile clientCsv,
             @RequestParam(name = "tutukaCsv", required = true) MultipartFile tutukaCsv
-    ) {
-
-        Map<String, Object> response = new HashMap<>();
-        System.out.println("Processing Files........"+ info);
-
-
+    ) throws IOException {
 
         FileUploadDTO fileLoader = new FileUploadDTO();
         fileLoader.setFileOne(tutukaCsv);
         fileLoader.setFileTwo(clientCsv);
 
-        logger.info("Inside Post Method");
-        long startTime1 = System.currentTimeMillis();
-        List<TransactionReportWithScore> report = new ArrayList<>();
-        TransactionUtiltiy util = new TransactionUtiltiy();
-
-        storageService.store(fileLoader.getFileOne());
-        storageService.store(fileLoader.getFileTwo());
-
-        //Validates for Empty file, INVALID Headers and INVALID File extension
-        FileUtility fileUtil = new FileUtility();
-        fileUtil.validate(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
-        fileUtil.validate(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
-
-        //Read the files into Transaction List
-        CsvReaderService csvBean = new CsvReaderService();
-        List<Transaction> tutukaList = csvBean.csvRead(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
-        System.out.println("TutukaTransactionsList>"+ tutukaList.toString());
-
-        List<Transaction> clientList = csvBean.csvRead(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
-
-        System.out.println("ClientTransactionsList>"+ clientList.toString());
-        //Remove the bad and duplicate transactions from the transaction List
-        util.removeBadAndDuplicatesFileOne(tutukaList, report, fileLoader.getFileOne().getOriginalFilename());
-        util.removeBadAndDuplicatesFileTwo(clientList, report, fileLoader.getFileTwo().getOriginalFilename());
-
-        //Fuzzy Logic cross matching
-        report.addAll(fLogic.fuzzyLogicMatch(tutukaList, clientList, fileLoader));
-        logger.info("TotalTime = :" + (-startTime1 + (System.currentTimeMillis())));
-
-        response.put("report", report);
-        response.put("status", HttpStatus.OK);
-
-        return  ResponseEntity.ok(response);
+        return  ResponseEntity.ok(compareService.compareTransactions(fileLoader));
     }
 
+    @PostMapping(value = "/similar-transactions", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> getSimilarTransactions(@RequestBody String data) throws IOException {
+        TransactionWithScoreDTO dto = new TransactionWithScoreDTO();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(data);
+
+        String file1Name = root.get("file1Name").asText().trim();
+        String file2Name = root.get("file2Name").asText().trim();
+
+        if(!file1Name.equalsIgnoreCase("null"))
+        {
+            dto.setProfileName1(root.get("profileName1").asText());
+            dto.setFile1Name(file1Name);
+            dto.setTransactionDate1(root.get("transactionDate1").asText());
+            dto.setTransactionAmount1(root.get("transactionAmount1").asLong());
+            dto.setTransactionNarrative1(root.get("transactionNarrative1").asText());
+            dto.setTransactionDescription1(root.get("transactionDescription1").asText());
+
+            if(!root.get("transactionID1").asText().equals("null"))
+            {
+                dto.setTransactionID1(new BigInteger(root.get("transactionID1").asText()));
+            }
+            dto.setTransactionType1(root.get("transactionType1").asInt());
+            dto.setWalletReference1(root.get("walletReference1").asText());
+
+        }
+
+        if(!file2Name.equalsIgnoreCase("null"))
+        {
+            dto.setProfileName2(root.get("profileName2").asText());
+            dto.setFile2Name(root.get("file2Name").asText());
+            dto.setTransactionDate2(root.get("transactionDate2").asText());
+            dto.setTransactionAmount2(root.get("transactionAmount2").asLong());
+            dto.setTransactionNarrative2(root.get("transactionNarrative2").asText());
+            dto.setTransactionDescription2(root.get("transactionDescription2").asText());
+
+            if(!root.get("transactionID2").asText().equals("null")){
+                dto.setTransactionID2(new BigInteger(root.get("transactionID2").asText()));
+            }
+            dto.setTransactionType2(root.get("transactionType2").asInt());
+            dto.setWalletReference2(root.get("walletReference2").asText());
+
+        }
 
 
-    @PostMapping(value = "/compare-files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
-    public ResponseEntity<Map<String,Object>> checkFiles(
-            @RequestParam(name = "info") String info,
-            @RequestParam(name = "clientCsv", required = true) MultipartFile clientCsv,
-            @RequestParam(name = "tutukaCsv", required = true) MultipartFile tutukaCsv
-    ) {
-
-        return  ResponseEntity.ok(compareService.compareTransactions(tutukaCsv, clientCsv));
-    }
-
-
-    @GetMapping("/upload")
-    public ModelAndView listUploadedFiles() throws IOException {
-    	logger.info("Inside upload Get Method");
- /*       model.addAttribute("files", storageService.loadAll().map(
-                path -> MvcUriComponentsBuilder.fromMethodName(ReconciliationApiController.class,
-                        "serveFile", path.getFileName().toString().substring(path.getFileName().toString().lastIndexOf("\\")+1)).build().toString())
-                .collect(Collectors.toList()));*/
-	    ModelAndView mav = new ModelAndView();
-	    mav.setViewName("uploadForm");
-	    mav.addObject("fileLoader", new FileUploadDTO());
-	    return mav;
-    }
-    
-    @GetMapping("/files/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
-        Resource file = storageService.loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
-    }
-    
-    @PostMapping("/upload")
-    public ModelAndView UploadAndCompare(@ModelAttribute("fileLoader") FileUploadDTO fileLoader, Model model,
-                                         RedirectAttributes redirectAttributes) {
-    	logger.info("Inside Post Method");
-    	long startTime1 = System.currentTimeMillis();
-    	ModelAndView modelAndView = new ModelAndView();
-    	List<TransactionReportWithScore> report = new ArrayList<>();
-    	TransactionUtiltiy util = new TransactionUtiltiy();
-    	
-        storageService.store(fileLoader.getFileOne());
-        storageService.store(fileLoader.getFileTwo());
-        
-        //Validates for Empty file, INVALID Headers and INVALID File extension
-        FileUtility fileUtil = new FileUtility();
-        fileUtil.validate(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
-        fileUtil.validate(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
-        
-        //Read the files into Transaction List
-        CsvReaderService csvBean = new CsvReaderService();
-		List<Transaction> tutukaList = csvBean.csvRead(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
-		List<Transaction> clientList = csvBean.csvRead(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
-		
-		//Remove the bad and duplicate transactions from the transaction List
-		util.removeBadAndDuplicatesFileOne(tutukaList, report, fileLoader.getFileOne().getOriginalFilename());
-		util.removeBadAndDuplicatesFileTwo(clientList, report, fileLoader.getFileTwo().getOriginalFilename());
-		
-		//Fuzzy Logic cross matching 		
-		report.addAll(fLogic.fuzzyLogicMatch(tutukaList, clientList, fileLoader));
-		logger.info("TotalTime = :" + (-startTime1 + (System.currentTimeMillis())));
-		
-		modelAndView.addObject("report", report);
-		modelAndView.setViewName("detailedReportPage");
-		
-		logger.info("Redirecting to report from post method");
-		
-		return modelAndView;
-    }
-    
-    @ExceptionHandler({EmptyFileException.class, FileExtensionException.class, DateTimeParseException.class, InvalidHeaderException.class})
-    public ModelAndView handleEmptyFileError(Exception ex) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("errors", ex.getMessage());
-        mav.setViewName("error");
-        return mav;
-    }
-    
-    @ExceptionHandler({Exception.class})
-    public ModelAndView handleStorageError(Exception ex) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("errors", ex.getMessage());
-        mav.setViewName("error");
-        return mav;
+        return ResponseEntity.ok(compareService.getSimilarTransaction(dto));
     }
     
 }

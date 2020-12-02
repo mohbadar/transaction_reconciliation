@@ -6,9 +6,10 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { MessageType, LayoutUtilsService } from 'app/core/_base/crud';
 
 
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ReconciliationService } from './service/reconciliation.service';
+import { ViewTransactionComponent } from './component/view-transaction/view-transaction.component';
 
 
 @Component({
@@ -27,13 +28,16 @@ export class DashboardComponent implements OnInit {
   tutukaCsv: File;
   tutukaCsvAdded: boolean;
 
+  resultLoaded: boolean = false;
+
+  
 
   record: any = {};
+  result: any;
 
   constructor(private formBuilder: FormBuilder,
       private location: Location,
       private layoutUtilService: LayoutUtilsService,
-      public dialog: MatDialog,
       private spinner: NgxSpinnerService,
       private reconciliationService: ReconciliationService
   ) { }
@@ -47,6 +51,8 @@ export class DashboardComponent implements OnInit {
   }
 
 
+
+
   submit() {
       const formData = new FormData();
       this.record = this.myForm.value;
@@ -58,6 +64,8 @@ export class DashboardComponent implements OnInit {
       this.spinner.show();
       this.reconciliationService.processFiles(formData).subscribe((response) => {
           console.log("Response: ", response);
+          this.resultLoaded = true;
+          this.result = response;
           // this.myForm.reset();
           const msg = `Files are successfully processed!`;
           this.spinner.hide();

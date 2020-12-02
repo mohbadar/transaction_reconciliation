@@ -1,0 +1,116 @@
+<div class="kt-portlet"
+    [ngClass]="{ 'kt-portlet--body-progress' : viewLoading, 'kt-portlet--body-progress-overlay' : loadingAfterSubmit }">
+    <div class="kt-portlet__head kt-portlet__head__custom">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">{{ 'VIEW_TRANSACTION'|translate }}</h3>
+        </div>
+    </div>
+    <div>
+
+        <div class="kt-form">
+            <div class="kt-portlet__body">
+
+                <div class="kt-portlet__body-progress">
+                    <mat-spinner diameter="20"></mat-spinner>
+                </div>
+
+	
+                <div class="form-group">
+                    <label>{{'FILE_NAME'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'FILE_NAME'|translate" 
+                    [value]="transaction.file1Name == null ? transaction.file2Name : transaction.file1Name"  readonly>
+                </div>
+
+
+               <div class="form-group">
+                    <label>{{'STATUS'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'STATUS'|translate" 
+                    [value]="transaction.status"  readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>{{'MATCH_SCORE'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'MATCH_SCORE'|translate" 
+                    [value]="transaction.matchScore"  readonly>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label>{{'PROFILE_NAME'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'PROFILE_NAME'|translate" 
+                    [value]="transaction.profileName1 == null ? transaction.profileName2 : transaction.profileName1"  readonly>
+                </div>
+
+
+           <div class="form-group">
+                    <label>{{'TRANSACTION_DATE'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'TRANSACTION_DATE'|translate" 
+                    [value]="transaction.transactionDate1 == null ? transaction.transactionDate2 : transaction.transactionDate1"  readonly>
+                </div>
+
+      <div class="form-group">
+                    <label>{{'TRANSACTION_AMOUNT'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'PROFILE_NAME'|translate" 
+                    [value]="transaction.transactionAmount1 == null ? transaction.transactionAmount2 : transaction.transactionAmount1"  readonly>
+                </div>
+
+
+      <div class="form-group">
+                    <label>{{'TRANSACTION_NARRATIVE'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'TRANSACTION_NARRATIVE'|translate" 
+                    [value]="transaction.transactionNarrative1 == null ? transaction.transactionNarrative2 : transaction.transactionNarrative1"  readonly>
+                </div>
+
+
+      <div class="form-group">
+                    <label>{{'TRANSACTION_DESCRIPTION'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'TRANSACTION_DESCRIPTION'|translate" 
+                    [value]="transaction.transactionDescription1 == null ? transaction.transactionDescription2 : transaction.transactionDescription1"  readonly>
+                </div>
+
+
+      <div class="form-group">
+                    <label>{{'TRANSACTION_ID'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'TRANSACTION_ID'|translate" 
+                    [value]="transaction.transactionID1 == null ? transaction.transactionID2 : transaction.transactionID1"  readonly>
+                </div>
+
+
+      <div class="form-group">
+                    <label>{{'TRANSACTION_TYPE'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'TRANSACTION_TYPE'|translate" 
+                    [value]="transaction.transactionType1 == null ? transaction.transactionType2 : transaction.transactionType1"  readonly>
+                </div>
+
+
+            <div class="form-group">
+                    <label>{{'WALLET_REFERENCE'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'WALLET_REFERENCE'|translate" 
+                    [value]="transaction.walletReference1 == null ? transaction.walletReference2 : transaction.walletReference1"  readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>{{'REASONS'|translate}}</label><br />
+                    <input class="form-control" [placeholder]="'REASONS'|translate" 
+                    [value]="transaction.reasons"  readonly>
+                </div>
+
+
+            </div>
+            <div class="kt-portlet__foot kt-portlet__foot--fit kt-portlet__no-border">
+                <div class="kt-form__actions kt-form__actions--solid">
+                    <div class="row text-right">
+                        <div class="col-lg-12">
+                            <button type="button" mat-raised-button [mat-dialog-close]="" cdkFocusInitial
+                                matTooltip="Cancel changes">
+                                {{ 'CLOSE'|translate }}
+                            </button>&nbsp;
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
