@@ -14,7 +14,7 @@ export class ReconciliationService {
     ) { }
 
     public processFiles(data): Observable<any> {
-        return this.httpClient.post(`${_BASE_URL}/process-files`, data);
+        return this.httpClient.post(`${_BASE_URL}/compare-files`, data);
     }
 
 

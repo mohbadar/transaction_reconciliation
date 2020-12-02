@@ -6,10 +6,7 @@ import com.tutuka.reconciliation.infrastructure.exception.InvalidHeaderException
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
 import com.tutuka.reconciliation.infrastructure.util.FileUtility;
 import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
-import com.tutuka.reconciliation.trxcompare.service.CsvReaderService;
-import com.tutuka.reconciliation.trxcompare.service.SimilarityMeasurementService;
-import com.tutuka.reconciliation.trxcompare.service.TransactionReportWithScore;
-import com.tutuka.reconciliation.trxcompare.service.FileSystemStorageService;
+import com.tutuka.reconciliation.trxcompare.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +34,11 @@ import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 @RequestMapping("api")
 public class ReconciliationApiController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final FileSystemStorageService storageService;
 
     @Autowired
-    public ReconciliationApiController(FileSystemStorageService storageService) {
-        this.storageService = storageService;
-    }
+    private FileSystemStorageService storageService;
+    @Autowired
+    private CompareService compareService;
     
     @Autowired
     private SimilarityMeasurementService fLogic;
@@ -98,6 +94,19 @@ public class ReconciliationApiController {
         response.put("status", HttpStatus.OK);
 
         return  ResponseEntity.ok(response);
+    }
+
+
+
+    @PostMapping(value = "/compare-files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
+    public ResponseEntity<Map<String,Object>> checkFiles(
+            @RequestParam(name = "info") String info,
+            @RequestParam(name = "clientCsv", required = true) MultipartFile clientCsv,
+            @RequestParam(name = "tutukaCsv", required = true) MultipartFile tutukaCsv
+    ) {
+
+        return  ResponseEntity.ok(compareService.compareTransactions(tutukaCsv, clientCsv));
     }
 
 

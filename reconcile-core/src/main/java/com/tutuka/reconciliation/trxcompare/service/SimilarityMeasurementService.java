@@ -63,13 +63,15 @@ public class SimilarityMeasurementService {
 	public List<TransactionReportWithScore> fuzzyLogicMatch(List<Transaction> tutukaTransactionList,
 			List<Transaction> clientTransactionList, FileUploadDTO fileUploadDTO) {
 		
-		Collections.sort(tutukaTransactionList, new TransactionComparator());
-		Collections.sort(clientTransactionList, new TransactionComparator());
+//		Collections.sort(tutukaTransactionList, new TransactionComparator());
+//		Collections.sort(clientTransactionList, new TransactionComparator());
 		logger.info("Sorted the transactions Lists");
 		List<TransactionReportWithScore> reportList = new ArrayList<>();
 		for (Transaction tutukaTx : tutukaTransactionList) {
-			logger.debug("Inside tutuka FOR LOOP   " + tutukaTx.getTransactionID() + " | "
-					+ tutukaTx.getTransactionDescription());
+//
+//
+//			logger.debug("Inside tutuka FOR LOOP   " + tutukaTx.getTransactionID() + " | "
+//					+ tutukaTx.getTransactionDescription());
 			for (Transaction clientTx : clientTransactionList) {
 				TransactionReportWithScore txReport = new TransactionReportWithScore();
 				if (!clientTx.isMatched()) {
@@ -89,6 +91,7 @@ public class SimilarityMeasurementService {
 					//The List is already sorted according to Transaction ID,Transaction Description
 					if (tutukaTx.getTransactionID().compareTo(clientTx.getTransactionID()) <= 0
 							&& !clientTx.isMatched()) {
+
 						logger.debug("Inside isMatched LOOP");
 						if (tutukaTx.getTransactionID().equals(clientTx.getTransactionID())) {
 							if (tutukaTx.getTransactionDescription().equals(clientTx.getTransactionDescription())) {
