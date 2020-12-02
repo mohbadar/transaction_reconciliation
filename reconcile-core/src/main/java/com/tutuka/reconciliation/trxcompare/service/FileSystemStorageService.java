@@ -1,10 +1,11 @@
-package com.tutuka.reconcile.core.storage;
+package com.tutuka.reconciliation.trxcompare.service;
 
-import com.tutuka.reconcile.core.infrastructure.exception.StorageException;
-import com.tutuka.reconcile.core.infrastructure.exception.StorageFileNotFoundException;
+import com.tutuka.reconciliation.infrastructure.exception.StorageException;
+import com.tutuka.reconciliation.infrastructure.exception.StorageFileNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -21,17 +22,19 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 @Service
-public class FileSystemStorageService implements StorageService {
+public class FileSystemStorageService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final Path rootLocation;
 
-    @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
-        this.rootLocation = Paths.get(properties.getLocation());
+//    @Value("${upload.dir}:")
+    private String location = "uploads/";
+
+    public FileSystemStorageService() {
+        this.rootLocation = Paths.get(location);
     }
 
-    @Override
+    
     public void store(MultipartFile file) {
     	logger.debug("Inside store method of StorageService");
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
@@ -58,7 +61,7 @@ public class FileSystemStorageService implements StorageService {
        
     }
 
-    @Override
+    
     public Stream<Path> loadAll() {
         try {
         	logger.debug("Inside loadAll method");
@@ -73,13 +76,13 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
-    @Override
+    
     public Path load(String filename) {
     	logger.debug("Inside load method");
         return rootLocation.resolve(filename);
     }
 
-    @Override
+    
     public Resource loadAsResource(String filename) {
     	logger.debug("Inside loadAsResource method");
         try {
@@ -101,13 +104,13 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
+    
     public void deleteAll() {
     	logger.debug("Inside deleteAll method");
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
-    @Override
+    
     public void init() {
         try {
             Files.createDirectories(rootLocation);

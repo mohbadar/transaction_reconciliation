@@ -1,10 +1,13 @@
-package com.tutuka.reconcile.core;
+package com.tutuka.reconciliation;
 
 import com.tutuka.lib.lang.applicationname.EnableApplicationName;
 
+import com.tutuka.reconciliation.trxcompare.service.FileSystemStorageService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.retry.annotation.EnableRetry;
@@ -24,5 +27,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class Application extends SpringBootServletInitializer{
         public static void main(String[] args) {
                 SpringApplication.run(Application.class, args);
+        }
+
+        @Bean
+        CommandLineRunner init(FileSystemStorageService storageService) {
+                return (args) -> {
+                        storageService.deleteAll();
+                        storageService.init();
+                };
         }
 }

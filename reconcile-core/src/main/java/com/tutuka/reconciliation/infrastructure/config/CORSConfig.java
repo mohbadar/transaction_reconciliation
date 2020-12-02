@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.infrastructure.config;
+package com.tutuka.reconciliation.infrastructure.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

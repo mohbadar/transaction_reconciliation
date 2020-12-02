@@ -1,8 +1,8 @@
-package com.tutuka.reconcile.core.infrastructure.util;
+package com.tutuka.reconciliation.infrastructure.util;
 
-import com.tutuka.reconcile.core.infrastructure.exception.EmptyFileException;
-import com.tutuka.reconcile.core.infrastructure.exception.FileExtensionException;
-import com.tutuka.reconcile.core.infrastructure.exception.InvalidHeaderException;
+import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
+import com.tutuka.reconciliation.infrastructure.exception.FileExtensionException;
+import com.tutuka.reconciliation.infrastructure.exception.InvalidHeaderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;

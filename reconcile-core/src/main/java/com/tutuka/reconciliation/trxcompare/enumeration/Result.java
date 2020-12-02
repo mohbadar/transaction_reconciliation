@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.enumeration;
+package com.tutuka.reconciliation.trxcompare.enumeration;
 
 public enum Result {
 	PERFECT_MATCH,

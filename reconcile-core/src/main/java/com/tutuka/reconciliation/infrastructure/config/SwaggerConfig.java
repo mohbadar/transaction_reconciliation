@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.infrastructure.config;
+package com.tutuka.reconciliation.infrastructure.config;
 
 import io.swagger.models.Contact;
 import org.springframework.beans.factory.annotation.Value;

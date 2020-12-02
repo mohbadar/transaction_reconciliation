@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.service;
+package com.tutuka.reconciliation.trxcompare.service;
 
 import org.apache.commons.codec.language.bm.NameType;
 import org.apache.commons.codec.language.bm.PhoneticEngine;

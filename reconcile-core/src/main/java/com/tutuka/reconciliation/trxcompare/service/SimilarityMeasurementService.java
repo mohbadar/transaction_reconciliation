@@ -1,8 +1,8 @@
-package com.tutuka.reconcile.core.service;
+package com.tutuka.reconciliation.trxcompare.service;
 
-import com.tutuka.reconcile.core.data.Transaction;
-import com.tutuka.reconcile.core.enumeration.Result;
-import com.tutuka.reconcile.core.domain.FileUploadDTO;
+import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.trxcompare.enumeration.Result;
+import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

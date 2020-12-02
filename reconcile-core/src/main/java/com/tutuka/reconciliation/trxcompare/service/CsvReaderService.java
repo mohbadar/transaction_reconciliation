@@ -1,10 +1,10 @@
-package com.tutuka.reconcile.core.service;
+package com.tutuka.reconciliation.trxcompare.service;
 
 import com.google.common.base.Splitter;
-import com.tutuka.reconcile.core.data.Transaction;
-import com.tutuka.reconcile.core.infrastructure.exception.EmptyFileException;
-import com.tutuka.reconcile.core.infrastructure.exception.TransactionDateException;
-import com.tutuka.reconcile.core.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
+import com.tutuka.reconciliation.infrastructure.exception.TransactionDateException;
+import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,9 +112,10 @@ public class CsvReaderService {
 				try {
 					transactionDate = LocalDateTime.parse(p[TxDateIndex], formatter);
 				} catch (Exception e) {
-					logger.error("DateTimeParseException occured while trying to parse " +p[TxDateIndex]+ " in the Transaction Date Field. File may be corrupt");
-					throw new TransactionDateException("DateTimeParseException occured while trying to parse "
-							+ p[TxDateIndex] + " in the Transaction Date Field. File may be corrupt", p[TxDateIndex]);
+//					logger.error("DateTimeParseException occured while trying to parse " +p[TxDateIndex]+ " in the Transaction Date Field. File may be corrupt");
+//					throw new TransactionDateException("DateTimeParseException occured while trying to parse "
+//							+ p[TxDateIndex] + " in the Transaction Date Field. File may be corrupt", p[TxDateIndex]);
+
 				}
 				if (util.isValidDate(transactionDate)) {
 					transaction.setTransactionDate(transactionDate);

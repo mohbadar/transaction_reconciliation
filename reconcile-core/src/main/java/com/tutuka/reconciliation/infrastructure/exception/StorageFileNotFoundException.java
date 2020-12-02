@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.infrastructure.exception;
+package com.tutuka.reconciliation.infrastructure.exception;
 
 public class StorageFileNotFoundException extends StorageException {
 

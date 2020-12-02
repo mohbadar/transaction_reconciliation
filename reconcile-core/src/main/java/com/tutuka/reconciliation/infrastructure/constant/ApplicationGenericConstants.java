@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.infrastructure.constant;
+package com.tutuka.reconciliation.infrastructure.constant;
 
 public class ApplicationGenericConstants {
 

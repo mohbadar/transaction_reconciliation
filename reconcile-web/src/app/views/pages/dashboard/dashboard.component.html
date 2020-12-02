@@ -1,94 +1,57 @@
 <kt-portlet class="_p_collections">
     <kt-portlet-body>
         <div class="kt-heading kt-heading--md">
-            {{'TRANSCATION_RECONCILIATION'|translate}}
+            {{'READING_SHEET_GENERATION'|translate}}
         </div>
         <div class="row">
             <div class=" col-lg-12">
-                <form [formGroup]="formGroup" class="mt-5">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group row required">
-                                <label class="col-lg-3 col-form-label">{{'CLIENT_FILE'|translate}}</label>
-                                <div class="col-lg-9">
-                                   <input hidden type="file" role="button" class="form-control" formControlName="clientfile"
-                                        #clientFileInput (change)="onClientFileSelected($event)" accept=".csv">
-                                    <span class="form-control" (click)="clientFileInput.click()">{{ clientFileName }}</span>
-                                    <print-error [control]="formGroup.get('clientfile')"></print-error>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-lg-6">
-                            <div class="form-group row required">
-                                <label class="col-lg-3 col-form-label">{{'TUTUKA_FILE'|translate}}</label>
-                                <div class="col-lg-9">
-                                    <input hidden type="file" role="button" class="form-control" formControlName="tutukafile"
-                                        #tutukaFileInput (change)="onTutukaFileSelected($event)" accept=".csv">
-                                    <span class="form-control" (click)="tutukaFileInput.click()">{{ tutukaFileName }}</span>
-                                    <print-error [control]="formGroup.get('tutukafile')"></print-error>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                   
-                    <div class="row justify-content-center">
-                        <button [disabled]="formGroup.invalid" type="submit" (click)="formSubmit()"
-                            class="btn btn-primary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u">
-                            {{'PROCESS'|translate}}
-                        </button>&nbsp;&nbsp;
-                    </div>
-                </form>
+
+
+        <form [formGroup]="myForm" (ngSubmit)="submit()" class="kt-form" id="kt_form">
+          <!--begin: Form Wizard Step 1-->
+          <div class="kt-wizard-v2__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
+            <div class="kt-heading kt-heading--md">{{'ENTER_PERSONAL_DETAILS'|translate}}</div>
+
+
+            <div class="kt-form__section kt-form__section--first">
+              <div class="kt-wizard-v2__form">
+            
+                <div class="form-group">
+                  <label>{{'CLIENT_CSV_FILE'|translate}}</label><br />
+                  <input type="file" accept=".csv" class="form-control" (change)="onClientCsvSelected($event)"
+                   formControlName="clientCsv" />
+                   <print-error [control]="myForm.get('clientCsv')"></print-error>
+                </div>
+
+                <div class="form-group">
+                  <label>{{'TUTUKA_CSV_FILE'|translate}}</label><br />
+                  <input type="file" accept=".csv" class="form-control" (change)="onTutukaCsvSelected($event)"
+                    formControlName="tutukaCsv" />
+                    <print-error [control]="myForm.get('tutukaCsv')"></print-error>
+
+                </div>
+              </div>
             </div>
+          </div>
+          <!--end: Form Wizard Step 1-->
+         
+          <!--begin: Form Actions -->
+          <div class="kt-form__actions">
+            <button class="btn btn-primary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u"
+              data-ktwizard-type="action-submit" type="submit" [disabled]="myForm.invalid">
+              {{'SUBMIT'|translate}}
+            </button>
+          </div>
+          <!--end: Form Actions -->
+        </form>
+    
+
+
+     </div>
         </div>
         <hr>
 
-
-        <ng-container>
-            <div>
-                <div class="jumbotron m-5 text-center" id="print-section"
-                    style="width:1200px; height:200px; overflow:auto;">
-                    <table class="table" *ngIf="searchResult != null && searchResult.length > 0" cellspacing="0"
-                        cellpadding="1" border="1" width="300">
-                        <thead>
-                            <tr>
-                                <th>{{'ID_NO'|translate}}</th>
-                                <th>{{'ACCOUNT_NO'|translate}}</th>
-                                <th>{{'SUBSCRIPTION_NO'|translate}}</th>
-                                <th>{{'NAME'|translate}}</th>
-                                <th>{{'F_NAME'|translate}}</th>
-                                <th>{{'METER_NO'|translate}}</th>
-                                <th>{{'ADDRESS'|translate}}</th>
-                                <th>{{'TARIFF'|translate}}</th>
-                                <th>{{'PREVIOUS_KWH'|translate}}</th>
-                                <th>{{'CURRENT_KWH'|translate}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of searchResult let i=index">
-                                <td>{{i + 1}}</td>
-                                <td>{{item.accountNo}}</td>
-                                <td>{{item.scno}}</td>
-                                <td>{{item.consumerName}}</td>
-                                <td>{{item.fatherName}}</td>
-                                <td>{{item.meterNo}}</td>
-                                <td>{{item.address}}</td>
-                                <td>{{item.category}}</td>
-                                <td>{{item.previousKwh}}</td>
-                                <td>{{item.presentKwh}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row justify-content-center">
-                    <button [disabled]="checkForm()"
-                        class="btn btn-primary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u"
-                        printSectionId="print-section" ngxPrint>
-                        {{'PRINT'|translate}}
-                    </button>
-                </div>
-            </div>
-        </ng-container>
     </kt-portlet-body>
 </kt-portlet>
 <ngx-spinner></ngx-spinner>

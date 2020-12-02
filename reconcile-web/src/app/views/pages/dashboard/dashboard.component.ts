@@ -1,9 +1,14 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
+import moment from 'moment';
+import { Observable } from 'rxjs';
+import { Component, OnInit, ElementRef, ViewChild, Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialog, MatExpansionPanel } from "@angular/material";
-import { TranslateService } from '@ngx-translate/core';
-import { LayoutUtilsService, MessageType } from 'app/core/_base/crud';
+import { MessageType, LayoutUtilsService } from 'app/core/_base/crud';
+
+
+import { MatDialog } from '@angular/material';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ReconciliationService } from './service/reconciliation.service';
 
 
 @Component({
@@ -13,105 +18,91 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class DashboardComponent implements OnInit {
 
-    @ViewChild("searchPanel") searchPanel: MatExpansionPanel;
-    @ViewChild("child")
-  
-    formGroup: FormGroup;
+  hasFormErrors: boolean = false;
 
-    clientFileAttachment: File;
-    clientFileName = 'Client File Attachment';
-    clientAttachmentAdded: boolean = false;
+  myForm: FormGroup;
 
-    tutukaFileAttachment: File;
-    tutukaFileName = 'Tutuka File Attachment';
-    tutukaAttachmentAdded: boolean = false;
+  clientCsv: File;
+  clientCsvAdded: boolean;
+  tutukaCsv: File;
+  tutukaCsvAdded: boolean;
 
-    record: any;
-    searchResult: any;
-  
-    constructor(
-      public formBuilder: FormBuilder,
-      public layoutUtilsService: LayoutUtilsService,
-      spinner: NgxSpinnerService,
-      private translate: TranslateService,
-    ) { 
-     
-      console.log("FormBuilder", this.formBuilder);
-      console.log("FormGroup", this.formGroup);
-      
-      
-    }
-  
-    ngOnInit(): void {
 
-      this.formGroup = this.formBuilder.group({
-        clientfile: ['', [Validators.required]],
-        tutukafile: ['', [Validators.required]],
+  record: any = {};
+
+  constructor(private formBuilder: FormBuilder,
+      private location: Location,
+      private layoutUtilService: LayoutUtilsService,
+      public dialog: MatDialog,
+      private spinner: NgxSpinnerService,
+      private reconciliationService: ReconciliationService
+  ) { }
+
+
+  ngOnInit() {
+      this.myForm = this.formBuilder.group({
+          clientCsv: [null,[Validators.required]],
+          tutukaCsv: [null,[Validators.required]],
       });
-    }
-
-
-    resetForm() {
-      this.formGroup.reset();
-      this.searchPanel.toggle();
-    }
-
-    onClientFileSelected(event) {
-        if (event.target.files && event.target.files[0]) {
-            const reader = new FileReader();
-            this.clientFileAttachment = event.target.files[0];
-            console.log('FileName: ', event.target.files[0]);
-            this.clientFileName = event.target.files[0].name;
-            reader.readAsDataURL(event.target.files[0]); // read file as data url
-            reader.onload = (e) => { // called once readAsDataURL is completed
-                this.clientAttachmentAdded = true;
-            }
-        }
-    }
-  
-    onTutukaFileSelected(event) {
-        if (event.target.files && event.target.files[0]) {
-            const reader = new FileReader();
-            this.tutukaFileAttachment = event.target.files[0];
-            console.log('FileName: ', event.target.files[0]);
-            this.tutukaFileName = event.target.files[0].name;
-            reader.readAsDataURL(event.target.files[0]); // read file as data url
-            reader.onload = (e) => { // called once readAsDataURL is completed
-                this.tutukaAttachmentAdded = true;
-            }
-        }
-    }
-  
-    formSubmit() {
-        const formData = new FormData();
-        this.record = this.formGroup.value;
-        formData.append('meterStockDTO', JSON.stringify(this.record));
-        formData.append('clientFile', this.clientFileAttachment);
-        formData.append('tutukaFile', this.tutukaFileAttachment);
-        console.log(formData);
-        
-        // this.spinner.show();
-        // this.service.uploadMetersFromXLS(formData).subscribe(
-        //     response => {
-        //         this.spinner.hide();
-        //         this.reconcileForm.reset();
-        //         const _createMessage = `File has been uploaded!`;
-        //         this.layoutUtilsService.showActionNotification(
-        //             _createMessage,
-        //             MessageType.Create
-        //         );
-        //     },
-        //     err => {
-        //         const msg = 'There was an error on uploading';
-        //         this.spinner.hide();
-        //         this.layoutUtilsService.showActionNotification(msg);
-        //     });
-    }
-    
-  
-    checkForm() {
-      return this.searchResult == null;
-    }
-
   }
+
+
+  submit() {
+      const formData = new FormData();
+      this.record = this.myForm.value;
+      formData.append('info', JSON.stringify(this.record));
+      formData.append('clientCsv', this.clientCsv);
+      formData.append('tutukaCsv', this.tutukaCsv);
+
+      console.log(formData);
+      this.spinner.show();
+      this.reconciliationService.processFiles(formData).subscribe((response) => {
+          console.log("Response: ", response);
+          // this.myForm.reset();
+          const msg = `Files are successfully processed!`;
+          this.spinner.hide();
+          this.layoutUtilService.showActionNotification(msg, MessageType.Create);
+          // this.routeHome();
+      }, (err) => {
+          const msg = 'There was an error in processing files: '+ JSON.stringify(err);
+          this.spinner.hide();
+          this.layoutUtilService.showActionNotification(msg);
+          console.log("err occured: ", err)
+      });
+  }
+
+  routeHome() {
+      this.location.back();
+  }
+
+
   
+
+  onClientCsvSelected(event) {
+      if (event.target.files && event.target.files[0]) {
+          const reader = new FileReader();
+          this.clientCsv = event.target.files[0];
+          console.log('FileName: ', event.target.files[0]);
+          reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+          reader.onload = (e) => { // called once readAsDataURL is completed
+              this.clientCsvAdded = true;
+          }
+      }
+  }
+
+  onTutukaCsvSelected(event) {
+      if (event.target.files && event.target.files[0]) {
+          const reader = new FileReader();
+          this.tutukaCsv = event.target.files[0];
+          console.log('FileName: ', event.target.files[0]);
+          reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+          reader.onload = (e) => { // called once readAsDataURL is completed
+              this.tutukaCsvAdded = true;
+          }
+      }
+  }
+
+
+}

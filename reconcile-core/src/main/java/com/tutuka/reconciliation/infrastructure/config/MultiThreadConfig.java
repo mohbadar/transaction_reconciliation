@@ -1,6 +1,6 @@
-package com.tutuka.reconcile.core.infrastructure.config;
+package com.tutuka.reconciliation.infrastructure.config;
 
-import com.tutuka.reconcile.core.infrastructure.constant.ApplicationGenericConstants;
+import com.tutuka.reconciliation.infrastructure.constant.ApplicationGenericConstants;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.Executor;

@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.domain;
+package com.tutuka.reconciliation.trxcompare.domain;
 
 import lombok.Getter;
 import lombok.Setter;

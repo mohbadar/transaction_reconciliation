@@ -1,9 +1,9 @@
-package com.tutuka.reconcile.core.infrastructure.util;
+package com.tutuka.reconciliation.infrastructure.util;
 
 import com.tutuka.lib.logger.Logger;
 import com.tutuka.lib.logger.appender.RollingFileAppender;
 import com.tutuka.lib.logger.factory.Logfactory;
-import com.tutuka.reconcile.core.infrastructure.constant.ApplicationGenericConstants;
+import com.tutuka.reconciliation.infrastructure.constant.ApplicationGenericConstants;
 
 public class LoggerFactory {
 

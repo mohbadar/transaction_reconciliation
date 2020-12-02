@@ -1,6 +1,6 @@
-package com.tutuka.reconcile.core.service;
+package com.tutuka.reconciliation.trxcompare.service;
 
-import com.tutuka.reconcile.core.enumeration.Result;
+import com.tutuka.reconciliation.trxcompare.enumeration.Result;
 import lombok.Getter;
 import lombok.Setter;
 

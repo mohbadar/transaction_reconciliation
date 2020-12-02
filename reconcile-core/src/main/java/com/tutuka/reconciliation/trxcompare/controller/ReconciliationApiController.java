@@ -1,44 +1,105 @@
-package com.tutuka.reconcile.core.controller;
+package com.tutuka.reconciliation.trxcompare.controller;
 
-import com.tutuka.reconcile.core.data.Transaction;
-import com.tutuka.reconcile.core.infrastructure.exception.*;
-import com.tutuka.reconcile.core.infrastructure.util.FileUtility;
-import com.tutuka.reconcile.core.infrastructure.util.TransactionUtiltiy;
-import com.tutuka.reconcile.core.service.CsvReaderService;
-import com.tutuka.reconcile.core.service.SimilarityMeasurementService;
-import com.tutuka.reconcile.core.service.TransactionReportWithScore;
-import com.tutuka.reconcile.core.storage.StorageService;
+import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
+import com.tutuka.reconciliation.infrastructure.exception.FileExtensionException;
+import com.tutuka.reconciliation.infrastructure.exception.InvalidHeaderException;
+import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.infrastructure.util.FileUtility;
+import com.tutuka.reconciliation.infrastructure.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.trxcompare.service.CsvReaderService;
+import com.tutuka.reconciliation.trxcompare.service.SimilarityMeasurementService;
+import com.tutuka.reconciliation.trxcompare.service.TransactionReportWithScore;
+import com.tutuka.reconciliation.trxcompare.service.FileSystemStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import com.tutuka.reconcile.core.domain.FileUploadDTO;
+import java.util.Map;
+
+import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 
 @RestController
 @RequestMapping("api")
 public class ReconciliationApiController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final StorageService storageService;
+    private final FileSystemStorageService storageService;
 
     @Autowired
-    public ReconciliationApiController(StorageService storageService) {
+    public ReconciliationApiController(FileSystemStorageService storageService) {
         this.storageService = storageService;
     }
     
     @Autowired
     private SimilarityMeasurementService fLogic;
+
+
+    @PostMapping(value = "/process-files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
+    public ResponseEntity<Map<String,Object>> processFile(
+            @RequestParam(name = "info") String info,
+            @RequestParam(name = "clientCsv", required = true) MultipartFile clientCsv,
+            @RequestParam(name = "tutukaCsv", required = true) MultipartFile tutukaCsv
+    ) {
+
+        Map<String, Object> response = new HashMap<>();
+        System.out.println("Processing Files........"+ info);
+
+
+
+        FileUploadDTO fileLoader = new FileUploadDTO();
+        fileLoader.setFileOne(tutukaCsv);
+        fileLoader.setFileTwo(clientCsv);
+
+        logger.info("Inside Post Method");
+        long startTime1 = System.currentTimeMillis();
+        List<TransactionReportWithScore> report = new ArrayList<>();
+        TransactionUtiltiy util = new TransactionUtiltiy();
+
+        storageService.store(fileLoader.getFileOne());
+        storageService.store(fileLoader.getFileTwo());
+
+        //Validates for Empty file, INVALID Headers and INVALID File extension
+        FileUtility fileUtil = new FileUtility();
+        fileUtil.validate(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
+        fileUtil.validate(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
+
+        //Read the files into Transaction List
+        CsvReaderService csvBean = new CsvReaderService();
+        List<Transaction> tutukaList = csvBean.csvRead(storageService.load(fileLoader.getFileOne().getOriginalFilename()).toString());
+        System.out.println("TutukaTransactionsList>"+ tutukaList.toString());
+
+        List<Transaction> clientList = csvBean.csvRead(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString());
+
+        System.out.println("ClientTransactionsList>"+ clientList.toString());
+        //Remove the bad and duplicate transactions from the transaction List
+        util.removeBadAndDuplicatesFileOne(tutukaList, report, fileLoader.getFileOne().getOriginalFilename());
+        util.removeBadAndDuplicatesFileTwo(clientList, report, fileLoader.getFileTwo().getOriginalFilename());
+
+        //Fuzzy Logic cross matching
+        report.addAll(fLogic.fuzzyLogicMatch(tutukaList, clientList, fileLoader));
+        logger.info("TotalTime = :" + (-startTime1 + (System.currentTimeMillis())));
+
+        response.put("report", report);
+        response.put("status", HttpStatus.OK);
+
+        return  ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/upload")
     public ModelAndView listUploadedFiles() throws IOException {

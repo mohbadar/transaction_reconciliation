@@ -1,9 +1,9 @@
-import com.tutuka.reconcile.core.Application;
-import com.tutuka.reconcile.core.data.Transaction;
-import com.tutuka.reconcile.core.enumeration.Result;
-import com.tutuka.reconcile.core.service.CsvReaderService;
-import com.tutuka.reconcile.core.service.FuzzyLogicService;
-import com.tutuka.reconcile.core.service.TransactionReportWithScore;
+import com.tutuka.reconciliation.Application;
+import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.trxcompare.enumeration.Result;
+import com.tutuka.reconciliation.trxcompare.service.CsvReaderService;
+import com.tutuka.reconciliation.trxcompare.service.SimilarityMeasurementService;
+import com.tutuka.reconciliation.trxcompare.service.TransactionReportWithScore;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
-import com.tutuka.reconcile.core.domain.FileUploadDTO;
+import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,10 +28,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(properties = { "similarity.valid_incr=1" })
 @ContextConfiguration(classes = Application.class)
-public class FuzzyLogicTests {
+public class SimilarityMeasurementTests {
 	
 	@Autowired
-	FuzzyLogicService fuzzy;
+	SimilarityMeasurementService similarityMeasurementService;
 
 	private List<Transaction> loadFile(String filename) throws Exception {
 		File testFile = new File(getClass().getClassLoader().getResource(filename).getFile());
@@ -73,7 +73,7 @@ public class FuzzyLogicTests {
 		File clientFile = new File("src/test/resources/client_ProbableMisMatch.csv");
 		List<TransactionReportWithScore> report = new ArrayList<>();
 		try {
-			report = fuzzy.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
+			report = similarityMeasurementService.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
 					filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,7 +90,7 @@ public class FuzzyLogicTests {
 	File clientFile = new File("src/test/resources/client_PermissbleAmtMatch.csv");
 	List<TransactionReportWithScore> report = new ArrayList<>();
 	try {
-		report = fuzzy.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
+		report = similarityMeasurementService.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
 				filesToFileLoader(tutukaFile, clientFile));
 	} catch (Exception e) {
 		e.printStackTrace();
@@ -105,7 +105,7 @@ public class FuzzyLogicTests {
 		File clientFile = new File("src/test/resources/client_PermissbleDateMatch.csv");
 		List<TransactionReportWithScore> report = new ArrayList<>();
 		try {
-			report = fuzzy.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
+			report = similarityMeasurementService.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
 					filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -124,7 +124,7 @@ public class FuzzyLogicTests {
 		File clientFile = new File("src/test/resources/client_PerfectMismatch.csv");
 		List<TransactionReportWithScore> report = new ArrayList<>();
 		try {
-			report = fuzzy.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
+			report = similarityMeasurementService.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
 					filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +147,7 @@ public class FuzzyLogicTests {
 		File clientFile = new File("src/test/resources/client_OthersNull.csv");
 		List<TransactionReportWithScore> report = new ArrayList<>();
 		try {
-			report = fuzzy.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
+			report = similarityMeasurementService.fuzzyLogicMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
 					filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();

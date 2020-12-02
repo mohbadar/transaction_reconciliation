@@ -1,7 +1,7 @@
-package com.tutuka.reconcile.core.service;
+package com.tutuka.reconciliation.trxcompare.service;
 
 import com.google.common.collect.ComparisonChain;
-import com.tutuka.reconcile.core.data.Transaction;
+import com.tutuka.reconciliation.trxcompare.data.Transaction;
 
 import java.util.Comparator;
 

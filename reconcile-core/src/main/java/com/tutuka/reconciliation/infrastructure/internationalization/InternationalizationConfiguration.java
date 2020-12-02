@@ -1,4 +1,4 @@
-package com.tutuka.reconcile.core.infrastructure.internationalization;
+package com.tutuka.reconciliation.infrastructure.internationalization;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

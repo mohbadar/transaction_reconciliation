@@ -7,7 +7,7 @@ add the following dependency to pom.xml
 
 ```
 		<dependency>
-			<groupId>af.tutuka.lang</groupId>
+			<groupId>com.tutuka.lang</groupId>
 			<artifactId>lib-lang</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -1,8 +1,8 @@
-package com.tutuka.reconcile.core.infrastructure.util;
+package com.tutuka.reconciliation.infrastructure.util;
 
-import com.tutuka.reconcile.core.enumeration.Result;
-import com.tutuka.reconcile.core.data.Transaction;
-import com.tutuka.reconcile.core.service.TransactionReportWithScore;
+import com.tutuka.reconciliation.trxcompare.enumeration.Result;
+import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.trxcompare.service.TransactionReportWithScore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
