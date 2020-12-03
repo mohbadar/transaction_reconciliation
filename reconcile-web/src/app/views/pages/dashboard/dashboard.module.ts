@@ -17,6 +17,7 @@ import { ListTransactionResultComponent } from './component/list-transaction-res
 import { ViewTransactionComponent } from './component/view-transaction/view-transaction.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SimilarTransactionsComponent } from './component/similar-transactions/similar-transactions.component';
+import { FilesStatsComponent } from './component/files-stats/files-stats.component';
 
 @NgModule({
     imports: [
@@ -71,6 +72,7 @@ import { SimilarTransactionsComponent } from './component/similar-transactions/s
         ListTransactionResultComponent,
         ViewTransactionComponent,
         SimilarTransactionsComponent,
+        FilesStatsComponent,
     ]
 })
 export class DashboardModule {

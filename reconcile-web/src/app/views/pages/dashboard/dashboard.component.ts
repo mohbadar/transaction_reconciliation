@@ -29,11 +29,12 @@ export class DashboardComponent implements OnInit {
   tutukaCsvAdded: boolean;
 
   resultLoaded: boolean = false;
-
+  filesStats;
   
 
   record: any = {};
   result: any;
+  comparisonDataLoaded : boolean = false;
 
   constructor(private formBuilder: FormBuilder,
       private location: Location,
@@ -64,11 +65,13 @@ export class DashboardComponent implements OnInit {
       this.spinner.show();
       this.reconciliationService.processFiles(formData).subscribe((response) => {
           console.log("Response: ", response);
-          this.resultLoaded = true;
+          this.spinner.hide();
           this.result = response;
+          this.comparisonDataLoaded = true;
+
+          this.setFilesStats(response);
           // this.myForm.reset();
           const msg = `Files are successfully processed!`;
-          this.spinner.hide();
           this.layoutUtilService.showActionNotification(msg, MessageType.Create);
           // this.routeHome();
       }, (err) => {
@@ -90,7 +93,7 @@ export class DashboardComponent implements OnInit {
       if (event.target.files && event.target.files[0]) {
           const reader = new FileReader();
           this.clientCsv = event.target.files[0];
-          console.log('FileName: ', event.target.files[0]);
+        //   console.log('FileName: ', event.target.files[0]);
           reader.readAsDataURL(event.target.files[0]); // read file as data url
 
           reader.onload = (e) => { // called once readAsDataURL is completed
@@ -103,13 +106,50 @@ export class DashboardComponent implements OnInit {
       if (event.target.files && event.target.files[0]) {
           const reader = new FileReader();
           this.tutukaCsv = event.target.files[0];
-          console.log('FileName: ', event.target.files[0]);
+        //   console.log('FileName: ', event.target.files[0]);
           reader.readAsDataURL(event.target.files[0]); // read file as data url
 
           reader.onload = (e) => { // called once readAsDataURL is completed
               this.tutukaCsvAdded = true;
           }
       }
+  }
+
+  setFilesStats(data)
+  {
+    this.filesStats = {
+        clientRowCount: data.clientRowCount,
+        tutukaRowCount: data.tutukaRowCount,
+        badTransaction: data.bad.length,
+        duplicate: data.duplicate.length,
+        perfectMatch: data.perfectMatch.length,
+        perfectMismatch: data.perfectMismatch.length,
+        permissibleMatch: data.permissibleMatch.length,
+        probableMatch: data.probableMatch.length,
+        unmatched1: data.unmatched.length,
+    }    
+  }
+
+  splitBasedOnFileName(transactions)
+  {
+      const splittedFile1Trx : any[] = [];
+      const splittedFile2Trx: any[] = [];
+      transactions.forEach(element => {
+          if(element.file1Name == this.myForm.get('tutukaCsv').value)
+          { 
+            splittedFile1Trx.push(element);
+          }else{
+            splittedFile2Trx.push(element);
+          }
+      });
+
+      return {file1: splittedFile1Trx, file2: splittedFile2Trx}
+  }
+
+
+  showReport()
+  {
+      this.resultLoaded = true;
   }
 
 

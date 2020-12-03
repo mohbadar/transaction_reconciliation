@@ -1,11 +1,12 @@
 
         <mat-tab-group>
 
+
         <!-- Start Tab 1-->
             <mat-tab label="PERFECT_MISMATCH"> 
                         
             <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="unMatchedDataSource" matSort style="width:100%">
+    <table mat-table [dataSource]="profectMismatchDataSource" matSort style="width:100%">
 
 
         <ng-container matColumnDef="file">
@@ -21,7 +22,7 @@
 
      <ng-container matColumnDef="transactionAmount">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionID1}} </td>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
         </ng-container>
         
 
@@ -57,14 +58,427 @@
         </tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    
 </div>
             
             </mat-tab>
         <!-- End Tab 1-->
 
-            <mat-tab label="PROBABLE_MISMATCH"> Content 2 </mat-tab>
-            <mat-tab label="PROBABLE_MATCH"> Content 3 </mat-tab>
-            <mat-tab label="PERMISSIBLE_MATCH"> Content 3 </mat-tab>
-            <mat-tab label="PERFECT_MATCH"> Content 3 </mat-tab>
+        <!-- Start DUPLICATE Transactions Table-->
+            <mat-tab label="DUPLICATE">
+            
+                        <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="duplicateDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+            
+            
+            
+             </mat-tab>
+
+        <!-- End transactions-->  
+
+        <!-- Bad Transaction Tab Start--> 
+            <mat-tab label="BAD_TRANSACTION">
+            
+            
+                        <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="badTransactionDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+            
+             </mat-tab>
+
+          <!-- End Tab-->   
+
+          <!-- Start PROBABLE_MISMATCH Tab-->
+            <mat-tab label="PROBABLE_MISMATCH">
+            
+                        <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="probableMismatchDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+            
+            </mat-tab>
+
+
+            <!-- End Tab-->
+
+
+            <!-- Start PROBABLE_MATCH Tab-->
+            <mat-tab label="PROBABLE_MATCH">
+                                    <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="probableMatchDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+           
+            
+            
+            </mat-tab>
+
+            <!--End Tab-->
+
+
+            <!-- Start PERMISSIBLE_MATCH Tab-->
+            <mat-tab label="PERMISSIBLE_MATCH">
+            
+                                                <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="permissibleMatchDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+             </mat-tab>
+            <mat-tab label="PERFECT_MATCH">
+            
+                                                <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="perfectMatchDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+            
+            </mat-tab>
+        <!-- end tab-->
+
+
+                <!-- Start Tab of UNMATCHED Trx-->
+            <mat-tab label="UNMATCHED"> 
+                        
+            <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="unMatchedDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'REASONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.reasons}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+              <button mat-icon-button color="primary" matTooltip="Get Similars" (click)="getSimilarTransactions(row)">
+                    <mat-icon>
+                        update
+                    </mat-icon>
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+            </mat-tab>
+        <!-- End Tab -->
+
         </mat-tab-group>

@@ -46,7 +46,17 @@
           <!--end: Form Actions -->
         </form>
     
+    <div *ngIf="comparisonDataLoaded == true">
+         <kt-files-stats [(data)]="filesStats"></kt-files-stats>
 
+          <div class="kt-form__actions" style="margin-top: 40px; margin-left: 30px">
+            <button class="btn btn-primary btn-md btn-tall btn-wide kt-font-bold kt-font-transform-u" (click)="showReport()">
+              {{'REPORT'|translate}}
+            </button>
+          </div>
+
+
+    </div>
 
      </div>
         </div>

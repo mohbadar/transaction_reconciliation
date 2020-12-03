@@ -104,10 +104,6 @@ public class SimilarityMeasurementService {
 				TransactionWithScoreDTO txReport = new TransactionWithScoreDTO();
 				if (!clientTx.isMatched()) {
 
-					String clientSetIdentifier = clientTx.getTransactionID().toString() + "|"
-							+ clientTx.getTransactionDescription();
-
-
 					//The List is already sorted according to Transaction ID,Transaction Description
 				   // transactionID and transactionDescription in both transactions are the same, then set matched flag to true
 					if (tutukaTx.getTransactionID().compareTo(clientTx.getTransactionID()) <= 0

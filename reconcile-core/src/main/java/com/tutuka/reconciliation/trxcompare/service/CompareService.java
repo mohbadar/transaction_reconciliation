@@ -61,6 +61,8 @@ public class CompareService {
 
         Map<String, Object> response = splitResultForFiltering(transactionsWithScores);
         response.put("status", HttpStatus.OK);
+        response.put("tutukaRowCount", tutukaList.size());
+        response.put("clientRowCount", tutukaList.size());
 
         this.fileUploadDTO = fileLoader;
 
@@ -127,14 +129,17 @@ public class CompareService {
         List<TransactionWithScoreDTO> permissibleMatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PERMISSIBLE_MATCH);
         List<TransactionWithScoreDTO> probableMismatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PROBABLE_MISMATCH);
         List<TransactionWithScoreDTO> perfectMismatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PERFECT_MISMATCH);
+        List<TransactionWithScoreDTO> probableMatchTransactions = filterTransactionsWithScore(transactionWithScoreDTOS, Result.PROBABLE_MATCH);
+
 
         data.put("duplicate", duplicateTransactions);
         data.put("bad", badTransactions);
         data.put("unmatched", unmatchedTransactions);
-        data.put("perfectMatch", perfectMatchTransactions);
         data.put("permissibleMatch", permissibleMatchTransactions);
         data.put("probableMismatch", probableMismatchTransactions);
-        data.put("perfectMismatch", perfectMatchTransactions);
+        data.put("perfectMatch", perfectMatchTransactions);
+        data.put("perfectMismatch", perfectMismatchTransactions);
+        data.put("probableMatch", probableMatchTransactions);
         return data;
     }
 
@@ -151,6 +156,5 @@ public class CompareService {
         });
         return filteredTransactions;
     }
-
 
 }

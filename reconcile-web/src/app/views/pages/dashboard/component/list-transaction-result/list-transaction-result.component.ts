@@ -21,6 +21,17 @@ export class ListTransactionResultComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+    badTransactionDataSource: MatTableDataSource<any>;
+    probableMismatchDataSource: MatTableDataSource<any>;
+    probableMatchDataSource: MatTableDataSource<any>;
+    permissibleMatchDataSource: MatTableDataSource<any>;
+    perfectMatchDataSource: MatTableDataSource<any>;
+    duplicateDataSource: MatTableDataSource<any>;
+    profectMismatchDataSource: MatTableDataSource<any>;
+
+
+    
+
   constructor(
      private cdref: ChangeDetectorRef,
      public dialog: MatDialog,
@@ -30,16 +41,16 @@ export class ListTransactionResultComponent implements OnInit {
     
   }
 
-   /**
-     * Apply user filter to configuration data
-     *
-     */
-  applyFilter(filterValue: string) {
-      this.unMatchedDataSource.filter = filterValue.trim().toLowerCase();
-
-      if (this.unMatchedDataSource.paginator) {
-          this.unMatchedDataSource.paginator.firstPage();
-      }
+  ngOnInit(): void {
+    console.log("Data", this.data);
+    this.setUnMatchDataSourceData(this.data.unmatched);
+    this.setDuplicateDataSourceData(this.data.duplicate);
+    this.setBadTransactionDataSourceData(this.data.bad);
+    this.setProbableMatchDataSourceData(this.data.probableMatch);
+    this.setProbableMismatchDataSourceData(this.data.probableMismatch);
+    this.setPerfectMatchDataSourceData(this.data.perfectMatch);
+    this.setPerfectMismatchDataSourceData(this.data.perfectMismatch);
+    this.setPermissibleMatchDataSourceData(this.data.permissibleMatch)
   }
 
   setUnMatchDataSourceData(data) {
@@ -48,12 +59,45 @@ export class ListTransactionResultComponent implements OnInit {
     this.unMatchedDataSource.sort = this.sort;
   }
 
-
-  ngOnInit(): void {
-    console.log("Data", this.data);
-    this.setUnMatchDataSourceData(this.data.unmatched)
+  setDuplicateDataSourceData(data) {
+    this.duplicateDataSource = new MatTableDataSource(data);
   }
 
+  setBadTransactionDataSourceData(data) {
+    this.badTransactionDataSource = new MatTableDataSource(data);
+    // this.badTransactionDataSource.paginator = this.paginator;
+    // this.badTransactionDataSource.sort = this.sort;
+  }
+
+  setProbableMismatchDataSourceData(data) {
+    this.probableMismatchDataSource = new MatTableDataSource(data);
+    // this.probableMismatchDataSource.paginator = this.paginator;
+    // this.probableMismatchDataSource.sort = this.sort;
+  }
+
+  setProbableMatchDataSourceData(data) {
+    this.probableMatchDataSource = new MatTableDataSource(data);
+    // this.probableMatchDataSource.paginator = this.paginator;
+    // this.probableMatchDataSource.sort = this.sort;
+  }
+  setPermissibleMatchDataSourceData(data) {
+    this.permissibleMatchDataSource = new MatTableDataSource(data);
+    // this.permissibleMatchDataSource.paginator = this.paginator;
+    // this.permissibleMatchDataSource.sort = this.sort;
+  }
+  setPerfectMatchDataSourceData(data) {
+    this.perfectMatchDataSource = new MatTableDataSource(data);
+    // this.prefectMatchDataSource.paginator = this.paginator;
+    // this.prefectMatchDataSource.sort = this.sort;
+  }
+
+  setPerfectMismatchDataSourceData(data) {
+    console.log("PerfectMismatch", data);
+    
+    this.profectMismatchDataSource = new MatTableDataSource(data);
+    // this.prefectMatchDataSource.paginator = this.paginator;
+    // this.prefectMatchDataSource.sort = this.sort;
+  }
 
   
   view(item) {
