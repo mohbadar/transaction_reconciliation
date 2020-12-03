@@ -56,7 +56,7 @@ public class Transaction {
 	 * @param other
 	 * @return
 	 */
-	public boolean match(Transaction other) {
+	public boolean equal(Transaction other) {
 
 		if (this == other)
 			return true;

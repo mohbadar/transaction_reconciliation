@@ -35,8 +35,6 @@ public class PreprocessingService {
         {
             String transactionNative = StopwordUtility.eliminateStopWords(Arrays.asList(transaction.getTransactionNarrative()));
             transaction.setTransactionNarrative(transactionNative);
-            String comparisonString = StopwordUtility.eliminateStopWords(Arrays.asList(transaction.getComparisonString()));
-            transaction.setComparisonString(comparisonString);
             newTransactions.add(transaction);
         }
         return newTransactions;

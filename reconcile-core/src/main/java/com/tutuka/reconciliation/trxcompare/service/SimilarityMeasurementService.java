@@ -1,9 +1,9 @@
 package com.tutuka.reconciliation.trxcompare.service;
 
 import com.tutuka.reconciliation.trxcompare.data.Transaction;
+import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 import com.tutuka.reconciliation.trxcompare.domain.TransactionWithScoreDTO;
 import com.tutuka.reconciliation.trxcompare.enumeration.Result;
-import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 import com.tutuka.reconciliation.trxcompare.util.SimilarityMeasurementUtility;
 import com.tutuka.reconciliation.trxcompare.util.TransactionSortComparator;
 import org.apache.commons.lang3.StringUtils;
@@ -28,20 +28,20 @@ public class SimilarityMeasurementService {
 	@Value("${similarity.probable_mismatch_tolerance}")
 	public double probableMismatchTolerance;
 
-	@Value("${similarity.valid_incr}")
-	public double validIncr;
+	@Value("${similarity.valid_increment}")
+	public double validIncrement;
 
-	@Value("${similarity.similarity_incr}")
-	public double similarityIncr;
+	@Value("${similarity.similarity_increment}")
+	public double similarityIncrement;
 
-	@Value("${similarity.tx_nrtv_valid_incr}")
-	public double transactionNarrativeValidIncr;
+	@Value("${similarity.transaction_narrative_valid_increment}")
+	public double transactionNarrativeValidIncrement;
 
-	@Value("${similarity.tx_nrtv_probable_match_incr}")
-	public double transactionNarrativeProbableMatchIncr;
+	@Value("${similarity.transaction_narrative_probable_match_increment}")
+	public double transactionNarrativeProbableMatchIncrement;
 
-	@Value("${similarity.tx_nrtv_probable_mismatch_incr}")
-	public double transactionNarrativeProbableMismatchIncr;
+	@Value("${similarity.transaction_narrative_probable_mismatch_increment}")
+	public double transactionNarrativeProbableMismatchIncrement;
 
 	@Value("${similarity.total_score}")
 	public double totalScore;
@@ -118,142 +118,9 @@ public class SimilarityMeasurementService {
 							if (tutukaTx.getTransactionDescription().equals(clientTx.getTransactionDescription())) {
 								tutukaTx.setMatched(true);
 								clientTx.setMatched(true);
-
-								// similarity measurement for walletReference
-								if (StringUtils.equals(tutukaTx.getWalletReference(), clientTx.getWalletReference())) {
-									txReport.setMatchScore(txReport.getMatchScore() + validIncr);
-								} else {
-									txReport.getReasons().append("| WalletReference Mismatch |");
-								}
-
-
-								// transactionDate similarity measurement with Asia Timezone Difference(3hours = 180min)  in consideration
-								if ((tutukaTx.getTransactionDate() == null) ^ (clientTx.getTransactionDate() == null)) {
-									txReport.getReasons().append("| TransactionDate Mismatch |");
-								} else if (Objects.equals(tutukaTx.getTransactionDate(),
-										clientTx.getTransactionDate())) {
-									txReport.setMatchScore(txReport.getMatchScore() + validIncr);
-								} else if (Math.abs(
-										Duration.between(tutukaTx.getTransactionDate(), clientTx.getTransactionDate())
-												.toMinutes()) <= 180) {
-									txReport.setMatchScore(txReport.getMatchScore() + similarityIncr);
-									txReport.getReasons().append("| TransactionDate Similar Match |");
-								} else {
-									txReport.getReasons().append("| TransactionDate Mismatch |");
-								}
-
-								// similarity measurement for transaction amount
-								if ((tutukaTx.getTransactionAmount() == null) ^ (clientTx.getTransactionAmount() == null)) {
-									txReport.getReasons().append("| TransactionAmount Mismatch |");
-								} else if (Objects.equals(tutukaTx.getTransactionAmount(),
-										clientTx.getTransactionAmount())) {
-									txReport.setMatchScore(txReport.getMatchScore() + validIncr);
-								} else if (Math.abs(tutukaTx.getTransactionAmount()) == Math
-										.abs(clientTx.getTransactionAmount())) {
-									txReport.setMatchScore(txReport.getMatchScore() + similarityIncr);
-									txReport.getReasons().append("| TransactionAmount Fuzzy match |");
-								} else {
-									txReport.getReasons().append("| TransactionAmount Mismatch |");
-								}
-
-								// similarity measurement for transaction type
-								if (tutukaTx.getTransactionType() == clientTx.getTransactionType()) {
-									txReport.setMatchScore(txReport.getMatchScore() + validIncr);
-								} else {
-									txReport.getReasons().append("| TransactionType Mismatch |");
-								}
-
-								// similarity measurement for transaction profileName
-								if ((tutukaTx.getProfileName() == null) ^ (clientTx.getProfileName() == null)) {
-									txReport.getReasons().append("| ProfileName Mismatch |");
-								} else if (Objects.equals(tutukaTx.getProfileName(), clientTx.getProfileName())) {
-									txReport.setMatchScore(txReport.getMatchScore() + validIncr);
-								} else {
-									txReport.getReasons().append("| ProfileName Mismatch |");
-								}
-
-								// similarity measurement for transaction narrative
-								if ((tutukaTx.getTransactionNarrative() == null)
-										^ (clientTx.getTransactionNarrative() == null)) {
-									txReport.getReasons().append("| TransactionNarrative Mismatch |");
-								} else if (Objects.equals(tutukaTx.getTransactionNarrative(),
-										clientTx.getTransactionNarrative())) {
-									txReport.setMatchScore(txReport.getMatchScore() + transactionNarrativeValidIncr);
-								} else {
-
-									double similarityScore = similarityMeasurementUtility.getSimilarityScore(
-											tutukaTx.getTransactionNarrative(), clientTx.getTransactionNarrative());
-									if (similarityScore > matchTolerance) {
-										txReport.setMatchScore(txReport.getMatchScore() + transactionNarrativeValidIncr);
-									} else if (similarityScore > probableMatchTolerance) {
-										txReport.setMatchScore(
-												txReport.getMatchScore() + transactionNarrativeProbableMatchIncr);
-										txReport.getReasons().append("| TransactionNarrative Fuzzy Match |");
-									} else if (similarityScore > probableMismatchTolerance) {
-										txReport.setMatchScore(
-												txReport.getMatchScore() + transactionNarrativeProbableMismatchIncr);
-										txReport.getReasons().append("| TransactionNarrative Fuzzy Mismatch |");
-									} else {
-										txReport.getReasons().append("| TransactionNarrative Mismatch |");
-									}
-								}
-
-								//set values
+								txReport = getSimilarityScoreOfTwoTransactions(tutukaTx,clientTx);
 								txReport.setFile1Name(fileUploadDTO.getFileOne().getOriginalFilename());
-								txReport.setProfileName1(tutukaTx.getProfileName());
-								txReport.setTransactionAmount1(tutukaTx.getTransactionAmount());
-								if (!(tutukaTx.getTransactionDate() == null)) {
-									txReport.setTransactionDate1(tutukaTx.getTransactionDate().format(formatter));
-								}
-								txReport.setTransactionDescription1(tutukaTx.getTransactionDescription());
-								txReport.setTransactionID1(tutukaTx.getTransactionID());
-								txReport.setTransactionNarrative1(tutukaTx.getTransactionNarrative());
-								txReport.setTransactionType1(tutukaTx.getTransactionType());
-								txReport.setWalletReference1(tutukaTx.getWalletReference());
 								txReport.setFile2Name(fileUploadDTO.getFileTwo().getOriginalFilename());
-								txReport.setProfileName2(clientTx.getProfileName());
-								txReport.setTransactionAmount2(clientTx.getTransactionAmount());
-								if (!(clientTx.getTransactionDate() == null)) {
-									txReport.setTransactionDate2(clientTx.getTransactionDate().format(formatter));
-								}
-								txReport.setTransactionDescription2(clientTx.getTransactionDescription());
-								txReport.setTransactionID2(clientTx.getTransactionID());
-								txReport.setTransactionNarrative2(clientTx.getTransactionNarrative());
-								txReport.setTransactionType2(clientTx.getTransactionType());
-								txReport.setWalletReference2(clientTx.getWalletReference());
-
-								Double score = txReport.getMatchScore();
-								//calculate scoreBitSum
-								int scoreBitSum = ((score == totalScore) ? 16 : 0)
-										+ ((score >= permissibleMatchLower && score < totalScore)
-												? 8
-												: 0)
-										+ ((score >= probableMatchLower
-												&& score < permissibleMatchLower) ? 4 : 0)
-										+ ((score >= probableMismatchLower
-												&& score < probableMatchLower) ? 2 : 0)
-										+ ((score >= 0.0 && score < probableMismatchLower) ? 1 : 0);
-
-								// Categorize Matching Transactions
-								switch (scoreBitSum) {
-								case 0:
-								case 1:
-									txReport.setStatus(Result.PERFECT_MISMATCH);
-									break;
-								case 2:
-									txReport.setStatus(Result.PROBABLE_MISMATCH);
-									break;
-								case 4:
-									txReport.setStatus(Result.PROBABLE_MATCH);
-									break;
-								case 8:
-									txReport.setStatus(Result.PERMISSIBLE_MATCH);
-									break;
-								case 16:
-									txReport.setStatus(Result.PERFECT_MATCH);
-									break;
-								}
-
 								reportList.add(txReport);
 							}
 							break;
@@ -320,10 +187,11 @@ public class SimilarityMeasurementService {
 		transactionsList = preprocessingService.applyPreprocessingLogic(transactionsList);
 		transaction = preprocessingService.applyPreprocessingLogic(Arrays.asList(transaction)).get(0);
 
-		for (Transaction trx : transactionsList)
-		{
-			Double score = similarityMeasurementUtility.getSimilarityScore(transaction.getComparisonString(), trx.getComparisonString())*100;
-			if(score > 95)
+		for (Transaction trx : transactionsList) {
+			Double score = getSimilarityScoreOfTwoTransactions(transaction, trx).getMatchScore();
+
+//			Double score = similarityMeasurementUtility.getSimilarityScore(transaction.getComparisonString(), trx.getComparisonString())*100;
+			if(score > probableMatchLower)
 			{
 				System.out.println("Similary Score : "+score );
 				trx.setSimilarityScore(score);
@@ -331,6 +199,168 @@ public class SimilarityMeasurementService {
 			}
 		}
 
-		  return similarTransactions;
-		}
+		return similarTransactions;
 	}
+
+
+	/**
+	 * Caculate Similarity Matching Score of Transaction and Put Inside a TransactionWithScoreDTO Object
+	 *
+	 * 	1.similarity measurement for walletReference
+	 * 	2.transactionDate similarity measurement with Asia Timezone Difference(3hours = 180min)  in consideration
+	 * 	3.similarity measurement for transaction
+	 * 	4.similarity measure for transaction type
+	 * 	5.similarity measurement for profileName
+	 * 	6.similarity measurement for transactionNarrative with CousinSimilarity
+	 * 	7.set values for Data Transfer Object
+	 * 	8.Calculate scoreBitSum of transaction
+	 * 	9.Categorize Transaction
+	 *
+	 * @param transaction1
+	 * @param transaction2
+	 * @return
+	 */
+	public TransactionWithScoreDTO getSimilarityScoreOfTwoTransactions(Transaction transaction1, Transaction transaction2) {
+		TransactionWithScoreDTO txReport = new TransactionWithScoreDTO();
+
+		// similarity measurement for walletReference
+		if (StringUtils.equals(transaction1.getWalletReference(), transaction2.getWalletReference())) {
+			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
+		} else {
+			txReport.getReasons().append("| WalletReference Mismatch |");
+		}
+
+
+		// transactionDate similarity measurement with Asia Timezone Difference(3hours = 180min)  in consideration
+		if ((transaction1.getTransactionDate() == null) ^ (transaction2.getTransactionDate() == null)) {
+			txReport.getReasons().append("| TransactionDate Mismatch |");
+		} else if (Objects.equals(transaction1.getTransactionDate(),
+				transaction2.getTransactionDate())) {
+			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
+		} else if (Math.abs(
+				Duration.between(transaction1.getTransactionDate(), transaction2.getTransactionDate())
+						.toMinutes()) <= 180) {
+			txReport.setMatchScore(txReport.getMatchScore() + similarityIncrement);
+			txReport.getReasons().append("| TransactionDate Similar Match |");
+		} else {
+			txReport.getReasons().append("| TransactionDate Mismatch |");
+		}
+
+		// similarity measurement for transaction amount
+		if ((transaction1.getTransactionAmount() == null) ^ (transaction2.getTransactionAmount() == null)) {
+			txReport.getReasons().append("| TransactionAmount Mismatch |");
+		} else if (Objects.equals(transaction1.getTransactionAmount(),
+				transaction2.getTransactionAmount())) {
+			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
+		} else if (Math.abs(transaction1.getTransactionAmount()) == Math
+				.abs(transaction2.getTransactionAmount())) {
+			txReport.setMatchScore(txReport.getMatchScore() + similarityIncrement);
+			txReport.getReasons().append("| TransactionAmount Fuzzy match |");
+		} else {
+			txReport.getReasons().append("| TransactionAmount Mismatch |");
+		}
+
+		// similarity measurement for transaction type
+		if (transaction1.getTransactionType() == transaction2.getTransactionType()) {
+			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
+		} else {
+			txReport.getReasons().append("| TransactionType Mismatch |");
+		}
+
+		// similarity measurement for transaction profileName
+		if ((transaction1.getProfileName() == null) ^ (transaction2.getProfileName() == null)) {
+			txReport.getReasons().append("| ProfileName Mismatch |");
+		} else if (Objects.equals(transaction1.getProfileName(), transaction2.getProfileName())) {
+			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
+		} else {
+			txReport.getReasons().append("| ProfileName Mismatch |");
+		}
+
+		// similarity measurement for transaction narrative
+		if ((transaction1.getTransactionNarrative() == null)
+				^ (transaction2.getTransactionNarrative() == null)) {
+			txReport.getReasons().append("| TransactionNarrative Mismatch |");
+		} else if (Objects.equals(transaction1.getTransactionNarrative(),
+				transaction2.getTransactionNarrative())) {
+			txReport.setMatchScore(txReport.getMatchScore() + transactionNarrativeValidIncrement);
+		} else {
+
+			double similarityScore = similarityMeasurementUtility.getSimilarityScore(
+					transaction1.getTransactionNarrative(), transaction2.getTransactionNarrative());
+			if (similarityScore > matchTolerance) {
+				txReport.setMatchScore(txReport.getMatchScore() + transactionNarrativeValidIncrement);
+			} else if (similarityScore > probableMatchTolerance) {
+				txReport.setMatchScore(
+						txReport.getMatchScore() + transactionNarrativeProbableMatchIncrement);
+				txReport.getReasons().append("| TransactionNarrative Fuzzy Match |");
+			} else if (similarityScore > probableMismatchTolerance) {
+				txReport.setMatchScore(
+						txReport.getMatchScore() + transactionNarrativeProbableMismatchIncrement);
+				txReport.getReasons().append("| TransactionNarrative Fuzzy Mismatch |");
+			} else {
+				txReport.getReasons().append("| TransactionNarrative Mismatch |");
+			}
+		}
+
+		//set values
+//							txReport.setFile1Name(fileUploadDTO.getFileOne().getOriginalFilename());
+		txReport.setProfileName1(transaction1.getProfileName());
+		txReport.setTransactionAmount1(transaction1.getTransactionAmount());
+		if (!(transaction1.getTransactionDate() == null)) {
+			txReport.setTransactionDate1(transaction1.getTransactionDate().format(formatter));
+		}
+		txReport.setTransactionDescription1(transaction1.getTransactionDescription());
+		txReport.setTransactionID1(transaction1.getTransactionID());
+		txReport.setTransactionNarrative1(transaction1.getTransactionNarrative());
+		txReport.setTransactionType1(transaction1.getTransactionType());
+		txReport.setWalletReference1(transaction1.getWalletReference());
+//							txReport.setFile2Name(fileUploadDTO.getFileTwo().getOriginalFilename());
+		txReport.setProfileName2(transaction2.getProfileName());
+		txReport.setTransactionAmount2(transaction2.getTransactionAmount());
+		if (!(transaction2.getTransactionDate() == null)) {
+			txReport.setTransactionDate2(transaction2.getTransactionDate().format(formatter));
+		}
+		txReport.setTransactionDescription2(transaction2.getTransactionDescription());
+		txReport.setTransactionID2(transaction2.getTransactionID());
+		txReport.setTransactionNarrative2(transaction2.getTransactionNarrative());
+		txReport.setTransactionType2(transaction2.getTransactionType());
+		txReport.setWalletReference2(transaction2.getWalletReference());
+
+		Double score = txReport.getMatchScore();
+		//calculate scoreBitSum
+		int scoreBitSum = ((score == totalScore) ? 16 : 0)
+				+ ((score >= permissibleMatchLower && score < totalScore)
+				? 8
+				: 0)
+				+ ((score >= probableMatchLower
+				&& score < permissibleMatchLower) ? 4 : 0)
+				+ ((score >= probableMismatchLower
+				&& score < probableMatchLower) ? 2 : 0)
+				+ ((score >= 0.0 && score < probableMismatchLower) ? 1 : 0);
+
+		// Categorize Matching Transactions
+		switch (scoreBitSum) {
+			case 0:
+			case 1:
+				txReport.setStatus(Result.PERFECT_MISMATCH);
+				break;
+			case 2:
+				txReport.setStatus(Result.PROBABLE_MISMATCH);
+				break;
+			case 4:
+				txReport.setStatus(Result.PROBABLE_MATCH);
+				break;
+			case 8:
+				txReport.setStatus(Result.PERMISSIBLE_MATCH);
+				break;
+			case 16:
+				txReport.setStatus(Result.PERFECT_MATCH);
+				break;
+		}
+
+
+		return txReport;
+
+
+	}
+}
