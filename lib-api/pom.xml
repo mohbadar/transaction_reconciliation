@@ -29,7 +29,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>com.tutuka.lib</groupId>
+			<artifactId>lib-logger</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!--		Google GSON-->
@@ -45,13 +50,7 @@
 			<artifactId>feign-gson</artifactId>
 			<version>${feign.gson.version}</version>
 		</dependency>
-
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-
+		
 		<!--		Google FindBugs-->
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>

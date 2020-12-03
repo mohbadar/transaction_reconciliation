@@ -2,7 +2,8 @@ package com.tutuka.reconciliation;
 
 import com.tutuka.lib.lang.applicationname.EnableApplicationName;
 
-import com.tutuka.reconciliation.trxcompare.service.FileSystemStorageService;
+import com.tutuka.lib.lang.exception.service.EnableServiceException;
+import com.tutuka.reconciliation.transactioncomapare.service.FileSystemStorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableApplicationName
+@EnableServiceException
 @ComponentScan(basePackages = {"com.*"})
 @EnableSwagger2
 @EnableAspectJAutoProxy(proxyTargetClass = true)

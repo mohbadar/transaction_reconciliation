@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-import com.tutuka.lib.lang.exception.common.PatternSyntaxException;
+import com.tutuka.lib.lang.exception.common.BaseUncheckedException;
 import com.tutuka.lib.logger.appender.ConsoleAppender;
 import com.tutuka.lib.logger.appender.FileAppender;
 import com.tutuka.lib.logger.appender.RollingFileAppender;
@@ -450,7 +450,7 @@ public class LogfactoryTest {
         Logfactory.getDefaultRollingFileLogger(rollingFileAppender, "LogfactoryTest");
     }
 
-    @Test(expected = PatternSyntaxException.class)
+    @Test(expected = BaseUncheckedException.class)
     public void testgetDefaultFileLoggerNameWithRollingWrongFilePattern() {
         rollingFileAppender.setAppenderName("testFileappender");
         rollingFileAppender.setAppend(true);
@@ -464,7 +464,7 @@ public class LogfactoryTest {
         Logfactory.getDefaultRollingFileLogger(rollingFileAppender, "LogfactoryTest");
     }
 
-    @Test(expected = PatternSyntaxException.class)
+    @Test(expected = BaseUncheckedException.class)
     public void testgetDefaultFileLoggerNameWithRollingWrongFileNamePattern() {
         rollingFileAppender.setAppenderName("testFileappender");
         rollingFileAppender.setAppend(true);
@@ -530,7 +530,7 @@ public class LogfactoryTest {
         Logfactory.getDefaultRollingFileLogger(rollingFileAppender, "LogfactoryTest");
     }
 
-    @Test(expected = PatternSyntaxException.class)
+    @Test(expected = BaseUncheckedException.class)
     public void testgetDefaultFileLoggerNameWithRollingNotIConstraintsException() {
         rollingFileAppender.setAppenderName("testFileRollingappender");
         rollingFileAppender.setAppend(true);

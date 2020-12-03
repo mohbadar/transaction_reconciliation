@@ -31,8 +31,8 @@ public class LoggerUtils {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return unmarshaller.unmarshal(file);
         } catch (JAXBException e) {
-            throw new XMLConfigurationParseException(LogExeptionCodeConstant.PHOENIXCONFIGURATIONXMLPARSE.getValue(),
-                    LogExeptionCodeConstant.PHOENIXCONFIGURATIONXMLPARSE.getValue(), e);
+            throw new XMLConfigurationParseException(LogExeptionCodeConstant.CONFIGURATIONXMLPARSE.getValue(),
+                    LogExeptionCodeConstant.CONFIGURATIONXMLPARSE.getValue(), e);
         }
 
     }

@@ -1,5 +1,7 @@
 package com.tutuka.lib.logger;
 
+import org.springframework.web.servlet.NoHandlerFoundException;
+
 public interface Logger {
 
     /**
@@ -52,4 +54,5 @@ public interface Logger {
      */
     void trace(String sessionId, String idType, String id, String description);
 
+    void error(String s, Exception ex);
 }

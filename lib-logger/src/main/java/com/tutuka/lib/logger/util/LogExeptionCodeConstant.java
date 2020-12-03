@@ -19,19 +19,19 @@ public enum LogExeptionCodeConstant {
     /**
      *
      */
-    PHOENIXILLEGALARGUMENTEXCEPTION("KER-LOG-007"),
+    ILLEGALARGUMENTEXCEPTION("KER-LOG-007"),
     /**
      *
      */
-    PHOENIXILLEGALFILEACCESS("KER-LOG-008"),
+    ILLEGALFILEACCESS("KER-LOG-008"),
     /**
      *
      */
-    PHOENIXCONFIGURATIONXMLPARSE("KER-LOG-009"),
+    CONFIGURATIONXMLPARSE("KER-LOG-009"),
     /**
      *
      */
-    PHOENIXILLEGALSTATEEXCEPTION("KER-LOG-003"),
+    ILLEGALSTATEEXCEPTION("KER-LOG-003"),
     /**
      *
      */
@@ -55,11 +55,11 @@ public enum LogExeptionCodeConstant {
     /**
      *
      */
-    PHOENIXILLEGALSTATEEXCEPTIONMESSAGE("FileNamePattern does not contain a valid DateToken"),
+    ILLEGALSTATEEXCEPTIONMESSAGE("FileNamePattern does not contain a valid DateToken"),
     /**
      *
      */
-    PHOENIXILLEGALARGUMENTEXCEPTIONMESSAGE("String value of size is not in expected format"),
+    ILLEGALARGUMENTEXCEPTIONMESSAGE("String value of size is not in expected format"),
     /**
      *
      */
@@ -75,7 +75,7 @@ public enum LogExeptionCodeConstant {
     /**
      *
      */
-    PHOENIXILLEGALFILEACCESSMESSAGE("File location not accessible"),
+    ILLEGALFILEACCESSMESSAGE("File location not accessible"),
     /**
      *
      */
@@ -91,7 +91,7 @@ public enum LogExeptionCodeConstant {
     /**
      *
      */
-    PHOENIXCONFIGURATIONXMLPARSEMESSAGE("invalid xml configuration");
+    CONFIGURATIONXMLPARSEMESSAGE("invalid xml configuration");
 
     /**
      * Value of exception constants constant {@link Enum} value

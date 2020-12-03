@@ -2,7 +2,7 @@
 
 import com.tutuka.reconciliation.Application;
 import com.tutuka.reconciliation.infrastructure.exception.StorageException;
-import com.tutuka.reconciliation.trxcompare.service.FileSystemStorageService;
+import com.tutuka.reconciliation.transactioncomapare.service.FileSystemStorageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

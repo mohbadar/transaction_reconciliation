@@ -3,9 +3,9 @@ package com.tutuka.lib.logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tutuka.lib.lang.exception.common.BaseUncheckedException;
 import com.tutuka.lib.lang.exception.common.IllegalArgumentException;
 import com.tutuka.lib.lang.exception.common.IllegalStateException;
-import com.tutuka.lib.lang.exception.common.PatternSyntaxException;
 import com.tutuka.lib.logger.appender.ConsoleAppender;
 import com.tutuka.lib.logger.appender.FileAppender;
 import com.tutuka.lib.logger.appender.RollingFileAppender;
@@ -26,7 +26,7 @@ import ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
 /**
- * Logback implementation class for phoenix
+ * Logback implementation class for
  *
  */
 public class LoggerImpl implements Logger {
@@ -46,11 +46,11 @@ public class LoggerImpl implements Logger {
     /**
      * Builds a logger instance
      *
-     * @param phoenixConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param ConsoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
      * @param name                 name of calling class to get logger
      */
-    private LoggerImpl(ConsoleAppender phoenixConsoleAppender, String name, LogLevel logLevel) {
+    private LoggerImpl(ConsoleAppender ConsoleAppender, String name, LogLevel logLevel) {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         this.logger = context.getLogger(name);
@@ -58,9 +58,9 @@ public class LoggerImpl implements Logger {
         ch.qos.logback.core.ConsoleAppender<ILoggingEvent> consoleAppender = new ch.qos.logback.core.ConsoleAppender<>();
         consoleAppender.setContext(context);
         consoleAppender.setEncoder(ple);
-        consoleAppender.setName(phoenixConsoleAppender.getAppenderName());
-        consoleAppender.setImmediateFlush(phoenixConsoleAppender.isImmediateFlush());
-        consoleAppender.setTarget(phoenixConsoleAppender.getTarget());
+        consoleAppender.setName(ConsoleAppender.getAppenderName());
+        consoleAppender.setImmediateFlush(ConsoleAppender.isImmediateFlush());
+        consoleAppender.setTarget(ConsoleAppender.getTarget());
         consoleAppender.start();
         if (logLevel != null) {
             this.logger.setLevel(Level.valueOf(logLevel.getLevel()));
@@ -74,31 +74,31 @@ public class LoggerImpl implements Logger {
     /**
      * Builds a logger instance
      *
-     * @param phoenixFileAppender {@link FileAppender} instance which contains all
+     * @param FileAppender {@link FileAppender} instance which contains all
      *                          configurations
      * @param name              name of calling class to get logger
      */
-    private LoggerImpl(FileAppender phoenixFileAppender, String name, LogLevel logLevel) {
+    private LoggerImpl(FileAppender FileAppender, String name, LogLevel logLevel) {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         this.logger = context.getLogger(name);
         this.logger.setAdditive(false);
         PatternLayoutEncoder ple = getdefaultPattern(context);
         ch.qos.logback.core.FileAppender<ILoggingEvent> fileAppender = null;
-        if (!fileAppenders.containsKey(phoenixFileAppender.getAppenderName())) {
+        if (!fileAppenders.containsKey(FileAppender.getAppenderName())) {
             fileAppender = new ch.qos.logback.core.FileAppender<>();
             fileAppender.setContext(context);
             fileAppender.setEncoder(ple);
-            fileAppender.setName(phoenixFileAppender.getAppenderName());
-            fileAppender.setImmediateFlush(phoenixFileAppender.isImmediateFlush());
-            fileAppender.setAppend(phoenixFileAppender.isAppend());
-            fileAppender.setFile(phoenixFileAppender.getFileName());
-            fileAppender.setPrudent(phoenixFileAppender.isPrudent());
+            fileAppender.setName(FileAppender.getAppenderName());
+            fileAppender.setImmediateFlush(FileAppender.isImmediateFlush());
+            fileAppender.setAppend(FileAppender.isAppend());
+            fileAppender.setFile(FileAppender.getFileName());
+            fileAppender.setPrudent(FileAppender.isPrudent());
             fileAppender.start();
             fileAppenders.put(fileAppender.getName(), fileAppender);
         } else {
             fileAppender = (ch.qos.logback.core.FileAppender<ILoggingEvent>) fileAppenders
-                    .get(phoenixFileAppender.getAppenderName());
+                    .get(FileAppender.getAppenderName());
         }
         if (logLevel != null) {
             this.logger.setLevel(Level.valueOf(logLevel.getLevel()));
@@ -111,36 +111,36 @@ public class LoggerImpl implements Logger {
     /**
      * Builds a logger instance
      *
-     * @param phoenixRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
      * @param name                     name of calling class to get logger
      */
-    private LoggerImpl(RollingFileAppender phoenixRollingFileAppender, String name, LogLevel logLevel) {
+    private LoggerImpl(RollingFileAppender RollingFileAppender, String name, LogLevel logLevel) {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         this.logger = context.getLogger(name);
         this.logger.setAdditive(false);
         PatternLayoutEncoder ple = getdefaultPattern(context);
         ch.qos.logback.core.rolling.RollingFileAppender<ILoggingEvent> rollingFileAppender = null;
-        if (!rollingFileAppenders.containsKey(phoenixRollingFileAppender.getAppenderName())) {
+        if (!rollingFileAppenders.containsKey(RollingFileAppender.getAppenderName())) {
             rollingFileAppender = new ch.qos.logback.core.rolling.RollingFileAppender<>();
             rollingFileAppender.setContext(context);
             rollingFileAppender.setEncoder(ple);
-            rollingFileAppender.setName(phoenixRollingFileAppender.getAppenderName());
-            rollingFileAppender.setImmediateFlush(phoenixRollingFileAppender.isImmediateFlush());
-            rollingFileAppender.setFile(phoenixRollingFileAppender.getFileName());
-            rollingFileAppender.setAppend(phoenixRollingFileAppender.isAppend());
-            rollingFileAppender.setPrudent(phoenixRollingFileAppender.isPrudent());
-            if (phoenixRollingFileAppender.getMaxFileSize().trim().isEmpty()) {
-                configureTimeBasedRollingPolicy(phoenixRollingFileAppender, context, rollingFileAppender);
+            rollingFileAppender.setName(RollingFileAppender.getAppenderName());
+            rollingFileAppender.setImmediateFlush(RollingFileAppender.isImmediateFlush());
+            rollingFileAppender.setFile(RollingFileAppender.getFileName());
+            rollingFileAppender.setAppend(RollingFileAppender.isAppend());
+            rollingFileAppender.setPrudent(RollingFileAppender.isPrudent());
+            if (RollingFileAppender.getMaxFileSize().trim().isEmpty()) {
+                configureTimeBasedRollingPolicy(RollingFileAppender, context, rollingFileAppender);
             } else {
-                configureSizeAndTimeBasedPolicy(phoenixRollingFileAppender, context, rollingFileAppender);
+                configureSizeAndTimeBasedPolicy(RollingFileAppender, context, rollingFileAppender);
             }
             rollingFileAppenders.put(rollingFileAppender.getName(), rollingFileAppender);
             rollingFileAppender.start();
         } else {
             rollingFileAppender = (ch.qos.logback.core.rolling.RollingFileAppender<ILoggingEvent>) rollingFileAppenders
-                    .get(phoenixRollingFileAppender.getAppenderName());
+                    .get(RollingFileAppender.getAppenderName());
         }
         if (logLevel != null) {
             this.logger.setLevel(Level.valueOf(logLevel.getLevel()));
@@ -154,25 +154,25 @@ public class LoggerImpl implements Logger {
     /**
      * Configures size and time based policy
      *
-     * @param phoenixRollingFileAppender {@link RollingFileAppender} instance to get
+     * @param RollingFileAppender {@link RollingFileAppender} instance to get
      *                                 values'p
      * @param context                  context of logger
      * @param rollingFileAppender      {@link RollingFileAppender} instance by which
      *                                 this policy will attach
      */
-    private void configureSizeAndTimeBasedPolicy(RollingFileAppender phoenixRollingFileAppender, LoggerContext context,
+    private void configureSizeAndTimeBasedPolicy(RollingFileAppender RollingFileAppender, LoggerContext context,
                                                  ch.qos.logback.core.rolling.RollingFileAppender<ILoggingEvent> rollingFileAppender) {
         SizeAndTimeBasedRollingPolicy<ILoggingEvent> sizeAndTimeBasedRollingPolicy = new SizeAndTimeBasedRollingPolicy<>();
         sizeAndTimeBasedRollingPolicy.setContext(context);
 
-        sizeAndTimeBasedRollingPolicy.setFileNamePattern(phoenixRollingFileAppender.getFileNamePattern());
-        sizeAndTimeBasedRollingPolicy.setMaxHistory(phoenixRollingFileAppender.getMaxHistory());
-        if (phoenixRollingFileAppender.getTotalCap() != null
-                && !phoenixRollingFileAppender.getTotalCap().trim().isEmpty()) {
-            sizeAndTimeBasedRollingPolicy.setTotalSizeCap(FileSize.valueOf(phoenixRollingFileAppender.getTotalCap()));
+        sizeAndTimeBasedRollingPolicy.setFileNamePattern(RollingFileAppender.getFileNamePattern());
+        sizeAndTimeBasedRollingPolicy.setMaxHistory(RollingFileAppender.getMaxHistory());
+        if (RollingFileAppender.getTotalCap() != null
+                && !RollingFileAppender.getTotalCap().trim().isEmpty()) {
+            sizeAndTimeBasedRollingPolicy.setTotalSizeCap(FileSize.valueOf(RollingFileAppender.getTotalCap()));
         }
-        if (phoenixRollingFileAppender.getMaxFileSize() != null) {
-            sizeAndTimeBasedRollingPolicy.setMaxFileSize(FileSize.valueOf(phoenixRollingFileAppender.getMaxFileSize()));
+        if (RollingFileAppender.getMaxFileSize() != null) {
+            sizeAndTimeBasedRollingPolicy.setMaxFileSize(FileSize.valueOf(RollingFileAppender.getMaxFileSize()));
         }
         sizeAndTimeBasedRollingPolicy.setParent(rollingFileAppender);
         rollingFileAppender.setRollingPolicy(sizeAndTimeBasedRollingPolicy);
@@ -182,25 +182,25 @@ public class LoggerImpl implements Logger {
     /**
      * Configures time based policy
      *
-     * @param phoenixRollingFileAppender {@link RollingFileAppender} instance to get
+     * @param RollingFileAppender {@link RollingFileAppender} instance to get
      *                                 values
      * @param context                  context of logger
      * @param rollingFileAppender      {@link RollingFileAppender} instance by which
      *                                 this policy will attach
      */
-    private void configureTimeBasedRollingPolicy(RollingFileAppender phoenixRollingFileAppender, LoggerContext context,
+    private void configureTimeBasedRollingPolicy(RollingFileAppender RollingFileAppender, LoggerContext context,
                                                  ch.qos.logback.core.rolling.RollingFileAppender<ILoggingEvent> rollingFileAppender) {
         TimeBasedRollingPolicy<ILoggingEvent> timeBasedRollingPolicy = new TimeBasedRollingPolicy<>();
         timeBasedRollingPolicy.setContext(context);
-        timeBasedRollingPolicy.setFileNamePattern(phoenixRollingFileAppender.getFileNamePattern());
-        timeBasedRollingPolicy.setMaxHistory(phoenixRollingFileAppender.getMaxHistory());
-        if (phoenixRollingFileAppender.getFileNamePattern().contains("%i")) {
-            throw new PatternSyntaxException(LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTION.getValue(),
+        timeBasedRollingPolicy.setFileNamePattern(RollingFileAppender.getFileNamePattern());
+        timeBasedRollingPolicy.setMaxHistory(RollingFileAppender.getMaxHistory());
+        if (RollingFileAppender.getFileNamePattern().contains("%i")) {
+            throw new BaseUncheckedException(LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTION.getValue(),
                     LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTIONMESSAGENOTI.getValue());
         }
-        if (phoenixRollingFileAppender.getTotalCap() != null
-                && !phoenixRollingFileAppender.getTotalCap().trim().isEmpty()) {
-            timeBasedRollingPolicy.setTotalSizeCap(FileSize.valueOf(phoenixRollingFileAppender.getTotalCap()));
+        if (RollingFileAppender.getTotalCap() != null
+                && !RollingFileAppender.getTotalCap().trim().isEmpty()) {
+            timeBasedRollingPolicy.setTotalSizeCap(FileSize.valueOf(RollingFileAppender.getTotalCap()));
         }
         timeBasedRollingPolicy.setParent(rollingFileAppender);
         rollingFileAppender.setRollingPolicy(timeBasedRollingPolicy);
@@ -267,11 +267,11 @@ public class LoggerImpl implements Logger {
             throw new EmptyPatternException(LogExeptionCodeConstant.EMPTYPATTERNEXCEPTION.getValue(),
                     LogExeptionCodeConstant.EMPTYPATTERNEXCEPTIONMESSAGEEMPTY.getValue());
         else if (!rollingFileAppender.getFileNamePattern().contains("%d"))
-            throw new PatternSyntaxException(LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTION.getValue(),
+            throw new BaseUncheckedException(LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTION.getValue(),
                     LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTIONMESSAGED.getValue());
         else if (!rollingFileAppender.getMaxFileSize().trim().isEmpty() && rollingFileAppender.getMaxFileSize() != null
                 && !rollingFileAppender.getFileNamePattern().contains("%i"))
-            throw new PatternSyntaxException(LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTION.getValue(),
+            throw new BaseUncheckedException(LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTION.getValue(),
                     LogExeptionCodeConstant.PATTERNSYNTAXEXCEPTIONMESSAGEI.getValue());
         else if (rollingFileAppender.getFileName() == null)
             throw new FileNameNotProvided(LogExeptionCodeConstant.FILENAMENOTPROVIDED.getValue(),
@@ -286,11 +286,11 @@ public class LoggerImpl implements Logger {
             try {
                 return new LoggerImpl(rollingFileAppender, name, loglevel);
             } catch (IllegalStateException e) {
-                throw new IllegalStateException(LogExeptionCodeConstant.PHOENIXILLEGALSTATEEXCEPTION.getValue(),
-                        LogExeptionCodeConstant.PHOENIXILLEGALSTATEEXCEPTIONMESSAGE.getValue(), e);
+                throw new IllegalStateException(LogExeptionCodeConstant.ILLEGALSTATEEXCEPTION.getValue(),
+                        LogExeptionCodeConstant.ILLEGALSTATEEXCEPTIONMESSAGE.getValue(), e);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(LogExeptionCodeConstant.PHOENIXILLEGALSTATEEXCEPTION.getValue(),
-                        LogExeptionCodeConstant.PHOENIXILLEGALSTATEEXCEPTIONMESSAGE.getValue(), e);
+                throw new IllegalArgumentException(LogExeptionCodeConstant.ILLEGALSTATEEXCEPTION.getValue(),
+                        LogExeptionCodeConstant.ILLEGALSTATEEXCEPTIONMESSAGE.getValue(), e);
             }
     }
 
@@ -353,8 +353,13 @@ public class LoggerImpl implements Logger {
         logger.trace(LOGDISPLAY, sessionId, idType, id, description);
     }
 
+    @Override
+    public void error(String s, Exception ex) {
+        logger.error(s,ex);
+    }
+
     /**
-     * Configures Layout for phoenix
+     * Configures Layout for
      *
      * @param context {@link LoggerContext} instance
      * @return {@link PatternLayoutEncoder} instance

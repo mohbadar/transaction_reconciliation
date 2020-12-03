@@ -1,24 +1,17 @@
 import com.tutuka.reconciliation.Application;
-import com.tutuka.reconciliation.trxcompare.data.Transaction;
-import com.tutuka.reconciliation.trxcompare.enumeration.Result;
-import com.tutuka.reconciliation.trxcompare.service.CsvReaderService;
-import com.tutuka.reconciliation.trxcompare.service.SimilarityMeasurementService;
-import com.tutuka.reconciliation.trxcompare.domain.TransactionWithScoreDTO;
-import org.apache.commons.io.IOUtils;
+import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
+import com.tutuka.reconciliation.transactioncomapare.enumeration.Result;
+import com.tutuka.reconciliation.transactioncomapare.service.SimilarityMeasurementService;
+import com.tutuka.reconciliation.transactioncomapare.domain.TransactionWithScoreDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.multipart.MultipartFile;
-import com.tutuka.reconciliation.trxcompare.domain.FileUploadDTO;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,46 +19,57 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestPropertySource(properties = { "similarity.valid_incr=1" })
+@TestPropertySource(properties = { "similarity.valid_increment=1" })
 @ContextConfiguration(classes = Application.class)
 public class SimilarityMeasurementTests {
 	
 	@Autowired
 	SimilarityMeasurementService similarityMeasurementService;
 
-	private List<Transaction> loadFile(String filename) throws Exception {
-		File testFile = new File(getClass().getClassLoader().getResource(filename).getFile());
-		CsvReaderService csvBeanReader = new CsvReaderService();
-		List<Transaction> transactionsList = new ArrayList<Transaction>();
-		transactionsList = csvBeanReader.csvRead(testFile.getAbsolutePath());
-		return transactionsList;
-	}
+	TestUtility testUtility = new TestUtility();
 
-	private MultipartFile fileToMultipart(File file) {
-		FileInputStream input = null;
-		MultipartFile multipartFile = null;
+	/**
+	 * Perfect Match Test
+	 */
+	@Test
+	public void test_TransactionsPerfectMatch() {
+		File tutukaFile = new File("src/test/resources/tutuka_transaction_score_match.csv");
+		File clientFile = new File("src/test/resources/client_transaction_score_match.csv");
+		List<TransactionWithScoreDTO> report = new ArrayList<>();
 		try {
-			input = new FileInputStream(file);
-			multipartFile = new MockMultipartFile("file", file.getName(), "text/plain", IOUtils.toByteArray(input));
-			System.out.println(" file.getName() is : " + file.getName());
-		} catch (IOException e) {
+			report = similarityMeasurementService.calculateSimilarityScoreMatch(testUtility.loadFile(tutukaFile.getName()), testUtility.loadFile(clientFile.getName()),
+					testUtility.filesToFileLoader(tutukaFile, clientFile));
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return multipartFile;
+		assertThat(report.get(0).getStatus()).isEqualTo(Result.PERFECT_MATCH);
+		System.out.println(report.get(0).getReasons().toString());
 	}
 
-	private FileUploadDTO filesToFileLoader(File file1Name, File file2Name) {
-		FileUploadDTO fileLoader = new FileUploadDTO();
-		fileLoader.setFileOne(fileToMultipart(file1Name));
-		fileLoader.setFileTwo(fileToMultipart(file2Name));
-		return fileLoader;
+	/**
+	 * Similarity Score Test
+	 */
+	@Test
+	public void test_SimilarityScore() {
+		File tutukaFile = new File("src/test/resources/tutuka_transaction_score_match.csv");
+		File clientFile = new File("src/test/resources/client_transaction_score_match.csv");
+
+		TransactionWithScoreDTO dto = new TransactionWithScoreDTO();
+
+		try {
+			Transaction tutukaTransaction = testUtility.loadFile(tutukaFile.getName()).get(0);
+			Transaction clientTransaction = testUtility.loadFile(clientFile.getName()).get(0);
+			dto = similarityMeasurementService.getSimilarityScoreOfTwoTransactions(tutukaTransaction, tutukaTransaction);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		assertThat(dto.getMatchScore() == 6.5);
+		assertThat(dto.getStatus()).isEqualTo(Result.PERFECT_MATCH);
 	}
 	
 	
-	
-	/*	WalletReference Mismatch and 
-	*	Transaction Amt Fuzzy Match
+	/*
+	*  WalletReference Mismatch and Transaction Amount Match
 	*/
 	@Test
 	public void test_ProbableMisMatch() {
@@ -73,46 +77,46 @@ public class SimilarityMeasurementTests {
 		File clientFile = new File("src/test/resources/client_ProbableMisMatch.csv");
 		List<TransactionWithScoreDTO> report = new ArrayList<>();
 		try {
-			report = similarityMeasurementService.calculateSimilarityScoreWithFuzzyLoginMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
-					filesToFileLoader(tutukaFile, clientFile));
+			report = similarityMeasurementService.calculateSimilarityScoreMatch(testUtility.loadFile(tutukaFile.getName()), testUtility.loadFile(clientFile.getName()),
+					testUtility.filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		assertThat(report.get(0).getStatus()).isEqualTo(Result.PROBABLE_MISMATCH);
 		assertThat(report.get(0).getReasons().toString().contains("WalletReference Mismatch"));
-		assertThat(report.get(0).getReasons().toString().contains("Transaction Amount Fuzzy match"));
+		assertThat(report.get(0).getReasons().toString().contains("Transaction Amount match"));
 		System.out.println(report.get(0).getReasons().toString());
 	}
-	
+
 	@Test
-	public void test_FuzzyAmountMatch() {
+	public void test_AmountMatch() {
 	File tutukaFile = new File("src/test/resources/tutuka_PermissbleAmtMatch.csv");
 	File clientFile = new File("src/test/resources/client_PermissbleAmtMatch.csv");
 	List<TransactionWithScoreDTO> report = new ArrayList<>();
 	try {
-		report = similarityMeasurementService.calculateSimilarityScoreWithFuzzyLoginMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
-				filesToFileLoader(tutukaFile, clientFile));
+		report = similarityMeasurementService.calculateSimilarityScoreMatch(testUtility.loadFile(tutukaFile.getName()), testUtility.loadFile(clientFile.getName()),
+				testUtility.filesToFileLoader(tutukaFile, clientFile));
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
 	assertThat(report.get(0).getStatus()).isEqualTo(Result.PERMISSIBLE_MATCH);
-	assertThat(report.get(0).getReasons().toString().contains("Transaction Amount Fuzzy match"));
+	assertThat(report.get(0).getReasons().toString().contains("Transaction Amount match"));
 	}
-	
+
 	@Test
-	public void test_FuzzyDateMatch() {
+	public void test_DateMatch() {
 		File tutukaFile = new File("src/test/resources/tutuka_PermissbleDateMatch.csv");
 		File clientFile = new File("src/test/resources/client_PermissbleDateMatch.csv");
 		List<TransactionWithScoreDTO> report = new ArrayList<>();
 		try {
-			report = similarityMeasurementService.calculateSimilarityScoreWithFuzzyLoginMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
-					filesToFileLoader(tutukaFile, clientFile));
+			report = similarityMeasurementService.calculateSimilarityScoreMatch(testUtility.loadFile(tutukaFile.getName()), testUtility.loadFile(clientFile.getName()),
+					testUtility.filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		//First record contains a time difference of 2 hours
 		assertThat(report.get(0).getStatus()).isEqualTo(Result.PERMISSIBLE_MATCH);
-		assertThat(report.get(0).getReasons().toString().contains("TransactionDate Fuzzy match"));
+		assertThat(report.get(0).getReasons().toString().contains("TransactionDate match"));
 		//Second record contains a time difference of 4 hours
 		assertThat(report.get(1).getStatus()).isEqualTo(Result.PROBABLE_MATCH);
 		assertThat(report.get(1).getReasons().toString().contains("TransactionDate Mismatch"));
@@ -124,8 +128,8 @@ public class SimilarityMeasurementTests {
 		File clientFile = new File("src/test/resources/client_PerfectMismatch.csv");
 		List<TransactionWithScoreDTO> report = new ArrayList<>();
 		try {
-			report = similarityMeasurementService.calculateSimilarityScoreWithFuzzyLoginMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
-					filesToFileLoader(tutukaFile, clientFile));
+			report = similarityMeasurementService.calculateSimilarityScoreMatch(testUtility.loadFile(tutukaFile.getName()), testUtility.loadFile(clientFile.getName()),
+					testUtility.filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -147,8 +151,8 @@ public class SimilarityMeasurementTests {
 		File clientFile = new File("src/test/resources/client_OthersNull.csv");
 		List<TransactionWithScoreDTO> report = new ArrayList<>();
 		try {
-			report = similarityMeasurementService.calculateSimilarityScoreWithFuzzyLoginMatch(loadFile(tutukaFile.getName()), loadFile(clientFile.getName()),
-					filesToFileLoader(tutukaFile, clientFile));
+			report = similarityMeasurementService.calculateSimilarityScoreMatch(testUtility.loadFile(tutukaFile.getName()), testUtility.loadFile(clientFile.getName()),
+					testUtility.filesToFileLoader(tutukaFile, clientFile));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

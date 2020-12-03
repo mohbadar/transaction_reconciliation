@@ -15,7 +15,7 @@ import com.tutuka.lib.logger.util.LoggerUtils;
 import java.io.File;
 
 /**
- * Factory class for PHOENIX
+ * Factory class for
  */
 public class Logfactory {
 
@@ -29,169 +29,169 @@ public class Logfactory {
     /**
      * Default Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param consoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
      * @param clazz                reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultConsoleLogger(ConsoleAppender PHOENIXConsoleAppender, Class<?> clazz) {
-        return LoggerImpl.getConsoleLogger(PHOENIXConsoleAppender, clazz.getName(), null);
+    public static Logger getDefaultConsoleLogger(ConsoleAppender consoleAppender, Class<?> clazz) {
+        return LoggerImpl.getConsoleLogger(consoleAppender, clazz.getName(), null);
     }
 
     /**
      * Default Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param ConsoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
      * @param clazz                reference of the calling class
      * @param logLevel             {@link LogLevel} more logger
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultConsoleLogger(ConsoleAppender PHOENIXConsoleAppender, Class<?> clazz,
+    public static Logger getDefaultConsoleLogger(ConsoleAppender ConsoleAppender, Class<?> clazz,
                                                  LogLevel logLevel) {
-        return LoggerImpl.getConsoleLogger(PHOENIXConsoleAppender, clazz.getName(), logLevel);
+        return LoggerImpl.getConsoleLogger(ConsoleAppender, clazz.getName(), logLevel);
     }
 
     /**
      * Default Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param ConsoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
      * @param name                 name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultConsoleLogger(ConsoleAppender PHOENIXConsoleAppender, String name) {
-        return LoggerImpl.getConsoleLogger(PHOENIXConsoleAppender, name, null);
+    public static Logger getDefaultConsoleLogger(ConsoleAppender ConsoleAppender, String name) {
+        return LoggerImpl.getConsoleLogger(ConsoleAppender, name, null);
     }
 
     /**
      * Default Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param ConsoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
      * @param name                 name of the calling class
      * @param logLevel             {@link LogLevel} more logger
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultConsoleLogger(ConsoleAppender PHOENIXConsoleAppender, String name, LogLevel logLevel) {
-        return LoggerImpl.getConsoleLogger(PHOENIXConsoleAppender, name, logLevel);
+    public static Logger getDefaultConsoleLogger(ConsoleAppender ConsoleAppender, String name, LogLevel logLevel) {
+        return LoggerImpl.getConsoleLogger(ConsoleAppender, name, logLevel);
     }
 
     /**
      * Default File factory method to configure logger
      *
-     * @param PHOENIXFileAppender {@link FileAppender} instance which contains all
+     * @param fileAppender {@link FileAppender} instance which contains all
      *                          configurations
      * @param clazz             reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultFileLogger(FileAppender PHOENIXFileAppender, Class<?> clazz) {
-        return LoggerImpl.getFileLogger(PHOENIXFileAppender, clazz.getName(), null);
+    public static Logger getDefaultFileLogger(FileAppender fileAppender, Class<?> clazz) {
+        return LoggerImpl.getFileLogger(fileAppender, clazz.getName(), null);
     }
 
     /**
      * Default File factory method to configure logger
      *
-     * @param PHOENIXFileAppender {@link FileAppender} instance which contains all
+     * @param FileAppender {@link FileAppender} instance which contains all
      *                          configurations
      * @param clazz             reference of the calling class
      * @param logLevel          {@link LogLevel} more logger
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultFileLogger(FileAppender PHOENIXFileAppender, Class<?> clazz, LogLevel logLevel) {
-        return LoggerImpl.getFileLogger(PHOENIXFileAppender, clazz.getName(), logLevel);
+    public static Logger getDefaultFileLogger(FileAppender FileAppender, Class<?> clazz, LogLevel logLevel) {
+        return LoggerImpl.getFileLogger(FileAppender, clazz.getName(), logLevel);
     }
 
     /**
      * Default File factory method to configure logger
      *
-     * @param PHOENIXFileAppender {@link FileAppender} instance which contains all
+     * @param FileAppender {@link FileAppender} instance which contains all
      *                          configurations
      * @param name              name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultFileLogger(FileAppender PHOENIXFileAppender, String name) {
-        return LoggerImpl.getFileLogger(PHOENIXFileAppender, name, null);
+    public static Logger getDefaultFileLogger(FileAppender FileAppender, String name) {
+        return LoggerImpl.getFileLogger(FileAppender, name, null);
     }
 
     /**
      * Default File factory method to configure logger
      *
-     * @param PHOENIXFileAppender {@link FileAppender} instance which contains all
+     * @param FileAppender {@link FileAppender} instance which contains all
      *                          configurations
      * @param name              name of the calling class
      * @param logLevel          {@link LogLevel} more logger
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultFileLogger(FileAppender PHOENIXFileAppender, String name, LogLevel logLevel) {
-        return LoggerImpl.getFileLogger(PHOENIXFileAppender, name, logLevel);
+    public static Logger getDefaultFileLogger(FileAppender FileAppender, String name, LogLevel logLevel) {
+        return LoggerImpl.getFileLogger(FileAppender, name, logLevel);
     }
 
     /**
      * Default Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
      * @param clazz                    reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultRollingFileLogger(RollingFileAppender PHOENIXRollingFileAppender, Class<?> clazz) {
-        return LoggerImpl.getRollingFileLogger(PHOENIXRollingFileAppender, clazz.getName(), null);
+    public static Logger getDefaultRollingFileLogger(RollingFileAppender RollingFileAppender, Class<?> clazz) {
+        return LoggerImpl.getRollingFileLogger(RollingFileAppender, clazz.getName(), null);
     }
 
     /**
      * Default Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
      * @param clazz                    reference of the calling class
      * @param logLevel                 {@link LogLevel} more logger
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultRollingFileLogger(RollingFileAppender PHOENIXRollingFileAppender, Class<?> clazz,
+    public static Logger getDefaultRollingFileLogger(RollingFileAppender RollingFileAppender, Class<?> clazz,
                                                      LogLevel logLevel) {
-        return LoggerImpl.getRollingFileLogger(PHOENIXRollingFileAppender, clazz.getName(), logLevel);
+        return LoggerImpl.getRollingFileLogger(RollingFileAppender, clazz.getName(), logLevel);
     }
 
     /**
      * Default Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
      * @param name                     name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultRollingFileLogger(RollingFileAppender PHOENIXRollingFileAppender, String name) {
-        return LoggerImpl.getRollingFileLogger(PHOENIXRollingFileAppender, name, null);
+    public static Logger getDefaultRollingFileLogger(RollingFileAppender RollingFileAppender, String name) {
+        return LoggerImpl.getRollingFileLogger(RollingFileAppender, name, null);
     }
 
     /**
      * Default Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
      * @param name                     name of the calling class
      * @param logLevel                 {@link LogLevel} more logger
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultRollingFileLogger(RollingFileAppender PHOENIXRollingFileAppender, String name,
+    public static Logger getDefaultRollingFileLogger(RollingFileAppender RollingFileAppender, String name,
                                                      LogLevel logLevel) {
-        return LoggerImpl.getRollingFileLogger(PHOENIXRollingFileAppender, name, logLevel);
+        return LoggerImpl.getRollingFileLogger(RollingFileAppender, name, logLevel);
     }
 
     /**
      * Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param ConsoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
-     * @param PHOENIXLoggerMethod    type of Logging implementation
+     * @param LoggerMethod    type of Logging implementation
      * @param clazz                reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getConsoleLogger(ConsoleAppender PHOENIXConsoleAppender, LoggerMethod PHOENIXLoggerMethod,
+    public static Logger getConsoleLogger(ConsoleAppender ConsoleAppender, LoggerMethod LoggerMethod,
                                           Class<?> clazz) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK) {
-            return LoggerImpl.getConsoleLogger(PHOENIXConsoleAppender, clazz.getName(), null);
+        if (LoggerMethod == LoggerMethod.LOGBACK) {
+            return LoggerImpl.getConsoleLogger(ConsoleAppender, clazz.getName(), null);
         } else {
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -201,16 +201,16 @@ public class Logfactory {
     /**
      * Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppender {@link ConsoleAppender} instance which contains
+     * @param ConsoleAppender {@link ConsoleAppender} instance which contains
      *                             all configurations
-     * @param PHOENIXLoggerMethod    type of Logging implementation
+     * @param LoggerMethod    type of Logging implementation
      * @param name                 name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getConsoleLogger(ConsoleAppender PHOENIXConsoleAppender, LoggerMethod PHOENIXLoggerMethod,
+    public static Logger getConsoleLogger(ConsoleAppender ConsoleAppender, LoggerMethod LoggerMethod,
                                           String name) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
-            return LoggerImpl.getConsoleLogger(PHOENIXConsoleAppender, name, null);
+        if (LoggerMethod == LoggerMethod.LOGBACK)
+            return LoggerImpl.getConsoleLogger(ConsoleAppender, name, null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -219,15 +219,15 @@ public class Logfactory {
     /**
      * File factory method to configure logger
      *
-     * @param PHOENIXFileAppender {@link FileAppender} instance which contains all
+     * @param FileAppender {@link FileAppender} instance which contains all
      *                          configurations
-     * @param PHOENIXLoggerMethod type of Logging implementation
+     * @param LoggerMethod type of Logging implementation
      * @param clazz             reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getFileLogger(FileAppender PHOENIXFileAppender, LoggerMethod PHOENIXLoggerMethod, Class<?> clazz) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
-            return LoggerImpl.getFileLogger(PHOENIXFileAppender, clazz.getName(), null);
+    public static Logger getFileLogger(FileAppender FileAppender, LoggerMethod LoggerMethod, Class<?> clazz) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
+            return LoggerImpl.getFileLogger(FileAppender, clazz.getName(), null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -236,15 +236,15 @@ public class Logfactory {
     /**
      * File factory method to configure logger
      *
-     * @param PHOENIXFileAppender {@link FileAppender} instance which contains all
+     * @param FileAppender {@link FileAppender} instance which contains all
      *                          configurations
-     * @param PHOENIXLoggerMethod type of Logging implementation
+     * @param LoggerMethod type of Logging implementation
      * @param name              name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getFileLogger(FileAppender PHOENIXFileAppender, LoggerMethod PHOENIXLoggerMethod, String name) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
-            return LoggerImpl.getFileLogger(PHOENIXFileAppender, name, null);
+    public static Logger getFileLogger(FileAppender FileAppender, LoggerMethod LoggerMethod, String name) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
+            return LoggerImpl.getFileLogger(FileAppender, name, null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -253,16 +253,16 @@ public class Logfactory {
     /**
      * Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
-     * @param PHOENIXLoggerMethod        type of Logging implementation
+     * @param LoggerMethod        type of Logging implementation
      * @param clazz                    reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getRollingFileLogger(RollingFileAppender PHOENIXRollingFileAppender,
-                                              LoggerMethod PHOENIXLoggerMethod, Class<?> clazz) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
-            return LoggerImpl.getRollingFileLogger(PHOENIXRollingFileAppender, clazz.getName(), null);
+    public static Logger getRollingFileLogger(RollingFileAppender RollingFileAppender,
+                                              LoggerMethod LoggerMethod, Class<?> clazz) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
+            return LoggerImpl.getRollingFileLogger(RollingFileAppender, clazz.getName(), null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -271,16 +271,16 @@ public class Logfactory {
     /**
      * Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppender {@link RollingFileAppender} instance which
+     * @param RollingFileAppender {@link RollingFileAppender} instance which
      *                                 contains all configurations
-     * @param PHOENIXLoggerMethod        type of Logging implementation
+     * @param LoggerMethod        type of Logging implementation
      * @param name                     name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getRollingFileLogger(RollingFileAppender PHOENIXRollingFileAppender,
-                                              LoggerMethod PHOENIXLoggerMethod, String name) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
-            return LoggerImpl.getRollingFileLogger(PHOENIXRollingFileAppender, name, null);
+    public static Logger getRollingFileLogger(RollingFileAppender RollingFileAppender,
+                                              LoggerMethod LoggerMethod, String name) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
+            return LoggerImpl.getRollingFileLogger(RollingFileAppender, name, null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -289,99 +289,99 @@ public class Logfactory {
     /**
      * Default Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppenderFile XML file containing PHOENIX console logger
+     * @param ConsoleAppenderFile XML file containing  console logger
      *                                 configurations
      * @param clazz                    reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultConsoleLogger(File PHOENIXConsoleAppenderFile, Class<?> clazz) {
+    public static Logger getDefaultConsoleLogger(File ConsoleAppenderFile, Class<?> clazz) {
         return LoggerImpl.getConsoleLogger(
-                (ConsoleAppender) LoggerUtils.unmarshall(PHOENIXConsoleAppenderFile, ConsoleAppender.class),
+                (ConsoleAppender) LoggerUtils.unmarshall(ConsoleAppenderFile, ConsoleAppender.class),
                 clazz.getName(), null);
     }
 
     /**
      * Default Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppenderFile XML file containing PHOENIX console logger
+     * @param ConsoleAppenderFile XML file containing  console logger
      *                                 configurations
      * @param name                     name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultConsoleLogger(File PHOENIXConsoleAppenderFile, String name) {
+    public static Logger getDefaultConsoleLogger(File ConsoleAppenderFile, String name) {
         return LoggerImpl.getConsoleLogger(
-                (ConsoleAppender) LoggerUtils.unmarshall(PHOENIXConsoleAppenderFile, ConsoleAppender.class), name, null);
+                (ConsoleAppender) LoggerUtils.unmarshall(ConsoleAppenderFile, ConsoleAppender.class), name, null);
     }
 
     /**
      * Default File factory method to configure logger
      *
-     * @param PHOENIXFileAppenderFile XML file containing PHOENIX file logger
+     * @param FileAppenderFile XML file containing  file logger
      *                              configurations
      * @param clazz                 reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultFileLogger(File PHOENIXFileAppenderFile, Class<?> clazz) {
+    public static Logger getDefaultFileLogger(File FileAppenderFile, Class<?> clazz) {
         return LoggerImpl.getFileLogger(
-                (FileAppender) LoggerUtils.unmarshall(PHOENIXFileAppenderFile, FileAppender.class), clazz.getName(),
+                (FileAppender) LoggerUtils.unmarshall(FileAppenderFile, FileAppender.class), clazz.getName(),
                 null);
     }
 
     /**
      * Default File factory method to configure logger
      *
-     * @param PHOENIXFileAppenderFile XML file containing PHOENIX file logger
+     * @param FileAppenderFile XML file containing  file logger
      *                              configurations
      * @param name                  name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultFileLogger(File PHOENIXFileAppenderFile, String name) {
+    public static Logger getDefaultFileLogger(File FileAppenderFile, String name) {
         return LoggerImpl.getFileLogger(
-                (FileAppender) LoggerUtils.unmarshall(PHOENIXFileAppenderFile, FileAppender.class), name, null);
+                (FileAppender) LoggerUtils.unmarshall(FileAppenderFile, FileAppender.class), name, null);
     }
 
     /**
      * Default Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppenderFile XML file containing PHOENIX rolling file
+     * @param RollingFileAppenderFile XML file containing  rolling file
      *                                     logger configurations
      * @param clazz                        reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultRollingFileLogger(File PHOENIXRollingFileAppenderFile, Class<?> clazz) {
+    public static Logger getDefaultRollingFileLogger(File RollingFileAppenderFile, Class<?> clazz) {
         return LoggerImpl.getRollingFileLogger(
-                (RollingFileAppender) LoggerUtils.unmarshall(PHOENIXRollingFileAppenderFile, RollingFileAppender.class),
+                (RollingFileAppender) LoggerUtils.unmarshall(RollingFileAppenderFile, RollingFileAppender.class),
                 clazz.getName(), null);
     }
 
     /**
      * Default Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppenderFile XML file containing PHOENIX rolling file
+     * @param RollingFileAppenderFile XML file containing  rolling file
      *                                     logger configurations
      * @param name                         name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getDefaultRollingFileLogger(File PHOENIXRollingFileAppenderFile, String name) {
+    public static Logger getDefaultRollingFileLogger(File RollingFileAppenderFile, String name) {
         return LoggerImpl.getRollingFileLogger(
-                (RollingFileAppender) LoggerUtils.unmarshall(PHOENIXRollingFileAppenderFile, RollingFileAppender.class),
+                (RollingFileAppender) LoggerUtils.unmarshall(RollingFileAppenderFile, RollingFileAppender.class),
                 name, null);
     }
 
     /**
      * Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppenderFile XML file containing PHOENIX console logger
+     * @param ConsoleAppenderFile XML file containing  console logger
      *                                 configurations
-     * @param PHOENIXLoggerMethod        type of Logging implementation
+     * @param LoggerMethod        type of Logging implementation
      * @param clazz                    reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getConsoleLogger(File PHOENIXConsoleAppenderFile, LoggerMethod PHOENIXLoggerMethod,
+    public static Logger getConsoleLogger(File ConsoleAppenderFile, LoggerMethod LoggerMethod,
                                           Class<?> clazz) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
+        if (LoggerMethod == LoggerMethod.LOGBACK)
             return LoggerImpl.getConsoleLogger(
-                    (ConsoleAppender) LoggerUtils.unmarshall(PHOENIXConsoleAppenderFile, ConsoleAppender.class),
+                    (ConsoleAppender) LoggerUtils.unmarshall(ConsoleAppenderFile, ConsoleAppender.class),
                     clazz.getName(), null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
@@ -391,16 +391,16 @@ public class Logfactory {
     /**
      * Console factory method to configure logger
      *
-     * @param PHOENIXConsoleAppenderFile XML file containing PHOENIX console logger
+     * @param ConsoleAppenderFile XML file containing  console logger
      *                                 configurations
-     * @param PHOENIXLoggerMethod        type of Logging implementation
+     * @param LoggerMethod        type of Logging implementation
      * @param name                     name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getConsoleLogger(File PHOENIXConsoleAppenderFile, LoggerMethod PHOENIXLoggerMethod, String name) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
+    public static Logger getConsoleLogger(File ConsoleAppenderFile, LoggerMethod LoggerMethod, String name) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
             return LoggerImpl.getConsoleLogger(
-                    (ConsoleAppender) LoggerUtils.unmarshall(PHOENIXConsoleAppenderFile, ConsoleAppender.class), name,
+                    (ConsoleAppender) LoggerUtils.unmarshall(ConsoleAppenderFile, ConsoleAppender.class), name,
                     null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
@@ -410,16 +410,16 @@ public class Logfactory {
     /**
      * File factory method to configure logger
      *
-     * @param PHOENIXFileAppenderFile XML file containing PHOENIX file logger
+     * @param FileAppenderFile XML file containing  file logger
      *                              configurations
-     * @param PHOENIXLoggerMethod     type of Logging implementation
+     * @param LoggerMethod     type of Logging implementation
      * @param clazz                 reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getFileLogger(File PHOENIXFileAppenderFile, LoggerMethod PHOENIXLoggerMethod, Class<?> clazz) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
+    public static Logger getFileLogger(File FileAppenderFile, LoggerMethod LoggerMethod, Class<?> clazz) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
             return LoggerImpl.getFileLogger(
-                    (FileAppender) LoggerUtils.unmarshall(PHOENIXFileAppenderFile, FileAppender.class), clazz.getName(),
+                    (FileAppender) LoggerUtils.unmarshall(FileAppenderFile, FileAppender.class), clazz.getName(),
                     null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
@@ -429,16 +429,16 @@ public class Logfactory {
     /**
      * File factory method to configure logger
      *
-     * @param PHOENIXFileAppenderFile XML file containing PHOENIX file logger
+     * @param FileAppenderFile XML file containing  file logger
      *                              configurations
-     * @param PHOENIXLoggerMethod     type of Logging implementation
+     * @param LoggerMethod     type of Logging implementation
      * @param name                  name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getFileLogger(File PHOENIXFileAppenderFile, LoggerMethod PHOENIXLoggerMethod, String name) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
+    public static Logger getFileLogger(File FileAppenderFile, LoggerMethod LoggerMethod, String name) {
+        if (LoggerMethod == LoggerMethod.LOGBACK)
             return LoggerImpl.getFileLogger(
-                    (FileAppender) LoggerUtils.unmarshall(PHOENIXFileAppenderFile, FileAppender.class), name, null);
+                    (FileAppender) LoggerUtils.unmarshall(FileAppenderFile, FileAppender.class), name, null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -447,17 +447,17 @@ public class Logfactory {
     /**
      * Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppenderFile XML file containing PHOENIX rolling file
+     * @param RollingFileAppenderFile XML file containing  rolling file
      *                                     logger configurations
-     * @param PHOENIXLoggerMethod            type of Logging implementation
+     * @param LoggerMethod            type of Logging implementation
      * @param clazz                        reference of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getRollingFileLogger(File PHOENIXRollingFileAppenderFile, LoggerMethod PHOENIXLoggerMethod,
+    public static Logger getRollingFileLogger(File RollingFileAppenderFile, LoggerMethod LoggerMethod,
                                               Class<?> clazz) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
+        if (LoggerMethod == LoggerMethod.LOGBACK)
             return LoggerImpl.getRollingFileLogger((RollingFileAppender) LoggerUtils
-                    .unmarshall(PHOENIXRollingFileAppenderFile, RollingFileAppender.class), clazz.getName(), null);
+                    .unmarshall(RollingFileAppenderFile, RollingFileAppender.class), clazz.getName(), null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());
@@ -466,17 +466,17 @@ public class Logfactory {
     /**
      * Rolling file factory method to configure logger
      *
-     * @param PHOENIXRollingFileAppenderFile XML file containing PHOENIX rolling file
+     * @param RollingFileAppenderFile XML file containing  rolling file
      *                                     logger configurations
-     * @param PHOENIXLoggerMethod            type of Logging implementation
+     * @param LoggerMethod            type of Logging implementation
      * @param name                         name of the calling class
      * @return configured {@link Logger} instance
      */
-    public static Logger getRollingFileLogger(File PHOENIXRollingFileAppenderFile, LoggerMethod PHOENIXLoggerMethod,
+    public static Logger getRollingFileLogger(File RollingFileAppenderFile, LoggerMethod LoggerMethod,
                                               String name) {
-        if (PHOENIXLoggerMethod == LoggerMethod.LOGBACK)
+        if (LoggerMethod == LoggerMethod.LOGBACK)
             return LoggerImpl.getRollingFileLogger((RollingFileAppender) LoggerUtils
-                    .unmarshall(PHOENIXRollingFileAppenderFile, RollingFileAppender.class), name, null);
+                    .unmarshall(RollingFileAppenderFile, RollingFileAppender.class), name, null);
         else
             throw new ImplementationNotFound(LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUND.getValue(),
                     LogExeptionCodeConstant.IMPLEMENTATIONNOTFOUNDMESSAGE.getValue());

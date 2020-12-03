@@ -6,10 +6,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="lib-lang" />
-        <module name="trxreconcile" />
-        <module name="lib-core" />
         <module name="lib-json" />
+        <module name="lib-core" />
+        <module name="lib-lang" />
         <module name="anar-lib-logger" />
         <module name="lib-api" />
         <module name="lib-logger" />

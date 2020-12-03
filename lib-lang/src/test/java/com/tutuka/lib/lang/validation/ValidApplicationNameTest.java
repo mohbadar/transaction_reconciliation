@@ -1,7 +1,7 @@
 
 package com.tutuka.lib.lang.validation;
 
-import com.tutuka.lib.lang.validation.constraints.ValidApplicationName;
+import com.tutuka.lib.lang.applicationname.ValidApplicationName;
 import org.junit.Assert;
 import org.junit.Test;
 

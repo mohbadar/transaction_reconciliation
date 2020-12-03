@@ -12,5 +12,4 @@ import java.lang.annotation.*;
 @Inherited
 @Import({ServiceExceptionJavaConfiguration.class})
 public @interface EnableServiceException {
-
 }

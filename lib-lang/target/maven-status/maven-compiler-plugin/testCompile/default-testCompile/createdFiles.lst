@@ -1,0 +1,5 @@
+com\tutuka\lib\lang\applicationname\ApplicationNameTest.class
+com\tutuka\lib\lang\validation\ValidApplicationNameTest.class
+com\tutuka\lib\lang\validation\ValidApplicationNameTest$AnnotatedClass.class
+com\tutuka\lib\lang\applicationname\ApplicationNameTest$TestCase.class
+com\tutuka\lib\lang\validation\TestHelper.class
