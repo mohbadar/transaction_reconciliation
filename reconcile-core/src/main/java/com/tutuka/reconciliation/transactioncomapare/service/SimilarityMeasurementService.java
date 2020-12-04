@@ -239,7 +239,7 @@ public class SimilarityMeasurementService {
 				Duration.between(transaction1.getTransactionDate(), transaction2.getTransactionDate())
 						.toMinutes()) <= 180) {
 			txReport.setMatchScore(txReport.getMatchScore() + similarityIncrement);
-			txReport.getReasons().append("| TransactionDate Similar Match |");
+			txReport.getReasons().append("| TransactionDate Match |");
 		} else {
 			txReport.getReasons().append("| TransactionDate Mismatch |");
 		}
