@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { locale as enLang } from './core/_config/i18n/en';
 import { locale as faLang } from './core/_config/i18n/fa';
-import { locale as psLang } from './core/_config/i18n/ps';
 import { TranslationService } from './core/_base/layout';
 
 // This is to avoid node/types error, since it is used only once
@@ -30,13 +29,6 @@ export class TranslateGuard implements CanActivate {
             if(moduleFa) {
                 faLang.data.M = moduleFa;
             }
-
-            const modulePs = this.loadModuleSpecificTranslations(route.data.moduleName, 'ps');
-            if(modulePs) {
-                psLang.data.M = modulePs;
-            }
-
-            this.translationService.loadTranslations(enLang, faLang, psLang);
         }
 
         return true;

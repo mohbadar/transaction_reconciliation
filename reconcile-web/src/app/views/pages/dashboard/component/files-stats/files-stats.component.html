@@ -2,47 +2,59 @@
         			<mat-card>
 						<mat-card-header>
 							<div mat-card-avatar class="example-header-image"></div>
-							<mat-card-title>Comparison Result</mat-card-title>
+							<mat-card-title>{{'COMPARISON_RESULT' | translate}}</mat-card-title>
 						</mat-card-header>
 						<mat-card-content>
                                 <table class="table table-striped">
                                    <tr>
-                                        <td>Tutuka File Total Transactions: </td>
+                                        <td> {{'TOTAL_TUTUKA_FILE_TRANSACTION'|translate}} </td>
                                         <td> {{data.tutukaRowCount}}</td>
                                     </tr>
 
                                 <tr>
-                                        <td>Client File Total Transactions: </td>
+                                        <td>{{'TOTAL_CLIENT_FILE_TRANSACTION'|translate}} </td>
                                         <td> {{data.clientRowCount}}</td>
                                 </tr>
 
                                     <tr>
-                                        <td>Bad Transactions: </td>
+                                        <td>{{'BAD_TRANSACTION'|translate}} </td>
                                         <td> {{data.badTransaction}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Duplicate Transactions: </td>
+                                        <td> {{'DUPLICATE_TRANSACTION'|translate}}</td>
                                         <td> {{data.duplicate}}</td>
                                     </tr>
 
                                     <tr>
-                                        <td>Perfect Matched Transactions: </td>
+                                        <td>{{'PERFECT_MATCH_TRANSACTIONS'|translate}} </td>
                                         <td> {{data.perfectMatch}}</td>
                                     </tr>
 
-                                    <tr>
-                                        <td>Perfect Mismatched Transactions: </td>
-                                        <td> {{data.perfectMismatch}}</td>
-                                    </tr>
 
                                     <tr>
-                                        <td>Permissible Match Transactions: </td>
+                                        <td> {{'PERMISSIBLE_MATCH_TRANSACTION'|translate}} </td>
                                         <td> {{data.permissibleMatch}}</td>
                                     </tr>
 
                                     <tr>
-                                        <td>Probable Match Transactions: </td>
+                                        <td>{{'PROBABLE_MATCH_TRANSACTION'|translate}}</td>
                                         <td> {{data.probableMatch}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{'PERFECT_MISMATCH_TRANSACTION'|translate}} </td>
+                                        <td> {{data.perfectMismatch}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>{{'PROBABLE_MISMATCH_TRANSACTION'|translate}} </td>
+                                        <td> {{data.probableMismatch}}</td>
+                                    </tr>
+                                    
+
+                                    <tr>
+                                        <td> {{'UNMATCHED'|translate}} </td>
+                                        <td> {{data.unmatched}}</td>
                                     </tr>
                                 </table>
                         </mat-card-content>

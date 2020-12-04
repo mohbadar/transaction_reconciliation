@@ -18,6 +18,9 @@ import { ViewTransactionComponent } from './component/view-transaction/view-tran
 import { HttpClientModule } from '@angular/common/http';
 import { SimilarTransactionsComponent } from './component/similar-transactions/similar-transactions.component';
 import { FilesStatsComponent } from './component/files-stats/files-stats.component';
+import { ModuleInfoComponent } from './component/module-info/module-info.component';
+import { PagesModule } from '../pages.module';
+import { CompareTransactionsComponent } from './component/compare-transactions/compare-transactions.component';
 
 @NgModule({
     imports: [
@@ -29,9 +32,20 @@ import { FilesStatsComponent } from './component/files-stats/files-stats.compone
         ReactiveFormsModule,
         RouterModule.forChild([
             {
+
                 path: '',
-                component: DashboardComponent
-            },
+                component: DashboardComponent,
+                children: [
+                    {
+                        path: '',
+                        component: ModuleInfoComponent
+                    },
+                    {
+                        path: 'compare-transaction',
+                        component: CompareTransactionsComponent
+                    }
+                ]
+            }                   
         ]),
 
         NgbDropdownModule,
@@ -63,7 +77,8 @@ import { FilesStatsComponent } from './component/files-stats/files-stats.compone
         MatAutocompleteModule,
         MatRadioModule,
         MatSelectModule,
-        MatButtonModule
+        MatButtonModule,
+        PagesModule
     
     ],
     providers: [],
@@ -73,6 +88,8 @@ import { FilesStatsComponent } from './component/files-stats/files-stats.compone
         ViewTransactionComponent,
         SimilarTransactionsComponent,
         FilesStatsComponent,
+        ModuleInfoComponent,
+        CompareTransactionsComponent,
     ]
 })
 export class DashboardModule {

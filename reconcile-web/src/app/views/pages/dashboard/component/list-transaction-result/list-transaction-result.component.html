@@ -3,7 +3,7 @@
 
 
         <!-- Start Tab 1-->
-            <mat-tab label="PERFECT_MISMATCH"> 
+    <mat-tab label="{{'PERFECT_MISMATCH' | translate}}"> 
                         
             <div class="mat-elevation-z8">
     <table mat-table [dataSource]="profectMismatchDataSource" matSort style="width:100%">
@@ -45,10 +45,9 @@
                         View
                     </mat-icon>
                 </button>&nbsp;
-              <button mat-icon-button color="primary" matTooltip="Get Similars" (click)="getSimilarTransactions(row)">
-                    <mat-icon>
-                        update
-                    </mat-icon>
+              <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
                 </button>&nbsp;
             </td>
         </ng-container>
@@ -64,8 +63,75 @@
             </mat-tab>
         <!-- End Tab 1-->
 
+
+            <!-- Start PROBABLE_MISMATCH Tab-->
+            <mat-tab label="{{'PROBABLE_MISMATCH' | translate}}">
+            
+                        <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="probableMismatchDataSource" matSort style="width:100%">
+
+
+        <ng-container matColumnDef="file">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="transactionID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
+        </ng-container>
+
+
+     <ng-container matColumnDef="transactionAmount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
+        </ng-container>
+        
+
+    <ng-container matColumnDef="transactionDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
+            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
+                    <mat-icon>
+                        View
+                    </mat-icon>
+                </button>&nbsp;
+
+              <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
+                </button>&nbsp;
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+    </table>
+
+    
+</div>
+            
+            
+            </mat-tab>
+
+
+            <!-- End Tab-->
+
+
         <!-- Start DUPLICATE Transactions Table-->
-            <mat-tab label="DUPLICATE">
+            <mat-tab label="{{'DUPLICATE' | translate}}">
             
                         <div class="mat-elevation-z8">
     <table mat-table [dataSource]="duplicateDataSource" matSort style="width:100%">
@@ -107,6 +173,12 @@
                         View
                     </mat-icon>
                 </button>&nbsp;
+
+            <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
+                </button>&nbsp;
+
             </td>
         </ng-container>
 
@@ -117,16 +189,13 @@
 
     
 </div>
-            
-            
-            
-            
+   
              </mat-tab>
 
         <!-- End transactions-->  
 
         <!-- Bad Transaction Tab Start--> 
-            <mat-tab label="BAD_TRANSACTION">
+            <mat-tab label="{{'BAD_TRANSACTION' | translate}}">
             
             
                         <div class="mat-elevation-z8">
@@ -169,64 +238,10 @@
                         View
                     </mat-icon>
                 </button>&nbsp;
-            </td>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-        </tr>
-    </table>
-
-    
-</div>
-            
-            
-             </mat-tab>
-
-          <!-- End Tab-->   
-
-          <!-- Start PROBABLE_MISMATCH Tab-->
-            <mat-tab label="PROBABLE_MISMATCH">
-            
-                        <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="probableMismatchDataSource" matSort style="width:100%">
-
-
-        <ng-container matColumnDef="file">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'FILE'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.file1Name == null ? row.file2Name : row.file1Name}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="transactionID">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_ID'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.transactionID1 == null ? row.transactionID2 : row.transactionID1}} </td>
-        </ng-container>
-
-
-     <ng-container matColumnDef="transactionAmount">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_AMOUNT'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.transactionAmount1 == null ? row.transactionAmount2 : row.transactionAmount1}} </td>
-        </ng-container>
-        
-
-    <ng-container matColumnDef="transactionDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TRANSACTION_DATE'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.transactionDate1 == null ? row.transactionDate2 : row.transactionDate1}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.status}} </td>
-    </ng-container>
-
-
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ACTIONS'|translate }}</th>
-            <td mat-cell *matCellDef="let row">
-              <button mat-icon-button color="primary" matTooltip="View" (click)="view(row)">
-                    <mat-icon>
-                        View
-                    </mat-icon>
+            <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
                 </button>&nbsp;
             </td>
         </ng-container>
@@ -239,15 +254,14 @@
     
 </div>
             
-            
-            </mat-tab>
+             </mat-tab>
 
+          <!-- End Tab-->   
 
-            <!-- End Tab-->
-
+      
 
             <!-- Start PROBABLE_MATCH Tab-->
-            <mat-tab label="PROBABLE_MATCH">
+            <mat-tab label="{{'PROBABLE_MATCH' | translate}}">
                                     <div class="mat-elevation-z8">
     <table mat-table [dataSource]="probableMatchDataSource" matSort style="width:100%">
 
@@ -288,6 +302,11 @@
                         View
                     </mat-icon>
                 </button>&nbsp;
+
+           <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
+                </button>&nbsp;
             </td>
         </ng-container>
 
@@ -298,16 +317,14 @@
 
     
 </div>
-           
-            
-            
+        
             </mat-tab>
 
             <!--End Tab-->
 
 
             <!-- Start PERMISSIBLE_MATCH Tab-->
-            <mat-tab label="PERMISSIBLE_MATCH">
+            <mat-tab label="{{'PERMISSIBLE_MATCH' | translate}}">
             
                                                 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="permissibleMatchDataSource" matSort style="width:100%">
@@ -349,6 +366,11 @@
                         View
                     </mat-icon>
                 </button>&nbsp;
+
+            <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
+                </button>&nbsp;
             </td>
         </ng-container>
 
@@ -361,7 +383,7 @@
 </div>
             
              </mat-tab>
-            <mat-tab label="PERFECT_MATCH">
+            <mat-tab label="{{'PERFECT_MATCH' | translate}}">
             
                                                 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="perfectMatchDataSource" matSort style="width:100%">
@@ -420,7 +442,7 @@
 
 
                 <!-- Start Tab of UNMATCHED Trx-->
-            <mat-tab label="UNMATCHED"> 
+            <mat-tab label="{{'UNMATCHED' | translate}}"> 
                         
             <div class="mat-elevation-z8">
     <table mat-table [dataSource]="unMatchedDataSource" matSort style="width:100%">
@@ -462,10 +484,9 @@
                         View
                     </mat-icon>
                 </button>&nbsp;
-              <button mat-icon-button color="primary" matTooltip="Get Similars" (click)="getSimilarTransactions(row)">
-                    <mat-icon>
-                        update
-                    </mat-icon>
+              <button mat-icon-button color="primary" 
+              matTooltip="Get Similars" (click)="getSimilarTransactions(row)"
+              class="flaticon2-gear">
                 </button>&nbsp;
             </td>
         </ng-container>

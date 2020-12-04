@@ -7,10 +7,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { PartialsModule } from '../partials/partials.module';
 // Pages
 import { CoreModule } from '../../core/core.module';
-import { MyPageComponent } from './my-page/my-page.component';
 
 @NgModule({
-    declarations: [MyPageComponent],
+    declarations: [],
     exports: [],
     imports: [
         CommonModule,

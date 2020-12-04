@@ -7,7 +7,6 @@ import { LayoutConfigService, SplashScreenService, TranslationService } from './
 // language list
 import { locale as enLang } from './core/_config/i18n/en';
 import { locale as faLang } from './core/_config/i18n/fa';
-import { locale as psLang } from './core/_config/i18n/ps';
 
 @Component({
 	// tslint:disable-next-line:component-selector
@@ -36,7 +35,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		private splashScreenService: SplashScreenService) {
 
 		// register translations
-		this.translationService.loadTranslations(enLang, faLang, psLang);
+		this.translationService.loadTranslations(enLang, faLang);
 	}
 
 	/**

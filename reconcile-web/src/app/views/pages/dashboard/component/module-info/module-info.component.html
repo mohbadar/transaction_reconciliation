@@ -1,0 +1,196 @@
+<kt-notice [icon]="'flaticon-warning kt-font-primary'">
+    To match transactions between <code>Tutuka</code> and <code>Client</code> files. <br/>
+	Considering that the requirements are fairly vague.
+    Mostly features are implemented based on developer assumptions.
+</kt-notice>
+
+
+
+<mat-tab-group>
+    <mat-tab label="{{'LAYOUT_AND_DESIGN' | translate}}"> 
+    </mat-tab>
+    
+    <mat-tab label="{{'ALGORITHM' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'TDD/BDD' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'EXCEPTION_HANDLING' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'SPEED_OF_RECON' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'CODE_MODULARITY' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'CODE_NEETNESS' | translate}}"> 
+    </mat-tab>
+</mat-tab-group>
+
+
+
+<mat-tab-group>
+    <mat-tab label="{{'ASSUMPTIONS' | translate}}"> 
+    </mat-tab>
+    
+    <mat-tab label="{{'MATCH_CATEGORIES' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'SELF_DOCUMENTED_CODE' | translate}}"> 
+    </mat-tab>
+
+    <mat-tab label="{{'EXTRA_EFFORT' | translate}}"> 
+    </mat-tab>
+</mat-tab-group>
+
+
+
+<div class="kt-portlet">
+    <div class="kt-portlet__head kt-portlet__head__custom">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">{{ 'USER_MANUAL'|translate }}</h3>
+        </div>
+    </div>
+    <div>
+
+        <div class="kt-form">
+            <div class="kt-portlet__body">
+
+            <!--
+                File Upload
+            -->
+
+            <div class="row">
+                <h3>File Upload: </h3>
+                <ul>
+                    <li class="font14">(1) Select Client CSV File</li>
+                    <li class="font14">(2) Select Tutuka CSV File</li>
+                    <li class="font14">(3) Click on <code>COMPARE</code> Button</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-responsive" src="./assets/media/tutuka/file_upload.PNG" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+            <hr/>
+
+            <!--
+                Comparison
+            -->
+
+
+            <div class="row">
+                <h3>Comparison Result: </h3>
+                <ul>
+                    <li class="font14">(1) <code>COMPARE</code> Button will active once you selected files. Click to View the Result</li>
+                    <li class="font14">(2) Shows the Result of Comparison</li>
+                    <li class="font14">(3) Click on <code>VIEW_COMPARISON_DETAILS</code> Button To See Comparison Report in a Tabular Format</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-responsive" src="./assets/media/tutuka/comparison_result.PNG" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+
+
+  <hr/>
+
+            <!--
+                Comparison Report in Tabular Format
+            -->
+
+
+            <div class="row">
+                <h3>Comparison Report in Tabuler Format: </h3>
+                <ul>
+                    <li class="font14">(2) Each <code>tab</code> Shows a table of categorized transactions like mismatch, probable_mismatch, perfect_match, and so on. Click to View a List of Transations in that Tab</li>
+                    <li class="font14">(2) Shows a Transaction </li>
+                    <li class="font14">(3) Click on <code>View</code> Icon To View Details of that Transaction</li>
+                    <li class="font14">(4) Click on <code>Settings</code> Icon To View Similar Matching Transactions of that Transaction</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-responsive" src="./assets/media/tutuka/comparison_details.PNG" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+        
+
+            <!--
+                View Transaction
+            -->
+
+
+            <div class="row">
+                <h3>View Transaction: </h3>
+                <ul>
+                    <li class="font14">(1) Shows All Details of the Selected Transaction</li>
+                    <li class="font14">(2) Reason of this Transaction is categorized in this TransactionCategory</li>
+                    <li class="font14">(3) Click on <code>CLOSE</code> Button To Close the Model</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-responsive" src="./assets/media/tutuka/view_transaction.PNG" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+    
+    
+            <!--
+                Similar Transactions
+            -->
+
+
+            <div class="row">
+                <h3>Similar Matching Transaction: </h3>
+                <ul>
+                    <li class="font14">(1) Shows List of Similar Matching Transactions</li>
+                    <li class="font14">(2) Similarity Score of Transactions from 6.5</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-responsive" src="./assets/media/tutuka/similar_transactions.PNG" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+
+        <!-- 
+            End 
+        -->
+        </div>
+    </div>
+</div>

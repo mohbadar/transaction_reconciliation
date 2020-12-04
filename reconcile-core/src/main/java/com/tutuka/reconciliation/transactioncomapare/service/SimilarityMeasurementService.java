@@ -55,6 +55,9 @@ public class SimilarityMeasurementService {
 	@Value("${similarity.probable_mismatch_lower}")
 	public double probableMismatchLower;
 
+	@Value("${similarity.single_transaction_limit}")
+	public double singleTransactionSimilarityMatchLimit;
+
 	@Autowired
 	private PreprocessingService preprocessingService;
 
@@ -186,10 +189,9 @@ public class SimilarityMeasurementService {
 		for (Transaction trx : transactionsList) {
 			Double score = getSimilarityScoreOfTwoTransactions(transaction, trx).getMatchScore();
 
-//			Double score = similarityMeasurementUtility.getSimilarityScore(transaction.getComparisonString(), trx.getComparisonString())*100;
-			if(score > probableMatchLower)
+			if(score > singleTransactionSimilarityMatchLimit)
 			{
-				System.out.println("Similary Score : "+score );
+				System.out.println("Similarity Score : "+score );
 				trx.setSimilarityScore(score);
 				similarTransactions.add(trx);
 			}

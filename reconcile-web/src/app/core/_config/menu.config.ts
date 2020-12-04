@@ -7,19 +7,25 @@ export class MenuConfig {
       self: {},
       items: [
         {
-          title: "Home",
+          title:'Comparison',
           root: true,
-          alignment: "left",
-          page: "",
-          translate: "MENU.HOME",
-        },
+          alignment: 'left',
+          toggle: 'click',
+          page: '',
+          translate: "MENU.COMPARISON",
+          submenu: [
+            {
+              title: 'Transaction Comparison',
+              page: '/compare-transaction',
+              translate: "MENU.COMPARISON"
+            },
 
-        {
-          title: "Information",
-          root: true,
-          alignment: "left",
-          page: "",
-          translate: "MENU.INFORMATION",
+            {
+              title: 'Module Information',
+              page: '',
+              translate: "MENU.INFORMATION"
+            },
+          ]
         },
       ],
     },
@@ -27,11 +33,23 @@ export class MenuConfig {
       self: {},
       items: [
         {
-          title: "Home",
-          root: true,
-          alignment: "left",
+          title: "Comparison",
           page: "",
-          translate: "MENU.HOME",
+          toggle: 'click',
+          translate: "MENU.INFORMATION",
+          submenu: [
+            {
+              title: 'Transaction Comparison',
+              page: '/compare-transaction',
+              translate: "MENU.COMPARISON"
+            },
+
+            {
+              title: 'Module Information',
+              page: '',
+              translate: "MENU.INFORMATION"
+            },
+          ]
         },
       ],
     },

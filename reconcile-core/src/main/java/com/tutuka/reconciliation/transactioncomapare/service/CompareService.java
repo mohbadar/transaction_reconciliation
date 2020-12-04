@@ -133,11 +133,13 @@ public class CompareService {
         data.put("duplicate", duplicateTransactions);
         data.put("bad", badTransactions);
         data.put("unmatched", unmatchedTransactions);
+
         data.put("permissibleMatch", permissibleMatchTransactions);
-        data.put("probableMismatch", probableMismatchTransactions);
-        data.put("perfectMatch", perfectMatchTransactions);
-        data.put("perfectMismatch", perfectMismatchTransactions);
         data.put("probableMatch", probableMatchTransactions);
+        data.put("perfectMatch", perfectMatchTransactions);
+
+        data.put("probableMismatch", probableMismatchTransactions);
+        data.put("perfectMismatch", perfectMismatchTransactions);
         return data;
     }
 
