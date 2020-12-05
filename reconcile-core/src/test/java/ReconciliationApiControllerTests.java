@@ -2,7 +2,7 @@ import com.tutuka.reconciliation.Application;
 import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
 import com.tutuka.reconciliation.transactioncomapare.domain.FileUploadDTO;
 import com.tutuka.reconciliation.transactioncomapare.service.CompareService;
-import com.tutuka.reconciliation.transactioncomapare.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.transactioncomapare.util.TransactionUtility;
 import com.tutuka.reconciliation.transactioncomapare.service.FileSystemStorageService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -84,14 +84,14 @@ public class ReconciliationApiControllerTests {
 
 	@Test
 	public void test_removeduplicateTransaction() throws Exception {
-		Iterator<Transaction> testIter = new TransactionUtiltiy().removeDuplicates(testUtility.loadFile("DuplicateFile.csv"))
+		Iterator<Transaction> testIter = new TransactionUtility().removeDuplicates(testUtility.loadFile("DuplicateFile.csv"))
 				.iterator();
 		assertThat((testIter.next()).getTransactionID().toString()).isEqualTo("584011808649511");
 	}
 	
 	@Test
 	public void test_removeduplicatesFromList() throws Exception {
-		assertThat(String.valueOf(new TransactionUtiltiy().removeDuplicates(testUtility.loadFile("DuplicateFile.csv")).size())).isEqualTo("2");
+		assertThat(String.valueOf(new TransactionUtility().removeDuplicates(testUtility.loadFile("DuplicateFile.csv")).size())).isEqualTo("2");
 	}
 
     

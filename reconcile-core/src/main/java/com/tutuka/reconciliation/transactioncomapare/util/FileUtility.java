@@ -3,6 +3,7 @@ package com.tutuka.reconciliation.transactioncomapare.util;
 import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
 import com.tutuka.reconciliation.infrastructure.exception.FileExtensionException;
 import com.tutuka.reconciliation.infrastructure.exception.InvalidHeaderException;
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +56,7 @@ public class FileUtility {
 	private void isValidFormat(String fileName) {
 		if(!fileName.toLowerCase().endsWith(".csv")) {
 			logger.error("The File " +fileName+ " is NOT a VALID CSV file!!");
-			throw new FileExtensionException("The File " +fileName+ " is NOT a VALID CSV file!!");
+			throw new FileExtensionException(Translator.toLocale("exception.file-extention-invalid"));
 		}
 	}
 	
@@ -76,12 +77,12 @@ public class FileUtility {
 	            Arrays.sort(headerColumns);
 	            if(Arrays.asList(headerColumns).contains(Arrays.asList(validHeaderColumns))){
 	            	logger.error("The File "+fileName+" contains INVALID or NO Headers.");
-	            	throw new InvalidHeaderException("The File "+fileName+" contains INVALID or NO Headers.");
+	            	throw new InvalidHeaderException(Translator.toLocale("exception.file-invalid-header"));
 	            }
 	        }
 	        else {
 	        	logger.error("The File " +fileName+ " is EMPTY or CORRUPT!!");
-	        	throw new EmptyFileException("The File " +fileName+ " is EMPTY or CORRUPT!!");
+	        	throw new EmptyFileException(Translator.toLocale("exception.file-empty-or-corrupt"));
 	        }
 	}
 	

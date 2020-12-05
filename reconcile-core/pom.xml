@@ -26,7 +26,7 @@
 	<dependencies>
 
 
-		<!--		Production Reading Matrics-->
+		<!--		Production Ready Matrics-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
@@ -35,6 +35,12 @@
 <!--			<groupId>io.micrometer</groupId>-->
 <!--			<artifactId>micrometer-registry-elastic</artifactId>-->
 <!--		</dependency>-->
+
+		<dependency>
+			<groupId>com.tutuka.lib</groupId>
+			<artifactId>lib-audit</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.tutuka.lib</groupId>

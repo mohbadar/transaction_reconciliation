@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="lib-audit" />
+        <module name="lib-lang" />
         <module name="lib-json" />
         <module name="lib-core" />
-        <module name="lib-lang" />
         <module name="anar-lib-logger" />
         <module name="lib-api" />
         <module name="lib-logger" />
@@ -18,6 +19,7 @@
     <bytecodeTargetLevel>
       <module name="anar-lib-logger" target="1.8" />
       <module name="lib-api" target="1.8" />
+      <module name="lib-audit" target="1.8" />
       <module name="lib-core" target="1.8" />
       <module name="lib-json" target="1.8" />
       <module name="lib-lang" target="1.8" />
@@ -30,6 +32,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="anar-lib-logger" options="-parameters" />
       <module name="lib-api" options="-parameters" />
+      <module name="lib-audit" options="-parameters" />
       <module name="lib-core" options="-parameters" />
       <module name="lib-json" options="-parameters" />
       <module name="lib-lang" options="-parameters" />

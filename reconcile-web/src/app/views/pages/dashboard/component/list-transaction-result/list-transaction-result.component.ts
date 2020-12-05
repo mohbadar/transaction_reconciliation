@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { LayoutUtilsService } from 'app/core/_base/crud';
 import { TransactionDTO } from '../../model/transaction.dto';
 import { ReconciliationService } from '../../service/reconciliation.service';
 import { SimilarTransactionsComponent } from '../similar-transactions/similar-transactions.component';
@@ -35,7 +36,8 @@ export class ListTransactionResultComponent implements OnInit {
   constructor(
      private cdref: ChangeDetectorRef,
      public dialog: MatDialog,
-     private reconciliationService: ReconciliationService
+     private reconciliationService: ReconciliationService,
+     private layoutUtilService: LayoutUtilsService,
 
   ) { 
     
@@ -132,7 +134,9 @@ getSimilarTransactions(item)
       this.presentSimilarTransactions(response.similarTransactions);
   }, 
   (err => {
-    console.log("Error Whille Get Similar Transactions");
+    const msg = 'There was an error in processing transactions: '+ JSON.stringify(err);
+    this.layoutUtilService.showActionNotification(msg);
+    console.log("err occured: ", err)
   }));
 }
 

@@ -19,8 +19,7 @@ public class LoggingAspect {
     @Before("@annotation(com.tutuka.lib.logger.annotation.Loggable)")
     public void annotatedBeforeLoggingAdvice(JoinPoint joinPoint) throws Throwable{
         log.info("[" + joinPoint.getSignature().getDeclaringTypeName() + "]" +
-                "[" + ((MethodSignature) joinPoint.getSignature()).getMethod().getName() + "] " +
-                "Input Params : " + JsonUtility.javaObjectToJsonString(joinPoint.getArgs()));
+                "[" + ((MethodSignature) joinPoint.getSignature()).getMethod().getName() + "]");
     }
 
 }

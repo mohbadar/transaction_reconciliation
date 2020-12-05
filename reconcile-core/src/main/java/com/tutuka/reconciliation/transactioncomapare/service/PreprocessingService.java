@@ -1,8 +1,11 @@
 package com.tutuka.reconciliation.transactioncomapare.service;
 
+import com.tutuka.lib.logger.annotation.Loggable;
+import com.tutuka.lib.audit.Auditable;
 import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
 import com.tutuka.reconciliation.transactioncomapare.util.StopwordUtility;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -12,6 +15,9 @@ import java.util.*;
 @Slf4j
 public class PreprocessingService {
 
+    @Loggable
+    @Auditable
+    @Retryable
     public List<Transaction> applyPreprocessingLogic(List<Transaction> transactions) throws IOException {
         // Remove Stopwords from TransactionNative
         List<Transaction> stopwordLessTransactions = removeStopwordsFromTransactionNative(transactions);

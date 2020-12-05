@@ -13,6 +13,10 @@ import java.util.Arrays;
 @Configuration
 public class CORSConfig{
 
+    /**
+     * CORS Configuration Bean
+     * @return
+     */
     @Bean
     public FilterRegistrationBean<CorsFilter> simpleCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

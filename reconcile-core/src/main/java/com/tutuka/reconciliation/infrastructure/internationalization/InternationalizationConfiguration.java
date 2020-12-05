@@ -19,8 +19,7 @@ public class InternationalizationConfiguration extends AcceptHeaderLocaleResolve
 
         List<Locale> LOCALES = Arrays.asList(
                 new Locale("en"),
-                new Locale("fa"),
-                new Locale("pa"));
+                new Locale("fa"));
 
         @Override
         public Locale resolveLocale(HttpServletRequest request) {

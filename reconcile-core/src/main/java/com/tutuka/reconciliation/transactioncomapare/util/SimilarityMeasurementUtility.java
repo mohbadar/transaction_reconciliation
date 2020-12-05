@@ -1,5 +1,6 @@
 package com.tutuka.reconciliation.transactioncomapare.util;
 
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import org.apache.commons.codec.language.bm.NameType;
 import org.apache.commons.codec.language.bm.PhoneticEngine;
 import org.apache.commons.codec.language.bm.RuleType;
@@ -46,7 +47,7 @@ public class SimilarityMeasurementUtility {
 				cosineSimilarity = (double) (dotProduct / (double) (Math.sqrt(A) * Math.sqrt(B)));
 			}
 		} else {
-			throw new IllegalArgumentException("Vectors must not be null");
+			throw new IllegalArgumentException(Translator.toLocale("exception.illegal-argument"));
 		}
 		return cosineSimilarity;
 	}

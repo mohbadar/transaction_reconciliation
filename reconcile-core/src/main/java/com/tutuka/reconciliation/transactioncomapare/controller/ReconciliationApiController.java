@@ -6,13 +6,18 @@ import com.tutuka.lib.api.config.EnableApiFactory;
 import com.tutuka.lib.api.handler.ResponseHandler;
 import com.tutuka.lib.api.handler.exception.InternalServerProblemException;
 import com.tutuka.lib.api.handler.exception.ResourceNotFoundException;
+import com.tutuka.lib.logger.annotation.Loggable;
+import com.tutuka.lib.audit.Auditable;
 import com.tutuka.reconciliation.infrastructure.constant.ApplicationGenericConstants;
+import com.tutuka.reconciliation.infrastructure.exception.TransactionWithScoreEmptyListException;
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import com.tutuka.reconciliation.transactioncomapare.domain.TransactionWithScoreDTO;
 import com.tutuka.reconciliation.transactioncomapare.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +33,7 @@ import com.tutuka.reconciliation.transactioncomapare.domain.FileUploadDTO;
 @EnableApiFactory
 @Api(basePath = ApplicationGenericConstants.REQUEST_MAPPING_COMPARISONS, value = ApplicationGenericConstants.REQUEST_MAPPING_COMPARISONS,
         description = ApplicationGenericConstants.API_DESC, produces = ApplicationGenericConstants.MULTIPART_JSON)
+@Slf4j
 public class ReconciliationApiController extends ResponseHandler {
 
     @Autowired
@@ -43,17 +49,22 @@ public class ReconciliationApiController extends ResponseHandler {
     //mapping annotation
     @PostMapping(value = "/compare-files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE, MediaType.ALL_VALUE })
+    @Loggable
+    @Auditable
     public ResponseEntity<Map<String,Object>> compareFiles(
             @RequestParam(name = "info") String info,
             @RequestParam(name = "clientCsv", required = true) MultipartFile clientCsv,
             @RequestParam(name = "tutukaCsv", required = true) MultipartFile tutukaCsv
     ) throws IOException {
+        long startTime = System.currentTimeMillis();
 
         FileUploadDTO fileLoader = new FileUploadDTO();
         fileLoader.setFileOne(tutukaCsv);
         fileLoader.setFileTwo(clientCsv);
+        Map<String, Object> response = compareService.compareTransactions(fileLoader);
 
-        return  ResponseEntity.ok(compareService.compareTransactions(fileLoader));
+        log.info("TotalTime in MilliSeconds = :" + (-startTime + (System.currentTimeMillis())));
+        return  ResponseEntity.ok(response);
     }
 
     // metadat annotations
@@ -65,9 +76,18 @@ public class ReconciliationApiController extends ResponseHandler {
             @ThrowsException(status = HttpStatus.INTERNAL_SERVER_ERROR, exception = InternalServerProblemException.class) })
     //mapping annotation
     @PostMapping(value = "/similar-transactions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Loggable
+    @Auditable
     public ResponseEntity<Map<String, Object>> getSimilarTransactions(@RequestBody String data) throws IOException {
+        long startTime = System.currentTimeMillis();
+
         TransactionWithScoreDTO dto = TransactionMapper.map(data);
-        return ResponseEntity.ok(compareService.getSimilarTransaction(dto));
+        if (dto == null)
+            throw new TransactionWithScoreEmptyListException(Translator.toLocale("exception.transaction-with-score-not-exist"));
+        Map<String, Object> response = compareService.getSimilarTransaction(dto);
+        log.info("TotalTime for Similarity Measurement of a Transaction in MilliSeconds = :" + (-startTime + (System.currentTimeMillis())));
+
+        return ResponseEntity.ok(response);
     }
     
 }

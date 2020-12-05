@@ -1,5 +1,8 @@
 package com.tutuka.reconciliation.transactioncomapare.service;
 
+import com.tutuka.lib.logger.annotation.Loggable;
+import com.tutuka.lib.audit.Auditable;
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
 import com.tutuka.reconciliation.transactioncomapare.domain.FileUploadDTO;
 import com.tutuka.reconciliation.transactioncomapare.domain.TransactionWithScoreDTO;
@@ -9,6 +12,7 @@ import com.tutuka.reconciliation.transactioncomapare.util.TransactionSortCompara
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -90,6 +94,9 @@ public class SimilarityMeasurementService {
 	 * @param fileUploadDTO
 	 * @return
 	 */
+	@Loggable
+	@Auditable
+	@Retryable
 	public List<TransactionWithScoreDTO> calculateSimilarityScoreMatch(List<Transaction> tutukaTransactionList,
 																	   List<Transaction> clientTransactionList, FileUploadDTO fileUploadDTO) {
 
@@ -143,7 +150,7 @@ public class SimilarityMeasurementService {
 				unmatchedTutukaReportRecord.setWalletReference1(tutukaTx.getWalletReference());
 				unmatchedTutukaReportRecord.setMatchScore(0);
 				unmatchedTutukaReportRecord.setStatus(Result.UNMATCHED);
-				unmatchedTutukaReportRecord.setReasons(new StringBuilder("Unmatched Transaction in File1"));
+				unmatchedTutukaReportRecord.setReasons(new StringBuilder(Translator.toLocale("transaction.unmatched-in-file-1")));
 				reportList.add(unmatchedTutukaReportRecord);
 			}
 
@@ -164,7 +171,7 @@ public class SimilarityMeasurementService {
 				unmatchedClientReportRecord.setWalletReference2(unMatchedClientTx.getWalletReference());
 				unmatchedClientReportRecord.setMatchScore(0);
 				unmatchedClientReportRecord.setStatus(Result.UNMATCHED);
-				unmatchedClientReportRecord.setReasons(new StringBuilder("Unmatched Transaction in File2"));
+				unmatchedClientReportRecord.setReasons(new StringBuilder(Translator.toLocale("transaction.unmatched-in-file-2")));
 				reportList.add(unmatchedClientReportRecord);
 			}
 
@@ -174,8 +181,11 @@ public class SimilarityMeasurementService {
 	}
 
 	/**
-	 * Similarity Measurement for one transaction
+	 * Similarity Measurement for one transaction with a collection of transactions
 	 */
+	@Loggable
+	@Auditable
+	@Retryable
 	public List<Transaction> calculateSimilarTransaction(Transaction transaction, List<Transaction> transactionsList) throws IOException {
 		System.out.println("Transaction List Size > "+ transactionsList.size());
 		List<Transaction> similarTransactions = new ArrayList<>();
@@ -218,6 +228,7 @@ public class SimilarityMeasurementService {
 	 * @param transaction2
 	 * @return
 	 */
+	@Loggable
 	public TransactionWithScoreDTO getSimilarityScoreOfTwoTransactions(Transaction transaction1, Transaction transaction2) {
 		TransactionWithScoreDTO txReport = new TransactionWithScoreDTO();
 
@@ -225,13 +236,13 @@ public class SimilarityMeasurementService {
 		if (StringUtils.equals(transaction1.getWalletReference(), transaction2.getWalletReference())) {
 			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
 		} else {
-			txReport.getReasons().append("| WalletReference Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.wallet-reference-mismatch"));
 		}
 
 
 		// transactionDate similarity measurement with Asia Timezone Difference(3hours = 180min)  in consideration
 		if ((transaction1.getTransactionDate() == null) ^ (transaction2.getTransactionDate() == null)) {
-			txReport.getReasons().append("| TransactionDate Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.date-mismatch"));
 		} else if (Objects.equals(transaction1.getTransactionDate(),
 				transaction2.getTransactionDate())) {
 			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
@@ -239,45 +250,45 @@ public class SimilarityMeasurementService {
 				Duration.between(transaction1.getTransactionDate(), transaction2.getTransactionDate())
 						.toMinutes()) <= 180) {
 			txReport.setMatchScore(txReport.getMatchScore() + similarityIncrement);
-			txReport.getReasons().append("| TransactionDate Match |");
+			txReport.getReasons().append(Translator.toLocale("transaction.date-match"));
 		} else {
-			txReport.getReasons().append("| TransactionDate Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.date-mismatch"));
 		}
 
 		// similarity measurement for transaction amount
 		if ((transaction1.getTransactionAmount() == null) ^ (transaction2.getTransactionAmount() == null)) {
-			txReport.getReasons().append("| TransactionAmount Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.amount-mismatch"));
 		} else if (Objects.equals(transaction1.getTransactionAmount(),
 				transaction2.getTransactionAmount())) {
 			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
 		} else if (Math.abs(transaction1.getTransactionAmount()) == Math
 				.abs(transaction2.getTransactionAmount())) {
 			txReport.setMatchScore(txReport.getMatchScore() + similarityIncrement);
-			txReport.getReasons().append("| TransactionAmount match |");
+			txReport.getReasons().append(Translator.toLocale("transaction.amount-match"));
 		} else {
-			txReport.getReasons().append("| TransactionAmount Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.amount-mismatch"));
 		}
 
 		// similarity measurement for transaction type
 		if (transaction1.getTransactionType() == transaction2.getTransactionType()) {
 			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
 		} else {
-			txReport.getReasons().append("| TransactionType Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.type-mismatch"));
 		}
 
 		// similarity measurement for transaction profileName
 		if ((transaction1.getProfileName() == null) ^ (transaction2.getProfileName() == null)) {
-			txReport.getReasons().append("| ProfileName Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.profile-name-mismatch"));
 		} else if (Objects.equals(transaction1.getProfileName(), transaction2.getProfileName())) {
 			txReport.setMatchScore(txReport.getMatchScore() + validIncrement);
 		} else {
-			txReport.getReasons().append("| ProfileName Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.profile-name-mismatch"));
 		}
 
 		// similarity measurement for transaction narrative
 		if ((transaction1.getTransactionNarrative() == null)
 				^ (transaction2.getTransactionNarrative() == null)) {
-			txReport.getReasons().append("| TransactionNarrative Mismatch |");
+			txReport.getReasons().append(Translator.toLocale("transaction.narrative-mismatch"));
 		} else if (Objects.equals(transaction1.getTransactionNarrative(),
 				transaction2.getTransactionNarrative())) {
 			txReport.setMatchScore(txReport.getMatchScore() + transactionNarrativeValidIncrement);
@@ -290,13 +301,13 @@ public class SimilarityMeasurementService {
 			} else if (similarityScore > probableMatchTolerance) {
 				txReport.setMatchScore(
 						txReport.getMatchScore() + transactionNarrativeProbableMatchIncrement);
-				txReport.getReasons().append("| TransactionNarrative Match |");
+				txReport.getReasons().append(Translator.toLocale("transaction.narrative-match"));
 			} else if (similarityScore > probableMismatchTolerance) {
 				txReport.setMatchScore(
 						txReport.getMatchScore() + transactionNarrativeProbableMismatchIncrement);
-				txReport.getReasons().append("| TransactionNarrative Mismatch |");
+				txReport.getReasons().append(Translator.toLocale("transaction.narrative-mismatch"));
 			} else {
-				txReport.getReasons().append("| TransactionNarrative Mismatch |");
+				txReport.getReasons().append(Translator.toLocale("transaction.narrative-mismatch"));
 			}
 		}
 

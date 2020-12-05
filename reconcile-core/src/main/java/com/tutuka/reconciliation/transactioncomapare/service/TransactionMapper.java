@@ -3,6 +3,7 @@ package com.tutuka.reconciliation.transactioncomapare.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tutuka.lib.logger.annotation.Loggable;
 import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
 import com.tutuka.reconciliation.transactioncomapare.domain.TransactionWithScoreDTO;
 import com.tutuka.reconciliation.transactioncomapare.util.DateUtil;
@@ -11,6 +12,7 @@ import java.math.BigInteger;
 
 public class TransactionMapper {
 
+    @Loggable
     public static Transaction map(TransactionWithScoreDTO dto)
     {
         Transaction transaction = new Transaction();
@@ -31,6 +33,7 @@ public class TransactionMapper {
         return transaction;
     }
 
+    @Loggable
     public static TransactionWithScoreDTO map(String data) throws JsonProcessingException {
         TransactionWithScoreDTO dto = new TransactionWithScoreDTO();
         ObjectMapper mapper = new ObjectMapper();

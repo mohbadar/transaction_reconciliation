@@ -24,6 +24,7 @@
 		<module>lib-api</module>
 		<module>lib-json</module>
 		<module>lib-logger</module>
+		<module>lib-audit</module>
 		<module>reconcile-core</module>
 	</modules>
 

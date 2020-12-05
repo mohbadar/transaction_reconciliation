@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/lib-logger/anar-lib-logger.iml" filepath="$PROJECT_DIR$/lib-logger/anar-lib-logger.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-api/lib-api.iml" filepath="$PROJECT_DIR$/lib-api/lib-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lib-audit/lib-audit.iml" filepath="$PROJECT_DIR$/lib-audit/lib-audit.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-lang/lib-core.iml" filepath="$PROJECT_DIR$/lib-lang/lib-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-json/lib-json.iml" filepath="$PROJECT_DIR$/lib-json/lib-json.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib-lang/lib-lang.iml" filepath="$PROJECT_DIR$/lib-lang/lib-lang.iml" />

@@ -1,10 +1,14 @@
 package com.tutuka.reconciliation.transactioncomapare.service;
 
+import com.tutuka.lib.logger.annotation.Loggable;
+import com.tutuka.lib.audit.Auditable;
 import com.tutuka.reconciliation.infrastructure.exception.StorageException;
 import com.tutuka.reconciliation.infrastructure.exception.StorageFileNotFoundException;
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -29,24 +33,25 @@ public class FileSystemStorageService {
         this.rootLocation = Paths.get(location);
     }
 
-    
+    @Loggable
+    @Auditable
+    @Retryable
     public void store(MultipartFile file) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + filename);
+                throw new StorageException(Translator.toLocale("exception.failed-to-store-file") + filename);
             }
             if (filename.contains("..")) {
                 // This is a security check
                 throw new StorageException(
-                        "Cannot store file with relative path outside current directory "
-                                + filename);
+                        Translator.toLocale("exception.file-store-with-relative-path-outside-directory") + filename);
             }
             Files.copy(file.getInputStream(), this.rootLocation.resolve(filename),
                     StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
-            throw new StorageException("Failed to store file " + filename, e);
+            throw new StorageException(Translator.toLocale("exception.failed-to-store-file") + filename, e);
         }
        
     }
@@ -60,7 +65,7 @@ public class FileSystemStorageService {
         }
         catch (IOException e) {
         	log.error("Failed to read stored files");
-            throw new StorageException("Failed to read stored files", e);
+            throw new StorageException(Translator.toLocale("exception.file-failed-to-read"), e);
         }
 
     }
@@ -71,7 +76,9 @@ public class FileSystemStorageService {
         return rootLocation.resolve(filename);
     }
 
-    
+    @Loggable
+    @Auditable
+    @Retryable
     public Resource loadAsResource(String filename) {
     	log.debug("Inside loadAsResource method");
         try {
@@ -83,17 +90,19 @@ public class FileSystemStorageService {
             else {
             	log.error("Could not read file: " + filename);
                 throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
+                        Translator.toLocale("exception.file-not-found-exception") + filename);
 
             }
         }
         catch (MalformedURLException e) {
         	log.error("Could not read file: " + filename);
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+            throw new StorageFileNotFoundException(Translator.toLocale("exception.file-not-found-exception") + filename, e);
         }
     }
 
-    
+    @Loggable
+    @Auditable
+    @Retryable
     public void deleteAll() {
     	log.debug("Inside deleteAll method");
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
@@ -106,7 +115,7 @@ public class FileSystemStorageService {
         }
         catch (IOException e) {
         	log.error("Could not initialize storage");
-            throw new StorageException("Could not initialize storage", e);
+            throw new StorageException(Translator.toLocale("exception.directory-initialization"), e);
         }
     }
 }

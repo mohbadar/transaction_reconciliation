@@ -7,25 +7,169 @@
 
 
 <mat-tab-group>
+
     <mat-tab label="{{'LAYOUT_AND_DESIGN' | translate}}"> 
-    </mat-tab>
-    
-    <mat-tab label="{{'ALGORITHM' | translate}}"> 
+
+        <div class="container">
+            <p class="font14">Angular framework is used in this application for building single-page client applications using HTML and TypeScript.  It implements core and optional functionality as a set of TypeScript libraries that we import into out app.</p>
+            <p class="font14">The architecture of an Angular application relies on certain fundamental concepts. The basic building blocks of the Angular framework are Angular components that are organized into NgModules. NgModules collect related code into functional sets; an Angular app is defined by a set of NgModules. An app always has at least a root module that enables bootstrapping, and typically has many more feature modules.</p>
+            <p class="font14">In this application, the following guidelines from experts have been considered towards creating a good layout and design :</p>
+            <ul>
+                <li class="font14">Responsive Design</li>
+                <li class="font14">Modular Design (Component Based) </li>
+                <li class="font14">Lazy Loading Design</li>
+                <li class="font14">Attractive Design</li>
+                <li class="font14">Efficient Design</li>
+                <li class="font14">Forgiving Design</li>
+                <li class="font14">Clear Design</li>
+                <li class="font14">Concise Design</li>
+                <li class="font14">Consistent Design</li>
+
+            </ul>
+        </div>
+
     </mat-tab>
 
+    <mat-tab label="{{'ALGORITHM' | translate}}"> 
+        <div class="container">
+            
+
+            <h3>Transaction Comparison with CSV Files Sequence Diagram: </h3>
+            <div class="row">
+                
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-rounded" src="./assets/media/tutuka/file_similarity_matching.png" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+            <hr/>   
+
+            <h3>Transaction Similarity Matching Sequence Diagram: </h3>
+            <div class="row">
+                
+                <div class="col-md-2 col-lg-2">
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    <img class="img-responsive img-rounded" src="./assets/media/tutuka/single_transaction_matching.png" style="width:800px"/>
+                </div>
+                  <div class="col-md-2 col-lg-2">
+                </div>
+            </div>
+
+            <hr/>
+
+            <h3> Texting Matching with Cousine Similarity </h3>
+            <p class="font14">Cosine similarity is a measure of similarity between two non-zero vectors of an inner product space that “measures the cosine of the angle between them.</p>
+            <p class="font14">So Cosine Similarity determines the dot product between the vectors of two documents/sentences to find the angle and cosine of that angle to derive the similarity.</p>
+            <p class="font14">In our case, Cosine Similarity tends to determine how similar two <code>TransactionNarrative</code> are. </p>
+       
+        <h3> Transaction Matching with Fuzzy Matching and Cousine Similarity </h3>
+            <p class="font14">
+                    Fuzzy matching is a method that provides an improved ability to process word-based matching queries to find matching records or sentences from a database or any other file. 
+            </p>
+            <p class="font14">Both Fuzzy Matching and Cousine Similarity are used to Compare Transactions and find the <code>PERFECT_MATCH</code>,<code>PERFECT_MISMATCH</code>,<code>PROBABLE_MATCH</code>,<code>PERMISSIBLE_MATCH</code>, <code>PROBABLE_MISMATCH</code>, <code>DUPLICATE</code>, <code>BAD_TRANSACTION</code>, and <code>UNMATCHED</code> transactions </p>
+       
+
+        <h3> Stopword Identification and Elimination</h3>
+            <p class="font14">
+                Stopwords are the English words which does not add much meaning to a sentence. They can safely be ignored without sacrificing the meaning of the sentence.
+            </p>
+            <p class="font14">
+                There is a <code>englishStopWords.txt</code> which contains a list of English Common Stopwords. Stopwords are filtered out before the processing and comparison. 
+            </p>
+       
+
+        </div>
+
+        <hr/>
+    </mat-tab>
+
+    
     <mat-tab label="{{'TDD/BDD' | translate}}"> 
+    <div style="margin: 40px;">
+        <p>
+          I emphasize developing features based on a user story and writing code that provides a solution to real problems. I like to following Behavior Driven Development (BDD) practices. (BDD)
+      </p>
+
+      <p>
+        In this specific case, I tracked all software development by repeatedly testing the software against all test cases. This is opposed to software being developed first and test cases created later. (TDD)
+      </p>
+     </div> 
     </mat-tab>
 
     <mat-tab label="{{'EXCEPTION_HANDLING' | translate}}"> 
+
+    <div style="margin: 40px;">
+
+       <p>To separate error-handling code from regular code, propagate errors up the call stack, and group and differentiate error types, the following pactices for exception-handling has been considered:  </p>
+        <ul>
+            <li>No Ignoring of Exceptions</li>
+            <li>Preference to Specific Exceptions</li>
+            <li>Clean Up Resources in a Finally Block or Use a Try-With-Resource Statement</li>
+            <li>Throw Exceptions With Descriptive Messages</li>
+            <li>Catch the Most Specific Exception First</li>
+            <li>No Catching of Throwable</li>
+            <li>Wrap the Exception Without Consuming It</li>
+        </ul>
+    </div>
+
     </mat-tab>
 
-    <mat-tab label="{{'SPEED_OF_RECON' | translate}}"> 
+    <mat-tab label="{{'SPEED_OF_RECON' | translate}}">
+    <div style="margin: 40px;">
+
+       <p>The comparison operation takes <code>618 MilliSeconds</code> for the files with following record counts:  </p>
+        <ul>
+            <li>Tutuka File: 306 transactions</li>
+            <li>Client File: 306 transactions</li>
+        </ul>
+
+        <p>Transaction Similar Matching takes <code>297 MilliSeconds</code></p>
+    </div>
+
     </mat-tab>
 
     <mat-tab label="{{'CODE_MODULARITY' | translate}}"> 
+
+    <div style="margin: 40px;">
+
+        <p>Modular code is code which is separated into independent modules. The idea is that internal details of individual modules should be hidden behind a public interface, making each module easier to understand, test and refactor independently of others</p>
+
+        <p> To provide understandability, continuity, protection, and decomposibility for application, the multi-module maven application with Java modules have been implemented. The project consists of the following modules:
+        <ul>
+            <li>lib-lang : includes shared functionalities between all other modules</li>
+            <li>lib-api: includes utility functionalities for build a robust API</li>
+            <li>lib-logger: includes logging utility functionalities</li>
+            <li>lib-audit: includes audit utility functionalities</li>
+            <li>lib-json: includes JSON management utility functionalities</li>
+            <li>reconcile-core: includes infrastructure and transaction comparison implementations</li>
+            <li>reconcile-web: Angular application (UI) for transaction comparison</li>
+
+        </ul>
+    </div>
+
     </mat-tab>
 
     <mat-tab label="{{'CODE_NEETNESS' | translate}}"> 
+
+        <div style="margin: 40px;">
+
+        <p>Writing clean code is important and will help save headaches later. I have been following practices to improve code cleanliness and neatness.</p>
+
+        <ul>
+            <li>Using Naming Standard</li>
+            <li>Avoid Large Functions</li>
+            <li>Use Proper Indentation</li>
+            <li>Use Explanatory Comments</li>
+            <li>Don’t Overuse Comments</li>
+
+        </ul>
+    </div>
+
     </mat-tab>
 </mat-tab-group>
 
@@ -33,16 +177,72 @@
 
 <mat-tab-group>
     <mat-tab label="{{'ASSUMPTIONS' | translate}}"> 
+
+        <div class="container">
+            <p class="font14">
+             As requirements are fairly vague, the following assumption has been made during development process:</p>
+            <ul>
+                <li class="font14">Similarity matching of one transaction is compared with transactions in another file</li>
+                <li class="font14">Transactions are not stored in any database</li>
+                <li class="font14">Comparison and similarity matching has been requested in one session.</li>
+                <li class="font14">Comma is assumed to be the CSV field delimiter.</li>
+                <li class="font14">Duplicate transactions might exist. </li>
+                <li class="font14">Bad transactions might exist. </li>
+                <li class="font14">If transactionID or transactionDescription is Null or Zero, than it is a bad transaction and will not be matched for similarity measurement with other files. </li>
+                <li class="font14">Transaction unique key (TUKey) is the composite of transactionID or transactionDescription. transactionID is unique but it is the same in the case of transaction reversal.</li>
+                <li class="font14">If TUKey of a transaction is present in the another file, then it is considered as a matched transaction. </li>
+                <li class="font14">If TUKey of a transaction is not present in the another file, then it is considered as a unmatched transaction. </li>
+                <li class="font14">Only if TUKey matches, it qualifies for a matching. </li>
+                <li class="font14">transactionNarrative field is an address field and will have to be cousine similarity and fuzzy matching logics. As almost NONE of the values from the files [TutukaMarkoffFile20140113.csv & ClientMarkoffFile20140113.csv] resolved to a valid location, geo-location fuzzy matching was out of the equation.</li>
+                <li class="font14">transactionDate values are at the same time zone. </li>
+                <li class="font14">For those transactions that have different transactionID’s but other transactions do match mostly, are still considered as UNMATCHED as transactionID is an unique ID and a null value of which is considered a BAD_TRANSACTION. Reason for this is transactionID should be a generated value for every transaction and cannot be the same for two different transactions. </li>
+                <li class="font14">If possible matches of a unmatched transaction is requested, then calculate similarity score and list matched transactions with more than 80% similarity. </li>
+            </ul>
+        </div>
+
+
     </mat-tab>
     
     <mat-tab label="{{'MATCH_CATEGORIES' | translate}}"> 
+
+        <div class="container">
+            <p class="font14">
+                Transaction comparison result is categorized in the following categories:
+            <ul>
+                <li class="font14"><code>PERFECT_MATCH</code></li>
+                <li class="font14"><code>PERFECT_MISMATCH</code></li>
+                <li class="font14"><code>PROBABLE_MATCH</code></li>
+                <li class="font14"><code>PERMISSIBLE_MATCH</code></li>
+                <li class="font14"><code>PROBABLE_MISMATCH</code></li>
+                <li class="font14"><code>DUPLICATE</code></li>
+                <li class="font14"><code>BAD_TRANSACTION</code></li>
+                <li class="font14"><code>UNMATCHED</code></li>
+            </ul>
+        </div>
+
+
     </mat-tab>
 
     <mat-tab label="{{'SELF_DOCUMENTED_CODE' | translate}}"> 
+
+        <div class="container">
+            <p class="font14">
+                To wride self-documented code, the following practices have been considered in developmend:
+            <ul>
+                    <li class="font14">Codes are properly grouped.</li>
+                    <li class="font14">Standard variable, method, and class naming is followed </li>
+                    <li class="font14">No use of magic numbers</li>
+                    <li class="font14">Codes are moved into functions </li>
+                    <li class="font14">Expressions are replaced with variables </li>
+                    <li class="font14">Class and module interfaces</li>
+                    <li class="font14">Prefer to use named constants</li>
+                    <li class="font14">Adding Sudo-Codes and Logics as Comments </li>
+            </ul>
+        </div>
+
+
     </mat-tab>
 
-    <mat-tab label="{{'EXTRA_EFFORT' | translate}}"> 
-    </mat-tab>
 </mat-tab-group>
 
 
@@ -75,7 +275,7 @@
                 <div class="col-md-2 col-lg-2">
                 </div>
                 <div class="col-md-8 col-lg-8">
-                    <img class="img-responsive" src="./assets/media/tutuka/file_upload.PNG" style="width:800px"/>
+                    <img class="img-responsive img-rounded" src="./assets/media/tutuka/file_upload.PNG" style="width:800px"/>
                 </div>
                   <div class="col-md-2 col-lg-2">
                 </div>
@@ -101,7 +301,7 @@
                 <div class="col-md-2 col-lg-2">
                 </div>
                 <div class="col-md-8 col-lg-8">
-                    <img class="img-responsive" src="./assets/media/tutuka/comparison_result.PNG" style="width:800px"/>
+                    <img class="img-responsive img-rounded" src="./assets/media/tutuka/comparison_result.PNG" style="width:800px"/>
                 </div>
                   <div class="col-md-2 col-lg-2">
                 </div>
@@ -130,7 +330,7 @@
                 <div class="col-md-2 col-lg-2">
                 </div>
                 <div class="col-md-8 col-lg-8">
-                    <img class="img-responsive" src="./assets/media/tutuka/comparison_details.PNG" style="width:800px"/>
+                    <img class="img-responsive img-rounded" src="./assets/media/tutuka/comparison_details.PNG" style="width:800px"/>
                 </div>
                   <div class="col-md-2 col-lg-2">
                 </div>
@@ -156,7 +356,7 @@
                 <div class="col-md-2 col-lg-2">
                 </div>
                 <div class="col-md-8 col-lg-8">
-                    <img class="img-responsive" src="./assets/media/tutuka/view_transaction.PNG" style="width:800px"/>
+                    <img class="img-responsive img-rounded" src="./assets/media/tutuka/view_transaction.PNG" style="width:800px"/>
                 </div>
                   <div class="col-md-2 col-lg-2">
                 </div>
@@ -181,7 +381,7 @@
                 <div class="col-md-2 col-lg-2">
                 </div>
                 <div class="col-md-8 col-lg-8">
-                    <img class="img-responsive" src="./assets/media/tutuka/similar_transactions.PNG" style="width:800px"/>
+                    <img class="img-responsive img-rounded" src="./assets/media/tutuka/similar_transactions.PNG" style="width:800px"/>
                 </div>
                   <div class="col-md-2 col-lg-2">
                 </div>

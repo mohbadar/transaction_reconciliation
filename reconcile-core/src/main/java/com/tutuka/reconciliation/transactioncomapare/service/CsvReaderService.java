@@ -1,12 +1,17 @@
 package com.tutuka.reconciliation.transactioncomapare.service;
 
 import com.google.common.base.Splitter;
+import com.tutuka.lib.logger.annotation.Loggable;
+import com.tutuka.lib.audit.Auditable;
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
 import com.tutuka.reconciliation.infrastructure.exception.EmptyFileException;
-import com.tutuka.reconciliation.transactioncomapare.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.transactioncomapare.util.TransactionUtility;
 import com.tutuka.reconciliation.transactioncomapare.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.retry.annotation.Retryable;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.text.Normalizer;
@@ -30,7 +35,7 @@ public class CsvReaderService {
 	private int transactionTypeIndex;
 	private int walletReferenceIndex;
 
-	TransactionUtiltiy util = new TransactionUtiltiy();
+	TransactionUtility util = new TransactionUtility();
 	LocalDateTime transactionDate = null;
 	Pattern pattern = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 	Splitter splitter = Splitter.on(pattern);
@@ -42,6 +47,9 @@ public class CsvReaderService {
 	 *            FileName
 	 * @return List of transactions after appropriate validations and trimming<br>
 	 */
+	@Loggable
+	@Auditable
+	@Retryable
 	public List<Transaction> csvRead(String fileName) {
 		log.debug("Inside csvRead method");
 		List<Transaction> TransactionsList = new ArrayList<Transaction>();
@@ -79,7 +87,7 @@ public class CsvReaderService {
 
 		if(TransactionsList.size()==0) {
 			log.error("The file "+fileName+" has ZERO transactions");
-			throw new EmptyFileException("The file "+fileName+" has ZERO transactions");
+			throw new EmptyFileException(Translator.toLocale("exception.file-zero-transactions"));
 		}
 		return TransactionsList;
 	}

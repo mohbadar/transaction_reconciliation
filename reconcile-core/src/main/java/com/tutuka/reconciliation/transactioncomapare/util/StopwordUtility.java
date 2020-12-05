@@ -1,8 +1,10 @@
 package com.tutuka.reconciliation.transactioncomapare.util;
 
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class StopwordUtility {
     }
 
     /**
-     * Gets each line of a file as string in  a list
+     * Gets each line in file as string and convert to a list
      * @param resourceFilePath
      * @return
      * @throws IOException
@@ -60,6 +62,10 @@ public class StopwordUtility {
     private static List<String> getFileContentAsList(String resourceFilePath) throws IOException {
 
         File file = ResourceUtils.getFile(resourceFilePath);
+
+        if (!file.exists())
+            throw new FileNotFoundException(Translator.toLocale("exception.file-not-found-exception"));
+
         List<String> lines = Files.readAllLines(file.toPath());
         lines = lines.stream().map(line -> line.toLowerCase()).collect(Collectors.toList());
 

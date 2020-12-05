@@ -1,14 +1,19 @@
 package com.tutuka.reconciliation.transactioncomapare.service;
 
+import com.tutuka.lib.logger.annotation.Loggable;
+import com.tutuka.lib.audit.Auditable;
+import com.tutuka.reconciliation.infrastructure.exception.EmptyCsvFilesException;
 import com.tutuka.reconciliation.infrastructure.exception.TransactionWithScoreEmptyListException;
+import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
 import com.tutuka.reconciliation.transactioncomapare.enumeration.Result;
 import com.tutuka.reconciliation.transactioncomapare.util.FileUtility;
-import com.tutuka.reconciliation.transactioncomapare.util.TransactionUtiltiy;
+import com.tutuka.reconciliation.transactioncomapare.util.TransactionUtility;
 import com.tutuka.reconciliation.transactioncomapare.data.Transaction;
 import com.tutuka.reconciliation.transactioncomapare.domain.TransactionWithScoreDTO;
 import com.tutuka.reconciliation.transactioncomapare.domain.FileUploadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -32,8 +37,15 @@ public class CompareService {
     private FileUploadDTO fileUploadDTO;
 
 
+    @Loggable
+    @Auditable
+    @Retryable
     public Map<String, Object> compareTransactions(FileUploadDTO fileLoader) throws IOException {
         List<TransactionWithScoreDTO> transactionsWithScores = new ArrayList<>();
+
+
+        if(fileLoader.getFileTwo().isEmpty() || fileLoader.getFileOne().isEmpty())
+            throw new EmptyCsvFilesException(Translator.toLocale("exception.empty-csv-file"));
 
         //store files
         storageService.store(fileLoader.getFileOne());
@@ -51,7 +63,7 @@ public class CompareService {
         List<Transaction> clientList = preprocessingService.applyPreprocessingLogic(csvBean.csvRead(storageService.load(fileLoader.getFileTwo().getOriginalFilename()).toString()));
 
         //Remove duplicate and bad transactions from transaction list
-        TransactionUtiltiy util = new TransactionUtiltiy();
+        TransactionUtility util = new TransactionUtility();
         util.removeBadAndDuplicatesFileOne(tutukaList, transactionsWithScores, fileLoader.getFileOne().getOriginalFilename());
         util.removeBadAndDuplicatesFileTwo(clientList, transactionsWithScores, fileLoader.getFileTwo().getOriginalFilename());
 
@@ -73,6 +85,9 @@ public class CompareService {
      * @param dto
      * @return
      */
+    @Loggable
+    @Auditable
+    @Retryable
     public Map<String, Object> getSimilarTransaction(TransactionWithScoreDTO dto) throws IOException {
         Map<String, Object> response = new HashMap<>();
 
@@ -88,7 +103,7 @@ public class CompareService {
         List<Transaction> transactions = preprocessingService.applyPreprocessingLogic(csvBean.csvRead(storageService.load(fileName).toString()));
 
         if (transactions.size() < 1)
-            throw new TransactionWithScoreEmptyListException("List of Transactions with score is null");
+            throw new TransactionWithScoreEmptyListException(Translator.toLocale("exception.transaction-with-score-empty-list"));
 
         Transaction transaction = TransactionMapper.map(dto);
 
@@ -101,6 +116,7 @@ public class CompareService {
         return response;
     }
 
+    @Loggable
     public List<Transaction> mapTransactionWithScoresToTransaction(List<TransactionWithScoreDTO> dtos)
     {
         List<Transaction> transactions = new ArrayList<>();
@@ -116,6 +132,7 @@ public class CompareService {
      * @param transactionWithScoreDTOS
      * @return
      */
+    @Loggable
     private Map<String, Object> splitResultForFiltering(List<TransactionWithScoreDTO> transactionWithScoreDTOS)
     {
         Map<String, Object> data = new HashMap<>();
@@ -143,12 +160,12 @@ public class CompareService {
         return data;
     }
 
+    @Loggable
     private List<TransactionWithScoreDTO> filterTransactionsWithScore(List<TransactionWithScoreDTO> dtos, Result result)
     {
         List<TransactionWithScoreDTO> filteredTransactions = new ArrayList<>();
 
         dtos.forEach(transactionWithScoreDTO -> {
-//            System.out.println("Status> " +transactionWithScoreDTO.getStatus().name());
             if (transactionWithScoreDTO.getStatus().name().equalsIgnoreCase(result.getValue()))
             {
                 filteredTransactions.add(transactionWithScoreDTO);
