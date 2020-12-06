@@ -1,22 +1,34 @@
 package com.tutuka.reconciliation.transactioncomapare.util;
 
+import ch.qos.logback.core.property.ResourceExistsPropertyDefiner;
 import com.tutuka.reconciliation.infrastructure.internationalization.Translator;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class StopwordUtility {
 
-    private static final String resourceFilePath = "classpath:englishStopWords.txt";
+    private static final String resourceFilePath = "englishStopWords.txt";
+    private static ResourceLoader resourceLoader;
 
 
+    public void setResourceLoader(ResourceLoader resourceLoader)
+    {
+        this.resourceLoader= resourceLoader;
+    }
     /**
      * Logic:
      *
@@ -61,8 +73,15 @@ public class StopwordUtility {
      */
     private static List<String> getFileContentAsList(String resourceFilePath) throws IOException {
 
-        File file = ResourceUtils.getFile(resourceFilePath);
+        ClassPathResource classPathResource = new ClassPathResource(resourceFilePath);
 
+        InputStream inputStream = classPathResource.getInputStream();
+        File file = File.createTempFile("test", ".txt");
+        try {
+            FileUtils.copyInputStreamToFile(inputStream, file);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+        }
         if (!file.exists())
             throw new FileNotFoundException(Translator.toLocale("exception.file-not-found-exception"));
 

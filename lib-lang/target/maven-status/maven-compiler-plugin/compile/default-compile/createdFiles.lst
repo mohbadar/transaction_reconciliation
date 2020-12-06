@@ -16,6 +16,7 @@ com\tutuka\lib\lang\applicationname\ApplicationNameConfiguration.class
 com\tutuka\lib\lang\exception\api\InternalServerProblemException.class
 com\tutuka\lib\lang\exception\service\ServiceExceptionJavaConfiguration.class
 com\tutuka\lib\lang\exception\common\IllegalArgumentException.class
+com\tutuka\lib\lang\applicationname\ValidApplicationName.class
 com\tutuka\lib\lang\data\ApiErrorMessageArg.class
 com\tutuka\lib\lang\exception\common\BaseCheckedException.class
 com\tutuka\lib\lang\exception\api\ResourceNotFoundException.class
@@ -23,6 +24,7 @@ com\tutuka\lib\lang\applicationname\EnableApplicationName.class
 com\tutuka\lib\lang\error\common\BaseError$1.class
 com\tutuka\lib\lang\exception\common\BaseUncheckedException.class
 com\tutuka\lib\lang\data\ApiGlobalErrorResponse.class
+com\tutuka\lib\lang\applicationname\CheckApplicationName.class
 com\tutuka\lib\lang\exception\api\StorageException.class
 com\tutuka\lib\lang\error\service\ServiceError$1.class
 com\tutuka\lib\lang\exception\service\ServiceExceptionFilter.class

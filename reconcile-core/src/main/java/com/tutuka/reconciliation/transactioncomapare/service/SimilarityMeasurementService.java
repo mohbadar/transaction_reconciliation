@@ -186,7 +186,7 @@ public class SimilarityMeasurementService {
 	@Loggable
 	@Auditable
 	@Retryable
-	public List<Transaction> calculateSimilarTransaction(Transaction transaction, List<Transaction> transactionsList) throws IOException {
+	public List<Transaction> calculateSimilarTransaction(Transaction transaction, List<Transaction> transactionsList) throws Exception {
 		System.out.println("Transaction List Size > "+ transactionsList.size());
 		List<Transaction> similarTransactions = new ArrayList<>();
 

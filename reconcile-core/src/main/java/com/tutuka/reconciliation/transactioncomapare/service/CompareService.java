@@ -40,7 +40,7 @@ public class CompareService {
     @Loggable
     @Auditable
     @Retryable
-    public Map<String, Object> compareTransactions(FileUploadDTO fileLoader) throws IOException {
+    public Map<String, Object> compareTransactions(FileUploadDTO fileLoader) throws Exception {
         List<TransactionWithScoreDTO> transactionsWithScores = new ArrayList<>();
 
 
@@ -88,7 +88,7 @@ public class CompareService {
     @Loggable
     @Auditable
     @Retryable
-    public Map<String, Object> getSimilarTransaction(TransactionWithScoreDTO dto) throws IOException {
+    public Map<String, Object> getSimilarTransaction(TransactionWithScoreDTO dto) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
         //Select another for comparison. For Tutuka Transactions-> ClientFile, and for client Transactions -> Tutuka file

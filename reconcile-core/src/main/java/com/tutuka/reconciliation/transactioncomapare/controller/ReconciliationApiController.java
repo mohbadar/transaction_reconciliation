@@ -55,7 +55,7 @@ public class ReconciliationApiController extends ResponseHandler {
             @RequestParam(name = "info") String info,
             @RequestParam(name = "clientCsv", required = true) MultipartFile clientCsv,
             @RequestParam(name = "tutukaCsv", required = true) MultipartFile tutukaCsv
-    ) throws IOException {
+    ) throws Exception {
         long startTime = System.currentTimeMillis();
 
         FileUploadDTO fileLoader = new FileUploadDTO();
@@ -78,7 +78,7 @@ public class ReconciliationApiController extends ResponseHandler {
     @PostMapping(value = "/similar-transactions", produces = MediaType.APPLICATION_JSON_VALUE)
     @Loggable
     @Auditable
-    public ResponseEntity<Map<String, Object>> getSimilarTransactions(@RequestBody String data) throws IOException {
+    public ResponseEntity<Map<String, Object>> getSimilarTransactions(@RequestBody String data) throws Exception {
         long startTime = System.currentTimeMillis();
 
         TransactionWithScoreDTO dto = TransactionMapper.map(data);

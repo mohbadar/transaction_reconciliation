@@ -9,6 +9,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 @Service
@@ -18,13 +19,13 @@ public class PreprocessingService {
     @Loggable
     @Auditable
     @Retryable
-    public List<Transaction> applyPreprocessingLogic(List<Transaction> transactions) throws IOException {
+    public List<Transaction> applyPreprocessingLogic(List<Transaction> transactions) throws IOException, URISyntaxException {
         // Remove Stopwords from TransactionNative
         List<Transaction> stopwordLessTransactions = removeStopwordsFromTransactionNative(transactions);
         return stopwordLessTransactions;
     }
 
-    private List<Transaction> removeStopwordsFromTransactionNative(List<Transaction> transactions) throws IOException {
+    private List<Transaction> removeStopwordsFromTransactionNative(List<Transaction> transactions) throws IOException, URISyntaxException {
         List<Transaction> newTransactions = new ArrayList<>();
         for (Transaction transaction: transactions)
         {

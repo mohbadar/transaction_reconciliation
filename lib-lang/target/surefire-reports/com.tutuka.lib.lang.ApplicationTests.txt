@@ -1,7 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.tutuka.lib.lang.ApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.39 s <<< FAILURE! - in com.tutuka.lib.lang.ApplicationTests
-com.tutuka.lib.lang.ApplicationTests  Time elapsed: 0.389 s  <<< ERROR!
-java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
-

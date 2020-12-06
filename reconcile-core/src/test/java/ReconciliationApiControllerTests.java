@@ -59,7 +59,7 @@ public class ReconciliationApiControllerTests {
 
 
 	@Test
-	public void test_filesCompare() throws IOException {
+	public void test_filesCompare() throws Exception {
 		File tutukaFile = new File("src/test/resources/TutukaMarkoffFile20140113 (1).csv");
 		File clientFile = new File("src/test/resources/ClientMarkoffFile20140113 (1).csv");
 
