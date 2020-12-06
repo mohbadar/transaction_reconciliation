@@ -47,4 +47,9 @@ applyFilter(filterValue: string) {
     this.setDataSourceData(this.transactions);
   }
 
+  calculatePercentage(similarityScore)
+  {
+    return ((similarityScore/6.5)*100).toFixed(2);
+  }
+
 }

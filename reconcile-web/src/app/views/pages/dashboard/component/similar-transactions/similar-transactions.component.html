@@ -24,7 +24,7 @@
 
     <ng-container matColumnDef="similarity">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'SIMILARITY'|translate }}</th>
-            <td mat-cell *matCellDef="let row"> {{row.similarityScore}} </td>
+            <td mat-cell *matCellDef="let row"> {{calculatePercentage(row.similarityScore)}} % </td>
     </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
