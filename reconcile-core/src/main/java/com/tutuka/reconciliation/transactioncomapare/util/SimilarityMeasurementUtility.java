@@ -78,7 +78,14 @@ public class SimilarityMeasurementUtility {
 		String tutuka = tutukaString.replaceAll("[aeiouAEIOU]", "");
 		String client = clientString.replaceAll("[aeiouAEIOU]", "");
 
-		// Generate Phonetic codes with Beider-Morse Encoder
+		/**
+		 * 		Converts words into potential phonetic representations.
+		 * 		This is a two-stage process. Firstly, the word is converted into a phonetic representation
+		 * 		that takes into account the likely source language. Next, this phonetic representation is converted
+		 * 		into a pan-European 'average' representation,
+		 * 		allowing comparison between different versions of essentially the same word from different languages.
+		 * 		Generate Phonetic codes with Beider-Morse Encoder
+		 */
 		PhoneticEngine beider = new PhoneticEngine(NameType.GENERIC, RuleType.APPROX, true);
 		String[] tutukaEncodeArray = beider.encode(tutuka).split("\\|");
 		String[] clientEncodeArray = beider.encode(client).split("\\|");

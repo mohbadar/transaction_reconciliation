@@ -41,7 +41,7 @@ public class CsvReaderService {
 	Splitter splitter = Splitter.on(pattern);
 
 	/**
-	 * Reads the file into a List of tutuka.compareTransactions.Transaction Objects
+	 * Reads the file into a List of Transaction Objects
 	 * 
 	 * @param fileName
 	 *            FileName
@@ -75,7 +75,7 @@ public class CsvReaderService {
 			transactionTypeIndex = Arrays.asList(headers).indexOf("TransactionType");
 			walletReferenceIndex = Arrays.asList(headers).indexOf("WalletReference");
 
-			TransactionsList = br.lines().parallel().map(mapToItem).collect(Collectors.toList());
+			TransactionsList = br.lines().parallel().map(mapToTransaction).collect(Collectors.toList());
 			br.close();
 		} catch (FileNotFoundException e) {
 			log.error("FileNotFoundException, The file " + fileName + " cannot be found ");
@@ -92,7 +92,7 @@ public class CsvReaderService {
 		return TransactionsList;
 	}
 
-	private Function<String, Transaction> mapToItem = (line) -> {
+	private Function<String, Transaction> mapToTransaction = (line) -> {
 		Transaction transaction = new Transaction();
 		/*
 		 * Splitter from Guava library takes care of fields that have commas within
